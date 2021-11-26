@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Native.Base"
+             x:Class="Stencil.Native.Presentation.Shells.Phone.PhoneMenuBarView">
+    <ContentView.Content>
+        <FlexLayout Direction="Row"
+                    JustifyContent="SpaceEvenly"
+                    BindableLayout.ItemsSource="{Binding MenuEntries}"
+                    BackgroundColor="{x:StaticResource PrimaryWhite}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Grid BackgroundColor="Transparent"
+                          Padding="0" Margin="0"
+                          RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <FlexLayout Grid.Row="1" VerticalOptions="Fill" HorizontalOptions="Fill" 
+                                    Direction="Column" JustifyContent="Center">
+                            <Label IsVisible="{Binding IsIcon}" 
+                                   Text="{Binding IconCharacter}"
+                                   FlexLayout.AlignSelf="Center"
+                                   HorizontalTextAlignment="Center"
+                                   FontFamily="{StaticResource FontAwesome}"
+                                   TextColor="{x:StaticResource Primary900}"
+                                   FontSize="22"
+                                   Margin="4"
+                                   Padding="0"/>
+                            <Label FlexLayout.AlignSelf="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Label}"
+                                   TextColor="{x:StaticResource Primary900}"
+                                   FontFamily="{StaticResource SansRegular}"
+                                   FontSize="14"
+                                   Margin="0"
+                                   Padding="0"/>
+                            <FlexLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                            </FlexLayout.GestureRecognizers>
+                        </FlexLayout>
+                        <BoxView Grid.Row="0" BackgroundColor="{x:StaticResource Accent100}" HorizontalOptions="Fill" />
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>
+    </ContentView.Content>
+</base:BaseContentView>

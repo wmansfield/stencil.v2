@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Native.Base"
+             x:Class="Stencil.Native.Views.Standard.StandardDataView">
+    <ContentView.Content>
+        <Grid x:Name="grdContainer"
+              BackgroundColor="{Binding BackgroundColor}"
+              VerticalOptions="Start" 
+              HorizontalOptions="Fill"
+              Margin="{Binding Margin}"
+              RowSpacing="0"
+              ColumnSpacing="0">
+            <CollectionView x:Name="lvItems"
+                            Grid.Row="0"
+                            VerticalOptions="Start"
+                            HorizontalOptions="Fill"
+                            SelectionMode="None"
+                            ItemsSource="{Binding DataViewItems}"
+                            ItemTemplate="{Binding DataTemplateSelector}">
+            </CollectionView>
+        </Grid>
+    </ContentView.Content>
+</base:BaseContentView>
