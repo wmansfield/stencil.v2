@@ -25,7 +25,10 @@ namespace Stencil.Native
         #endregion
         public virtual TAccount CurrentAccount { get; protected set; }
 
+        public abstract Task SessionStartAsync(TAccount account);
+        public abstract Task SessionEndAsync(bool redirect);
     }
+
     public abstract class NativeApplication : TrackedClass
     {
         #region Constructor
@@ -56,26 +59,41 @@ namespace Stencil.Native
 
         #region Properties
 
+        public string CurrentCulture { get; protected set; }
+
+
         protected virtual bool HasStarted { get; set; }
 
         protected abstract string InternalAppName { get; }
+
+        protected abstract Task OnStartup_BeforeStencilAsync();
+        protected abstract Task OnStartup_AfterStencilAsync();
 
         #endregion
 
         #region Lifecycle
 
+
+
+        /// <summary>
+        /// Expected to be overriden and custom flow provided completely
+        /// </summary>
         public virtual Task OnStartAsync()
         {
             return base.ExecuteMethodAsync(nameof(OnStartAsync), async delegate ()
             {
-                if(!this.HasStarted)
+                if (!this.HasStarted)
                 {
+                    await OnStartup_BeforeStencilAsync();
+
                     await this.EnsureEncryptionKeyAsync();
+
+                    await OnStartup_AfterStencilAsync();
+                    
                     await this.NavigateToInitialPageAsync();
+                    
                     this.HasStarted = true;
                 }
-                //TODO:MUST: this.EnsureAppConfigDelayed();
-                //TODO:MUST: this.EnsureAppVersionDelayed();
             });
         }
 
@@ -137,8 +155,9 @@ namespace Stencil.Native
                 {
                     return Realm.GetInstance(configuration);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    this.LogError(ex);
                     // uh oh, try a new one
                     Realm.DeleteRealm(configuration);
                     return Realm.GetInstance(configuration);

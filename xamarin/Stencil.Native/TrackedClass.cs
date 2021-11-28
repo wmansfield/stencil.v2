@@ -33,7 +33,7 @@ namespace Stencil.Native
 
         #region Properties
 
-        public StencilAPI API { get; protected set; }
+        protected TAPI API { get; set; }
 
         protected string TrackPrefix { get; set; }
 

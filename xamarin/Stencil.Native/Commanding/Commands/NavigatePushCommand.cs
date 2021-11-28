@@ -1,10 +1,12 @@
-﻿using Stencil.Native.Views;
+﻿using Newtonsoft.Json;
+using Stencil.Native.Screens;
+using Stencil.Native.Views;
 using Stencil.Native.Views.Standard;
 using System.Threading.Tasks;
 
 namespace Stencil.Native.Commanding.Commands
 {
-    public class NavigatePushCommand : BaseAppCommand<StencilAPI>
+    public class NavigatePushCommand : BaseNavigationCommand<StencilAPI>
     {
         public NavigatePushCommand()
             : base(StencilAPI.Instance, nameof(NavigatePushCommand))
@@ -24,11 +26,15 @@ namespace Stencil.Native.Commanding.Commands
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate ()
             {
-                IDataViewModel dataViewModel = await this.API.Screens.GenerateScreenAsync(this.API.CommandProcessor, $"{commandParameter}");
+                NavigationData navigationData = this.ParseNavigationData<NavigationData>(commandParameter);
+
+                IDataViewModel dataViewModel = await this.API.Screens.GenerateScreenAsync(this.API.CommandProcessor, navigationData);
                 StandardDataView dataView = new StandardDataView(dataViewModel);
                 await this.API.Router.PushViewAsync(dataView, commandScope.TargetMenuEntry);
                 return true;
             });
         }
+
+        
     }
 }

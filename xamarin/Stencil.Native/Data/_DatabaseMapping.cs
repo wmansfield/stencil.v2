@@ -7,7 +7,7 @@ using db = Stencil.Native.Data.Models;
 
 namespace Stencil.Native.Data
 {
-    public static partial class _DatabaseMapping
+    public static class _DatabaseMapping
     {
         #region Generic Mapping
 

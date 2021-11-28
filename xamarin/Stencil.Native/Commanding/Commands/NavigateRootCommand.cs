@@ -1,10 +1,11 @@
-﻿using Stencil.Native.Views;
+﻿using Stencil.Native.Screens;
+using Stencil.Native.Views;
 using Stencil.Native.Views.Standard;
 using System.Threading.Tasks;
 
 namespace Stencil.Native.Commanding.Commands
 {
-    public class NavigateRootCommand : BaseAppCommand<StencilAPI>
+    public class NavigateRootCommand : BaseNavigationCommand<StencilAPI>
     {
         public NavigateRootCommand()
             : base(StencilAPI.Instance, nameof(NavigateRootCommand))
@@ -24,7 +25,9 @@ namespace Stencil.Native.Commanding.Commands
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate()
             {
-                IDataViewModel dataViewModel = await this.API.Screens.GenerateScreenAsync(this.API.CommandProcessor, $"{commandParameter}");
+                NavigationData navigationData = this.ParseNavigationData<NavigationData>(commandParameter);
+
+                IDataViewModel dataViewModel = await this.API.Screens.GenerateScreenAsync(this.API.CommandProcessor, navigationData);
                 StandardDataView dataView = new StandardDataView(dataViewModel);
                 await this.API.Router.SetInitialViewAsync(dataView);
                 return true;

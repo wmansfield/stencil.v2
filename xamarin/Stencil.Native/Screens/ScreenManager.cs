@@ -11,25 +11,24 @@ using v1_1 = Stencil.Native.Views.Standard.v1_1;
 
 namespace Stencil.Native.Screens
 {
-    public abstract class ScreenManager : TrackedClass, IScreenManager
+    public abstract class ScreenManager<TAPI> : TrackedClass<TAPI>, IScreenManager
+        where TAPI : StencilAPI
     {
-        public ScreenManager()
-            : base(nameof(ScreenManager))
+        public ScreenManager(TAPI api)
+            : base(api, nameof(ScreenManager<TAPI>))
         {
 
         }
 
-        public Task<IDataViewModel> GenerateScreenAsync(ICommandProcessor commandProcessor, string screenName)
+        public Task<IDataViewModel> GenerateScreenAsync(ICommandProcessor commandProcessor, INavigationData navigationData)
         {
             return base.ExecuteFunctionAsync(nameof(GenerateScreenAsync), async delegate ()
             {
                 IDataViewModel result = null;
 
-                if (!string.IsNullOrWhiteSpace(screenName))
+                if (!string.IsNullOrWhiteSpace(navigationData?.screen))
                 {
-                    screenName = screenName.ToLower();
-
-                    IScreenConfig screenConfig = await this.LoadScreenConfigAsync(screenName);
+                    IScreenConfig screenConfig = await this.LoadScreenConfigAsync(navigationData);
                     if(screenConfig != null)
                     {
                         // map to view elements
@@ -140,37 +139,45 @@ namespace Stencil.Native.Screens
             });
         }
 
-        protected Task<IScreenConfig> LoadScreenConfigAsync(string screenName)
+        protected Task<IScreenConfig> LoadScreenConfigAsync(INavigationData navigationData)
         {
-            return base.ExecuteFunction(nameof(LoadScreenConfigAsync), delegate ()
+            return base.ExecuteFunctionAsync(nameof(LoadScreenConfigAsync), async delegate ()
             {
                 ScreenConfig result = null;
 
-                using (IStencilDatabase database = this.API.StencilDatabase.OpenStencilDatabase())
+                if (!string.IsNullOrWhiteSpace(navigationData?.screen))
                 {
-                    result = database.ScreenConfig_Get(screenName);
+                    string screenName = string.Format("{0}.{1}", navigationData.screen, navigationData.identifier);
+
+                    using (IStencilDatabase database = this.API.StencilDatabase.OpenStencilDatabase())
+                    {
+                        result = database.ScreenConfig_Get(screenName);
+                    }
                 }
 
-                if(result == null)
+                if (result == null)
                 {
                     // manually build if missing from database
-                    result = this.GenerateMissingScreenConfig(screenName);
+                    result = await this.GenerateMissingScreenConfigAsync(navigationData);
 
                     if (result != null && !result.SuppressPersist)
                     {
-                        result.id = screenName; // jic
+                        if(string.IsNullOrWhiteSpace(result.id))
+                        {
+                            result.id = string.Format("{0}.{1}", navigationData.screen, navigationData.identifier); // jic
+                        }
 
                         using (IStencilDatabase database = this.API.StencilDatabase.OpenStencilDatabase())
                         {
-                            database.ScreenConfig_Upsert(screenName, result);
+                            database.ScreenConfig_Upsert(result.id, result);
                         }
                     }
                 }
 
-                return Task.FromResult(result as IScreenConfig);
+                return result as IScreenConfig;
             });
         }
 
-        protected abstract ScreenConfig GenerateMissingScreenConfig(string screenName);
+        protected abstract Task<ScreenConfig> GenerateMissingScreenConfigAsync(INavigationData navigationData);
     }
 }

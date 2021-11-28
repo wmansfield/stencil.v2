@@ -6,7 +6,7 @@ namespace Stencil.Native.Screens
 {
     public interface IScreenManager
     {
-        Task<IDataViewModel> GenerateScreenAsync(ICommandProcessor commandProcessor, string screenName);
+        Task<IDataViewModel> GenerateScreenAsync(ICommandProcessor commandProcessor, INavigationData navigationData);
         IDataViewItem GenerateViewItem(IViewConfig viewConfig);
     }
 }
