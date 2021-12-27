@@ -10,8 +10,8 @@ namespace Stencil.Native.Screens
         {
 
         }
-        public string screen { get; set; }
-        public string identifier { get; set; }
+        public string screen_name { get; set; }
+        public string screen_parameter { get; set; }
         public Dictionary<string, string> data { get; set; }
     }
 }

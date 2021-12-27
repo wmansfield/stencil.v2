@@ -1,4 +1,5 @@
 ﻿using Stencil.Native.Commanding;
+using Stencil.Native.Views.Markdown;
 using Stencil.Native.Views.Standard;
 using Stencil.Native.Views.Standard.v1_0;
 using Stencil.Native.Views.Standard.v1_1;
@@ -18,7 +19,8 @@ namespace Stencil.Native.Views
             libraries[StandardLibrary.LIBRARY_NAME] = new List<IComponentLibrary>() // order matters, first match wins
             {
                 new StandardComponentsV1_1(),
-                new StandardComponentsV1_0()
+                new StandardComponentsV1_0(),
+                new MarkdownComponentsV1_0()
             };
             libraries[string.Empty] = libraries[StandardLibrary.LIBRARY_NAME];
 

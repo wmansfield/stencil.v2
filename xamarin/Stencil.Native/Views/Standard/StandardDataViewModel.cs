@@ -1,7 +1,10 @@
 ﻿using Stencil.Native.Base;
 using Stencil.Native.Commanding;
 using Stencil.Native.Presentation.Menus;
+using Stencil.Native.Screens;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Stencil.Native.Views.Standard
@@ -24,6 +27,7 @@ namespace Stencil.Native.Views.Standard
         public bool IsMenuSupported { get; set; }
         public DataTemplateSelector DataTemplateSelector { get; set; }
 
+        public List<ICommandConfig> ShowCommands { get; set; }
 
         private ObservableCollection<IDataViewItem> _dataViewItems;
         public ObservableCollection<IDataViewItem> DataViewItems
@@ -52,6 +56,21 @@ namespace Stencil.Native.Views.Standard
         {
             get { return _backgroundColor; }
             set { SetProperty(ref _backgroundColor, value); }
+        }
+
+        public override Task OnNavigatingToAsync()
+        {
+            return base.ExecuteMethodAsync(nameof(OnNavigatingToAsync), async delegate ()
+            {
+                await base.OnNavigatingToAsync();
+                if(this.ShowCommands != null)
+                {
+                    foreach (ICommandConfig showCommand in this.ShowCommands)
+                    {
+                        await this.API.CommandProcessor.ExecuteCommandAsync(this.CommandScope, showCommand.CommandName, showCommand.CommandParameter);
+                    }
+                }
+            });
         }
     }
 }

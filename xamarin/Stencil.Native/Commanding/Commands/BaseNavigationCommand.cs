@@ -36,7 +36,7 @@ namespace Stencil.Native.Commanding.Commands
                     {
                         return new TNavigationData()
                         {
-                            screen = stringContents
+                            screen_name = stringContents
                         };
                     }
                 }

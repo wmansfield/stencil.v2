@@ -16,6 +16,7 @@
                             VerticalOptions="Start"
                             HorizontalOptions="Fill"
                             SelectionMode="None"
+                            ItemSizingStrategy="MeasureAllItems"
                             ItemsSource="{Binding DataViewItems}"
                             ItemTemplate="{Binding DataTemplateSelector}">
             </CollectionView>

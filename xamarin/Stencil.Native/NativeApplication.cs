@@ -1,6 +1,7 @@
 ﻿using Realms;
 using Stencil.Native.Commanding;
 using Stencil.Native.Data;
+using Stencil.Native.Data.Sync;
 using Stencil.Native.Presentation.Routing;
 using Stencil.Native.Screens;
 using System;
@@ -54,6 +55,8 @@ namespace Stencil.Native
         public static ICommandProcessor CommandProcessor { get; protected set; }
         public static IScreenManager ScreenManager { get; protected set; }
         public static NativeApplication Instance { get; protected set; }
+        public static IDataSync DataSync { get; protected set; }
+        
 
         #endregion
 
@@ -93,25 +96,28 @@ namespace Stencil.Native
                     await this.NavigateToInitialPageAsync();
                     
                     this.HasStarted = true;
+
+                    await NativeApplication.DataSync?.OnAppStartAsync();
                 }
             });
         }
 
         public virtual Task OnResumeAsync()
         {
-            return base.ExecuteFunction(nameof(OnResumeAsync), delegate ()
+            return base.ExecuteMethodAsync(nameof(OnResumeAsync), async delegate ()
             {
+                await NativeApplication.DataSync?.OnAppResumeAsync();
+
                 //TODO:MUST: this.EnsureAppConfigDelayed();
                 //TODO:MUST: this.EnsureAppVersionDelayed();
-                return Task.CompletedTask;
             });
         }
 
         public virtual Task OnSleepAsync()
         {
-            return base.ExecuteFunction(nameof(OnSleepAsync), delegate ()
+            return base.ExecuteMethodAsync(nameof(OnSleepAsync), async delegate ()
             {
-                return Task.CompletedTask;
+                await NativeApplication.DataSync?.OnAppSleepAsync();
             });
         }
 

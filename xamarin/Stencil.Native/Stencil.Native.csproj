@@ -11,4 +11,24 @@
 		<PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Converters\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Stencil.Native.Shared\Stencil.Native.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\Markdown\MarkdownContainer.xaml.cs">
+	    <DependentUpon>MarkdownContainer.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Views\Markdown\MarkdownContainer.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	</ItemGroup>
+
 </Project>

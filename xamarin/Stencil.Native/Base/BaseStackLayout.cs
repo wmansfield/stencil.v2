@@ -3,20 +3,21 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Stencil.Native.Base
 {
-    public abstract class BaseContentView : ContentView
+    public abstract class BaseStackLayout : StackLayout
     {
-        public BaseContentView(string trackPrefix)
+        public BaseStackLayout(string trackPrefix)
         {
             this.API = StencilAPI.Instance;
             this.TrackPrefix = trackPrefix;
         }
-        
-  
+
+
         #region Properties
 
 

@@ -28,7 +28,7 @@ namespace Stencil.Native.Commanding.Commands
             {
                 NavigationData navigationData = this.ParseNavigationData<NavigationData>(commandParameter);
 
-                IDataViewModel dataViewModel = await this.API.Screens.GenerateScreenAsync(this.API.CommandProcessor, navigationData);
+                IDataViewModel dataViewModel = await this.API.Screens.GenerateViewModelAsync(this.API.CommandProcessor, navigationData);
                 StandardDataView dataView = new StandardDataView(dataViewModel);
                 await this.API.Router.PushViewAsync(dataView, commandScope.TargetMenuEntry);
                 return true;

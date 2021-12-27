@@ -1,6 +1,7 @@
 ﻿
 using Stencil.Native.Commanding;
 using Stencil.Native.Data;
+using Stencil.Native.Data.Sync;
 using Stencil.Native.Presentation.Routing;
 using Stencil.Native.Screens;
 
@@ -12,6 +13,9 @@ namespace Stencil.Native
         {
             Instance = new StencilAPI();
         }
+        /// <summary>
+        /// Often replaced with an extended version
+        /// </summary>
         public static StencilAPI Instance;
 
         protected StencilAPI()
@@ -69,5 +73,7 @@ namespace Stencil.Native
                 return NativeApplication.StencilDatabaseConnector;
             }
         }
+       
+        
     }
 }

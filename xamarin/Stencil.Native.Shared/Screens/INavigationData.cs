@@ -6,8 +6,8 @@ namespace Stencil.Native.Screens
 {
     public interface INavigationData
     {
-        string screen { get; set; }
-        string identifier { get; set; }
+        string screen_name { get; set; }
+        string screen_parameter { get; set; }
         Dictionary<string, string> data { get; set; }
 
     }
