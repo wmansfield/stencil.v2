@@ -61,7 +61,8 @@ namespace Stencil.Native.Views
                         if (dataViewComponent != null)
                         {
                             dataViewItem.PreparedData = dataViewComponent.PrepareData(this.CommandScope, this, dataViewItem.ConfigurationJson, dataViewItem.Sections);
-                            return dataViewComponent.GetDataTemplate();
+                            DataTemplate result = dataViewComponent.GetDataTemplate();
+                            return result;
                         }
                     }
                 }

@@ -2,6 +2,7 @@
 using Stencil.Native.Commanding;
 using Stencil.Native.Data;
 using Stencil.Native.Data.Sync;
+using Stencil.Native.Presentation;
 using Stencil.Native.Presentation.Routing;
 using Stencil.Native.Screens;
 using System;
@@ -56,7 +57,7 @@ namespace Stencil.Native
         public static IScreenManager ScreenManager { get; protected set; }
         public static NativeApplication Instance { get; protected set; }
         public static IDataSync DataSync { get; protected set; }
-        
+        public static IAlerts Alerts { get; protected set; }
 
         #endregion
 
@@ -139,7 +140,7 @@ namespace Stencil.Native
                 byte[] encryptionKey = this.GetEncryptionKeySynchronous();
                 RealmConfiguration configuration = new RealmConfiguration(string.Format("native.{0}.realm", this.InternalAppName.ToLower()))
                 {
-                    SchemaVersion = 1,
+                    SchemaVersion = 2,
                     EncryptionKey = encryptionKey,
                     MigrationCallback = (migration, oldSchemaVersion) =>
                     {

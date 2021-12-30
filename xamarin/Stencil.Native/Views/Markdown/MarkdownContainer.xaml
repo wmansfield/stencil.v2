@@ -5,6 +5,9 @@
                     x:Class="Stencil.Native.Views.Markdown.MarkdownContainer">
     <DataTemplate x:Key="markdownContainer">
         <stencil:MarkdownView 
+            HorizontalOptions="Fill"
+            VerticalOptions="Start"
+            LinkTappedCommand="{Binding PreparedData.LinkTappedCommand}"
             Sections="{Binding PreparedData.sections}"
             FontSize="{Binding PreparedData.FontSize}"
             SuppressDivider="{Binding PreparedData.SuppressDivider}">

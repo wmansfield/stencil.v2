@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Stencil.Native.Views.Standard.v1_0.PrimaryButton">
+    <DataTemplate x:Key="primaryButton">
+        <!--<ViewCell>-->
+        <Grid HeightRequest="52"
+              Padding="{Binding PreparedData.Padding}"
+              BackgroundColor="{Binding PreparedData.BackgroundColor}"
+              HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+            <BoxView CornerRadius="4"
+                     BackgroundColor="{Binding PreparedData.UIButtonBackgroundColor}"
+                     HorizontalOptions="FillAndExpand"
+                     VerticalOptions="FillAndExpand"/>
+            <Label Text="{Binding PreparedData.Text}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource PrimaryWhite}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontSize="{StaticResource FontSizeStandard}" />
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Button_Clicked" />
+            </Grid.GestureRecognizers>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

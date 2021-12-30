@@ -16,6 +16,7 @@ namespace Stencil.Native.Screens
         bool AutomaticDownload { get; }
         bool IsMenuSupported { get; }
         IVisualConfig VisualConfig { get; }
+        List<IViewConfig> FooterConfigs { get; }
         List<IViewConfig> ViewConfigs { get; }
         List<IMenuConfig> MenuConfigs { get;  }
         List<ICommandConfig> ShowCommands { get; }

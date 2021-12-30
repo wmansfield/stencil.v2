@@ -40,7 +40,7 @@ namespace Stencil.Native.Screens
                     if (screenConfig != null)
                     {
                         // map to view elements
-                        ObservableCollection<IDataViewItem> viewItems = new ObservableCollection<IDataViewItem>();
+                        ObservableCollection<IDataViewItem> mainItems = new ObservableCollection<IDataViewItem>();
                         if (screenConfig.ViewConfigs != null)
                         {
                             foreach (IViewConfig viewConfig in screenConfig.ViewConfigs)
@@ -48,11 +48,23 @@ namespace Stencil.Native.Screens
                                 IDataViewItem dataViewItem = this.GenerateViewItem(viewConfig);
                                 if (dataViewItem != null)
                                 {
-                                    viewItems.Add(dataViewItem);
+                                    mainItems.Add(dataViewItem);
                                 }
                             }
                         }
 
+                        ObservableCollection<IDataViewItem> footerItems = new ObservableCollection<IDataViewItem>();
+                        if (screenConfig.FooterConfigs != null)
+                        {
+                            foreach (IViewConfig viewConfig in screenConfig.FooterConfigs)
+                            {
+                                IDataViewItem dataViewItem = this.GenerateViewItem(viewConfig);
+                                if (dataViewItem != null)
+                                {
+                                    footerItems.Add(dataViewItem);
+                                }
+                            }
+                        }
 
                         ObservableCollection<IMenuEntry> menuEntries = null;
                         if (screenConfig.MenuConfigs != null)
@@ -73,20 +85,24 @@ namespace Stencil.Native.Screens
                         result = new StandardDataViewModel(commandProcessor)
                         {
                             IsMenuSupported = screenConfig.IsMenuSupported,
-                            DataViewItems = viewItems,
+                            MainItems = mainItems,
+                            FooterItems = footerItems,
+                            ShowFooter = footerItems.Count > 0,
                             MenuEntries = menuEntries,
                             ShowCommands = screenConfig.ShowCommands
                         };
 
                         if(screenConfig.VisualConfig != null)
                         {
-                            if(!string.IsNullOrWhiteSpace(screenConfig.VisualConfig.BackgroundColor))
+                            result.BackgroundImage = screenConfig.VisualConfig.BackgroundImage;
+
+                            if (!string.IsNullOrWhiteSpace(screenConfig.VisualConfig.BackgroundColor))
                             {
                                 result.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
                             }
-                            if(screenConfig.VisualConfig.Margin != null)
+                            if(screenConfig.VisualConfig.Padding != null)
                             {
-                                result.Margin = screenConfig.VisualConfig.Margin.ToThickness();
+                                result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
                             }
                         }
                     }

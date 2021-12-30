@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:stencil="clr-namespace:Stencil.Native.Views;assembly=Stencil.Native"
+                    x:Class="Stencil.Native.Views.Standard.v1_0.DualColumnMarkdown">
+    <DataTemplate x:Key="dualColumnMarkdown">
+        <!--<ViewCell>-->
+        <Grid ColumnDefinitions="*,*" 
+              RowDefinitions="Auto"
+              RowSpacing="0" 
+              ColumnSpacing="0" 
+              HorizontalOptions="Fill"
+              Padding="{Binding PreparedData.Padding}"
+              BackgroundColor="{Binding PreparedData.BackgroundColor}">
+            <stencil:MarkdownView Grid.Column="0"
+                                  HorizontalOptions="Start"
+                                  VerticalOptions="Center"
+                                  LinkTappedCommand="{Binding PreparedData.LinkTappedCommand}"
+                                  TextColor="{Binding PreparedData.TextColor}"
+                                  Sections="{Binding PreparedData.MarkdownLeft}"
+                                  FontSize="{Binding PreparedData.FontSize}"
+                                  SuppressDivider="{Binding PreparedData.SuppressDivider}">
+            </stencil:MarkdownView>
+            <stencil:MarkdownView Grid.Column="1"
+                                  HorizontalOptions="End"
+                                  VerticalOptions="Center"
+                                  LinkTappedCommand="{Binding PreparedData.LinkTappedCommand}"
+                                  TextColor="{Binding PreparedData.TextColor}"
+                                  Sections="{Binding PreparedData.MarkdownRight}"
+                                  FontSize="{Binding PreparedData.FontSize}"
+                                  SuppressDivider="{Binding PreparedData.SuppressDivider}">
+            </stencil:MarkdownView>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

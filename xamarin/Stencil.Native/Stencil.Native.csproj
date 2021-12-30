@@ -12,10 +12,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Converters\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\Stencil.Native.Shared\Stencil.Native.Shared.csproj" />
 	</ItemGroup>
 
@@ -23,10 +19,37 @@
 	  <Compile Update="Views\Markdown\MarkdownContainer.xaml.cs">
 	    <DependentUpon>MarkdownContainer.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\GroupBegin.xaml.cs">
+	    <DependentUpon>GroupBegin.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\PrimaryButton.xaml.cs">
+	    <DependentUpon>PrimaryButton.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\LightEntry.xaml.cs">
+	    <DependentUpon>LightEntry.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\FullEntry.xaml.cs">
+	    <DependentUpon>FullEntry.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Update="Views\Markdown\MarkdownContainer.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\Standard\v1_0\DualColumnMarkdown.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\Standard\v1_0\GroupEnd.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\Standard\v1_0\GroupBegin.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\Standard\v1_0\Image.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\Standard\v1_0\Spacer.xaml">
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </EmbeddedResource>
 	</ItemGroup>

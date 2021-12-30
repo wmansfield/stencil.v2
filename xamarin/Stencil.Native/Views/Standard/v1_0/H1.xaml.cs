@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Native.Commanding;
-
+using Stencil.Native.Resourcing;
 using Xamarin.Forms;
 
 namespace Stencil.Native.Views.Standard.v1_0
@@ -34,10 +34,23 @@ namespace Stencil.Native.Views.Standard.v1_0
                 return new PreparedData();
             });
         }
-        public class PreparedData
+        public class PreparedData : PropertyClass
         {
             public string Text { get; set; }
-            public string FormattedText { get; set; }
+
+            private string _textColor = AppColors.TextOverBackground;
+            public string TextColor
+            {
+                get { return _textColor; }
+                set { SetProperty(ref _textColor, value); }
+            }
+
+            private string _backgroundColor;
+            public string BackgroundColor
+            {
+                get { return _backgroundColor; }
+                set { SetProperty(ref _backgroundColor, value); }
+            }
         }
     }
 }

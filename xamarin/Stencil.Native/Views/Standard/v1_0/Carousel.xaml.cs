@@ -48,7 +48,7 @@ namespace Stencil.Native.Views.Standard.v1_0
                         {
                             StandardDataViewModel dataViewModel = new StandardDataViewModel(commandScope.CommandProcessor, selector)
                             {
-                                DataViewItems = new ObservableCollection<IDataViewItem>(section.ViewItems)
+                                MainItems = new ObservableCollection<IDataViewItem>(section.ViewItems)
                             };
 
                             cells.Add(dataViewModel);

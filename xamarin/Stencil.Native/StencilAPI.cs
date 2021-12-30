@@ -2,6 +2,7 @@
 using Stencil.Native.Commanding;
 using Stencil.Native.Data;
 using Stencil.Native.Data.Sync;
+using Stencil.Native.Presentation;
 using Stencil.Native.Presentation.Routing;
 using Stencil.Native.Screens;
 
@@ -63,6 +64,13 @@ namespace Stencil.Native
             get
             {
                 return NativeApplication.Logger;
+            }
+        }
+        public IAlerts Alerts
+        {
+            get
+            {
+                return NativeApplication.Alerts;
             }
         }
 

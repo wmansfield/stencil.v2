@@ -15,6 +15,7 @@ namespace Stencil.Native.Screens
         public ScreenConfig()
         {
             this.ViewConfigs = new List<IViewConfig>();
+            this.FooterConfigs = new List<IViewConfig>();
             this.ShowCommands = new List<ICommandConfig>();
             this.MenuConfigs = new List<IMenuConfig>();
         }
@@ -34,6 +35,8 @@ namespace Stencil.Native.Screens
         public IVisualConfig VisualConfig { get; set; }
 
         public List<IViewConfig> ViewConfigs { get; set; }
+        public List<IViewConfig> FooterConfigs { get; set; }
+
         public List<ICommandConfig> ShowCommands { get; set; }
         public List<IMenuConfig> MenuConfigs { get; set; }
     }

@@ -36,9 +36,6 @@ namespace Stencil.Native.Views.Standard.v1_1
         public class PreparedData
         {
             public string Text { get; set; }
-            public string FormattedText { get; set; }
-            public bool Underlined { get; set; }
-
         }
     }
 }

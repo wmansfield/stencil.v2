@@ -14,6 +14,14 @@ namespace Stencil.Native.Commanding.Commands
 
         }
 
+        public override bool AlertErrors
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override Task<string> CanExecuteAsync(ICommandScope commandScope)
         {
             return base.ExecuteFunction(nameof(CanExecuteAsync), delegate ()

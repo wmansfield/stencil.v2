@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Stencil.Native.Views.Standard.v1_0.Spacer">
+    <DataTemplate x:Key="spacer">
+        <!--<ViewCell>-->
+            <AbsoluteLayout HeightRequest="{Binding PreparedData.Height}" 
+                            BackgroundColor="{Binding PreparedData.BackgroundColor}" 
+                            Padding="0"
+                            Margin="0"
+                            IsClippedToBounds="True">
+            </AbsoluteLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

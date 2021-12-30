@@ -29,11 +29,11 @@ namespace Stencil.Native.Views.Standard
 
         public List<ICommandConfig> ShowCommands { get; set; }
 
-        private ObservableCollection<IDataViewItem> _dataViewItems;
-        public ObservableCollection<IDataViewItem> DataViewItems
+        private ObservableCollection<IDataViewItem> _mainItems;
+        public ObservableCollection<IDataViewItem> MainItems
         {
-            get { return _dataViewItems; }
-            set { SetProperty(ref _dataViewItems, value); }
+            get { return _mainItems; }
+            set { SetProperty(ref _mainItems, value); }
         }
 
 
@@ -44,11 +44,11 @@ namespace Stencil.Native.Views.Standard
             set { SetProperty(ref _menuEntries, value); }
         }
 
-        private Thickness _margin;
-        public Thickness Margin
+        private Thickness _padding;
+        public Thickness Padding
         {
-            get { return _margin; }
-            set { SetProperty(ref _margin, value); }
+            get { return _padding; }
+            set { SetProperty(ref _padding, value); }
         }
 
         private Color _backgroundColor;
@@ -56,6 +56,27 @@ namespace Stencil.Native.Views.Standard
         {
             get { return _backgroundColor; }
             set { SetProperty(ref _backgroundColor, value); }
+        }
+
+        private string _backgroundImage;
+        public string BackgroundImage
+        {
+            get { return _backgroundImage; }
+            set { SetProperty(ref _backgroundImage, value); }
+        }
+
+        private ObservableCollection<IDataViewItem> _footerItems;
+        public ObservableCollection<IDataViewItem> FooterItems
+        {
+            get { return _footerItems; }
+            set { SetProperty(ref _footerItems, value); }
+        }
+
+        private bool _showFooter;
+        public bool ShowFooter
+        {
+            get { return _showFooter; }
+            set { SetProperty(ref _showFooter, value); }
         }
 
         public override Task OnNavigatingToAsync()

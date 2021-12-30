@@ -7,7 +7,7 @@
         <FlexLayout Direction="Column"
                     JustifyContent="SpaceEvenly"
                     BindableLayout.ItemsSource="{Binding MenuEntries}"
-                    BackgroundColor="{x:StaticResource PrimaryWhite}">
+                    BackgroundColor="{x:StaticResource MenuBarBackground}">
             <BindableLayout.ItemTemplate>
                 <DataTemplate>
                     <Frame BackgroundColor="Transparent"

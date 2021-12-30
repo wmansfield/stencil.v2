@@ -1,6 +1,7 @@
 ﻿using Stencil.Native.Markdown;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -13,6 +14,13 @@ namespace Stencil.Native.Views
         {
         }
 
+        public static readonly BindableProperty TextColorProperty = BindableProperty.Create(propertyName: nameof(TextColor), returnType: typeof(string), declaringType: typeof(MarkdownView), defaultValue: null);
+        public string TextColor
+        {
+            get { return (string)GetValue(TextColorProperty); }
+            set { SetValue(TextColorProperty, value); }
+        }
+
         public static readonly BindableProperty SectionsProperty = BindableProperty.Create(propertyName: nameof(Sections),returnType: typeof(List<MarkdownSection>),declaringType: typeof(MarkdownView),defaultValue: null);
         public List<MarkdownSection> Sections
         {
@@ -23,8 +31,8 @@ namespace Stencil.Native.Views
         public static readonly BindableProperty SuppressDividerProperty = BindableProperty.Create(propertyName: nameof(SuppressDivider),returnType: typeof(bool),declaringType: typeof(MarkdownView),defaultValue: false);
         public bool SuppressDivider
         {
-            get { return (bool)GetValue(MarkdownTextProperty); }
-            set { SetValue(MarkdownTextProperty, value); }
+            get { return (bool)GetValue(SuppressDividerProperty); }
+            set { SetValue(SuppressDividerProperty, value); }
         }
 
         public static readonly BindableProperty FontSizeProperty = BindableProperty.Create(propertyName: nameof(FontSize), returnType: typeof(int), declaringType: typeof(MarkdownView), defaultValue: 16);
@@ -32,14 +40,6 @@ namespace Stencil.Native.Views
         {
             get { return (int)GetValue(FontSizeProperty); }
             set { SetValue(FontSizeProperty, value); }
-        }
-
-
-        public static readonly BindableProperty MarkdownTextProperty = BindableProperty.Create(propertyName: nameof(MarkdownText),returnType: typeof(string),declaringType: typeof(MarkdownView),defaultValue: null);
-        public string MarkdownText
-        {
-            get { return (string)GetValue(MarkdownTextProperty); }
-            set { SetValue(MarkdownTextProperty, value); }
         }
 
         public static readonly BindableProperty LinkTappedCommandProperty = BindableProperty.Create(propertyName: nameof(LinkTappedCommand),returnType: typeof(ICommand),declaringType: typeof(MarkdownView),defaultValue: null);
@@ -71,6 +71,9 @@ namespace Stencil.Native.Views
             {
                 this.AnythingTappedCommand?.Execute(null);
             });
+
         }
+
+        
     }
 }

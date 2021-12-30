@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -43,7 +43,7 @@ namespace Stencil.Native.Views.Markdown
                 {
                     result = new PreparedData();
                 }
-                result.TemplateSelector = new MarkdownTemplateSelector(commandScope);
+                result.LinkTappedCommand = new Command<string>(async (destination) => await NativeApplication.CommandProcessor.LinkTapped(destination));
                 result.CommandScope = commandScope;
                 return result;
             });
@@ -56,7 +56,7 @@ namespace Stencil.Native.Views.Markdown
             public List<MarkdownSection> sections { get; set; }
 
             [JsonIgnore]
-            public DataTemplateSelector TemplateSelector { get; set; }
+            public ICommand LinkTappedCommand { get; set; }
 
             [JsonIgnore]
             public ICommandScope CommandScope { get; set; }

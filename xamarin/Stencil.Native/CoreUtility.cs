@@ -227,5 +227,25 @@ namespace Stencil.Native
                 return NativeApplication.Logger;
             }
         }
+
+
+        public static bool TryParseDimensions(string dimensions, out System.Drawing.Size size)
+        {
+            size = new System.Drawing.Size();
+            try
+            {
+                if (!string.IsNullOrEmpty(dimensions) && dimensions.Contains("x"))
+                {
+                    string[] split = dimensions.Split('x');
+                    if (split != null && split.Length == 2)
+                    {
+                        size = new System.Drawing.Size(int.Parse(split[0]), int.Parse(split[1]));
+                        return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
     }
 }

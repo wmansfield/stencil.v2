@@ -8,6 +8,7 @@ namespace Stencil.Native.Commanding
 {
     public interface IDynamicCommand<TResult>
     {
+        bool AlertErrors { get; }
         Task<string> CanExecuteAsync(ICommandScope commandScope);
 
         Task<TResult> ExecuteAsync(ICommandScope commandScope, object commandParameter);

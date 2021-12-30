@@ -7,7 +7,8 @@ namespace Stencil.Native.Screens
 {
     public interface IVisualConfig
     {
-        ThicknessInfo Margin { get; }
+        ThicknessInfo Padding { get; }
         string BackgroundColor { get; }
+        string BackgroundImage { get; }
     }
 }

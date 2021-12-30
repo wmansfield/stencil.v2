@@ -2,24 +2,38 @@
 <base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:base="clr-namespace:Stencil.Native.Base"
+             xmlns:effects="clr-namespace:Stencil.Native.Effects;assembly=Stencil.Native"
              x:Class="Stencil.Native.Views.Standard.StandardDataView">
     <ContentView.Content>
         <Grid x:Name="grdContainer"
               BackgroundColor="{Binding BackgroundColor}"
-              VerticalOptions="Start" 
+              VerticalOptions="Fill" 
               HorizontalOptions="Fill"
-              Margin="{Binding Margin}"
               RowSpacing="0"
               ColumnSpacing="0">
-            <CollectionView x:Name="lvItems"
-                            Grid.Row="0"
-                            VerticalOptions="Start"
-                            HorizontalOptions="Fill"
-                            SelectionMode="None"
-                            ItemSizingStrategy="MeasureAllItems"
-                            ItemsSource="{Binding DataViewItems}"
-                            ItemTemplate="{Binding DataTemplateSelector}">
-            </CollectionView>
+            <Image IsVisible="{Binding BackgroundImage, Converter={StaticResource isValidStringConverter}}"
+                   Source="{Binding BackgroundImage}" 
+                   VerticalOptions="Fill" 
+                   HorizontalOptions="Fill" 
+                   Aspect="AspectFill" />
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Fill" Spacing="0" Margin="0">
+                <!--- ListView.Margin as Padding is Not a mistake -->
+                <CollectionView Margin="{Binding Padding}" 
+                      BackgroundColor="{Binding BackgroundColor}"
+                      VerticalOptions="FillAndExpand"
+                      HorizontalOptions="Fill"
+                      ItemSizingStrategy="MeasureAllItems"
+                      SelectionMode="None"
+                      ItemsSource="{Binding MainItems}"
+                      ItemTemplate="{Binding DataTemplateSelector}">
+                </CollectionView>
+
+                <StackLayout HorizontalOptions="Fill"
+                      IsVisible="{Binding ShowFooter}"
+                      BindableLayout.ItemsSource="{Binding FooterItems}"
+                      BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
+                </StackLayout>
+            </StackLayout>
         </Grid>
     </ContentView.Content>
 </base:BaseContentView>

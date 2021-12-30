@@ -11,6 +11,7 @@ namespace Stencil.Native.Commanding
 
         }
 
+        public abstract bool AlertErrors { get; }
         public abstract Task<string> CanExecuteAsync(ICommandScope commandScope);
 
         public abstract Task<object> ExecuteAsync(ICommandScope commandScope, object commandParameter);

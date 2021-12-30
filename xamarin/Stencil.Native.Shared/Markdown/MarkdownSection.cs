@@ -12,7 +12,5 @@ namespace Stencil.Native.Markdown
 
         public AssetData asset { get; set; }
 
-        [JsonIgnore]
-        public object native_data { get; set; }
     }
 }

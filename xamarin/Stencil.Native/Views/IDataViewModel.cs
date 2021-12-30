@@ -12,10 +12,13 @@ namespace Stencil.Native.Views
         ICommand NavigateBackCommand { get; }
         bool IsMenuSupported { get; }
         ObservableCollection<IMenuEntry> MenuEntries { get; }
-        ObservableCollection<IDataViewItem> DataViewItems { get; }
+        ObservableCollection<IDataViewItem> MainItems { get; }
+        ObservableCollection<IDataViewItem> FooterItems { get; }
+        bool ShowFooter { get; }
         DataTemplateSelector DataTemplateSelector { get; }
-        Thickness Margin { get; }
+        Thickness Padding { get; }
         Color BackgroundColor { get; }
+        string BackgroundImage { get; }
 
     }
 }

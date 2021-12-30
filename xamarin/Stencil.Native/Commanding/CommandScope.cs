@@ -15,6 +15,7 @@ namespace Stencil.Native.Commanding
         public ICommandProcessor CommandProcessor { get; set; }
         public IMenuEntry TargetMenuEntry { get; set; }
 
+        public bool AlertErrors { get; set; }
 
         public ConcurrentDictionary<string, ConcurrentDictionary<string, ICommandField>> command_data { get; }
 

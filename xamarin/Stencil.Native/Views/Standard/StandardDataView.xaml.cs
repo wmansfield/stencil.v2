@@ -34,6 +34,7 @@ namespace Stencil.Native.Views.Standard
                 base.OnBindingContextChanged();
 
                 this.DataViewModel.DataViewVisual = this;
+
             });
         }
 

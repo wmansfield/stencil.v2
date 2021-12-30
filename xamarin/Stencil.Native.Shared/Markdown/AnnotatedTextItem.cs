@@ -19,5 +19,18 @@ namespace Stencil.Native.Markdown
         /// </summary>
         [JsonIgnore]
         public object PreparedData { get; set; }
+
+
+        [JsonIgnore]
+        public object ui_data { get; set; }
+
+        [JsonIgnore]
+        public object ui_text { get; set; }
+
+        [JsonIgnore]
+        public List<TextAnnotation> ui_links { get; set; }
+
+        [JsonIgnore]
+        public float? ui_height { get; set; }
     }
 }
