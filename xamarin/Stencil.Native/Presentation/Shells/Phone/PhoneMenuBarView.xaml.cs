@@ -46,8 +46,16 @@ namespace Stencil.Native.Presentation.Shells.Phone
                         {
                             TargetMenuEntry = entry
                         };
+                        try
+                        {
+                            entry.UIActive = true;
 
-                        await menuViewModel.CommandProcessor.ExecuteCommandAsync(commandScope, entry.CommandName, entry.CommandParameter);
+                            await menuViewModel.CommandProcessor.ExecuteCommandAsync(commandScope, entry.CommandName, entry.CommandParameter);
+                        }
+                        finally
+                        {
+                            entry.UIActive = false;
+                        }
                     }
                 }
                 

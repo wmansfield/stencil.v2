@@ -29,5 +29,16 @@ namespace Stencil.Native.Views.Standard
             get { return _sections; }
             set { SetProperty(ref _sections, value); }
         }
+
+        /// <summary>
+        /// Warning: Does not support change notification, rely on custom application of changes instead
+        /// </summary>
+        public IDataViewFilter ViewFilter { get; set; }
+
+
+        /// <summary>
+        /// Warning: Does not support change notification, rely on custom application of changes instead
+        /// </summary>
+        public IDataViewModel DataViewModel { get; set; }
     }
 }

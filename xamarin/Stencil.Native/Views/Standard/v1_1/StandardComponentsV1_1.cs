@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Stencil.Native.Views.Standard.v1_1
 {
@@ -9,9 +10,14 @@ namespace Stencil.Native.Views.Standard.v1_1
         {
             _dataViewComponents = new Dictionary<string, IDataViewComponent>(StringComparer.OrdinalIgnoreCase);
             _dataViewComponents[H1.COMPONENT_NAME] = new H1();
+
+            foreach (string key in _dataViewComponents.Keys.ToList())
+            {
+                _dataViewComponents[ComponentUtility.GenerateVersionedName(key, VERSION)] = _dataViewComponents[key];
+            }
         }
 
-        public const string NAME = "v1.1";
+        public const string VERSION = "1.1";
 
         private Dictionary<string, IDataViewComponent> _dataViewComponents;
 

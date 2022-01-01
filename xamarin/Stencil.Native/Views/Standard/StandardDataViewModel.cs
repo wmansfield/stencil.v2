@@ -1,7 +1,9 @@
-﻿using Stencil.Native.Base;
+﻿using Newtonsoft.Json;
+using Stencil.Native.Base;
 using Stencil.Native.Commanding;
 using Stencil.Native.Presentation.Menus;
 using Stencil.Native.Screens;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -11,15 +13,20 @@ namespace Stencil.Native.Views.Standard
 {
     public class StandardDataViewModel : BaseViewModel, IDataViewModel
     {
-        public StandardDataViewModel(ICommandProcessor commandProcessor, DataTemplateSelector dataTemplateSelector = null)
+        public StandardDataViewModel(ICommandProcessor commandProcessor, Func<ICommandScope, DataTemplateSelector> dataTemplateSelectorCreator)
             : base(nameof(StandardDataViewModel))
         {
+            this.Filters = new List<IDataViewFilter>();
+            this.CommandScope = new CommandScope(commandProcessor);
+            this.DataTemplateSelector = dataTemplateSelectorCreator(this.CommandScope);
+        }
+
+        public StandardDataViewModel(ICommandProcessor commandProcessor, DataTemplateSelector dataTemplateSelector)
+            : base(nameof(StandardDataViewModel))
+        {
+            this.Filters = new List<IDataViewFilter>();
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelector;
-            if (this.DataTemplateSelector == null)
-            {
-                this.DataTemplateSelector = new ComponentLibraryTemplateSelector(this.CommandScope);
-            }
         }
 
         public ICommandScope CommandScope { get; set; }
@@ -29,11 +36,19 @@ namespace Stencil.Native.Views.Standard
 
         public List<ICommandConfig> ShowCommands { get; set; }
 
-        private ObservableCollection<IDataViewItem> _mainItems;
-        public ObservableCollection<IDataViewItem> MainItems
+        private ObservableCollection<IDataViewItem> _mainItemsUnFiltered;
+        public ObservableCollection<IDataViewItem> MainItemsUnFiltered
         {
-            get { return _mainItems; }
-            set { SetProperty(ref _mainItems, value); }
+            get { return _mainItemsUnFiltered; }
+            set { SetProperty(ref _mainItemsUnFiltered, value); }
+        }
+
+
+        private ObservableCollection<IDataViewItem> _mainItemsFiltered;
+        public ObservableCollection<IDataViewItem> MainItemsFiltered
+        {
+            get { return _mainItemsFiltered; }
+            set { SetProperty(ref _mainItemsFiltered, value); }
         }
 
 
@@ -65,6 +80,20 @@ namespace Stencil.Native.Views.Standard
             set { SetProperty(ref _backgroundImage, value); }
         }
 
+        private ObservableCollection<IDataViewItem> _headerItems;
+        public ObservableCollection<IDataViewItem> HeaderItems
+        {
+            get { return _headerItems; }
+            set { SetProperty(ref _headerItems, value); }
+        }
+
+        private bool _showHeader;
+        public bool ShowHeader
+        {
+            get { return _showHeader; }
+            set { SetProperty(ref _showHeader, value); }
+        }
+
         private ObservableCollection<IDataViewItem> _footerItems;
         public ObservableCollection<IDataViewItem> FooterItems
         {
@@ -77,6 +106,62 @@ namespace Stencil.Native.Views.Standard
         {
             get { return _showFooter; }
             set { SetProperty(ref _showFooter, value); }
+        }
+
+        public List<IDataViewFilter> Filters { get; set; }
+
+
+        public Task InitializeData()
+        {
+            return base.ExecuteMethodAsync(nameof(InitializeData), async delegate ()
+            {
+                await this.ApplyFiltersAsync();
+            });
+        }
+
+        public Task ApplyFiltersAsync()
+        {
+            return base.ExecuteMethodAsync(nameof(ApplyFiltersAsync), async delegate ()
+            {
+                ObservableCollection<IDataViewItem> filteredItems = new ObservableCollection<IDataViewItem>();
+                ObservableCollection<IDataViewItem> unFilteredItems = this.MainItemsUnFiltered;
+                
+                if (unFilteredItems?.Count > 0)
+                {
+                    if(this.Filters?.Count > 0)
+                    {
+                        foreach (IDataViewItem item in unFilteredItems)
+                        {
+                            bool shouldSuppress = false;
+                            foreach (IDataViewFilter filter in this.Filters)
+                            {
+                                try
+                                {
+                                    shouldSuppress = await filter.ApplyFilter(this, item);
+                                    if (shouldSuppress)
+                                    {
+                                        break;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    this.LogError(ex, $"Error applying filter with '{filter.GetType()}' against item '{JsonConvert.SerializeObject(item.PreparedData)}'");
+                                }
+                            }
+                            if(!shouldSuppress)
+                            {
+                                filteredItems.Add(item);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        filteredItems = unFilteredItems;
+                    }
+                }
+
+                this.MainItemsFiltered = filteredItems;
+            });
         }
 
         public override Task OnNavigatingToAsync()

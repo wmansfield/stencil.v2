@@ -1,4 +1,5 @@
-﻿using Stencil.Native.Views;
+﻿using Newtonsoft.Json;
+using Stencil.Native.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,22 @@ namespace Stencil.Native.Screens
         public ScreenConfigExchange()
         {
             this.ViewConfigs = new List<ViewConfig>();
+            this.HeaderConfigs = new List<ViewConfig>();
             this.FooterConfigs = new List<ViewConfig>();
             this.ShowCommands = new List<CommandConfig>();
             this.MenuConfigs = new List<MenuConfig>();
+            this.DownloadCommands = new List<CommandConfig>();
         }
         public string ScreenStorageKey { get; set; }
         public string ScreenName { get; set; }
         public string ScreenParameter { get; set; }
+        public NavigationData ScreenNavigationData { get; set; }
+
         public bool SuppressPersist { get; set; }
         public bool AutomaticDownload { get; set; }
         public bool IsMenuSupported { get; set; }
 
+        public Lifetime Lifetime { get; set; }
         public DateTimeOffset? DownloadedUTC { get; set; }
         public DateTimeOffset? CacheUntilUTC { get; set; }
         public DateTimeOffset? ExpireUTC { get; set; }
@@ -40,15 +46,32 @@ namespace Stencil.Native.Screens
         public VisualConfig VisualConfig { get; set; }
 
         public List<ViewConfig> ViewConfigs { get; set; }
+        public List<ViewConfig> HeaderConfigs { get; set; }
         public List<ViewConfig> FooterConfigs { get; set; }
         public List<CommandConfig> ShowCommands { get; set; }
+        public List<CommandConfig> DownloadCommands { get; set; }
         public List<MenuConfig> MenuConfigs { get; set; }
+
+        INavigationData IScreenConfig.ScreenNavigationData
+        {
+            get
+            {
+                return this.ScreenNavigationData;
+            }
+        }
 
         List<IViewConfig> IScreenConfig.ViewConfigs
         {
             get
             {
                 return this.ViewConfigs.AsEnumerable<IViewConfig>().ToList();
+            }
+        }
+        List<IViewConfig> IScreenConfig.HeaderConfigs
+        {
+            get
+            {
+                return this.HeaderConfigs.AsEnumerable<IViewConfig>().ToList();
             }
         }
         List<IViewConfig> IScreenConfig.FooterConfigs
@@ -72,6 +95,13 @@ namespace Stencil.Native.Screens
             get
             {
                 return this.ShowCommands.AsEnumerable<ICommandConfig>().ToList();
+            }
+        }
+        List<ICommandConfig> IScreenConfig.DownloadCommands
+        {
+            get
+            {
+                return this.DownloadCommands.AsEnumerable<ICommandConfig>().ToList();
             }
         }
 

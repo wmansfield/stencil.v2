@@ -49,7 +49,16 @@ namespace Stencil.Native.Data
         #endregion
 
         #region Screen Methods
-
+#if !DEBUG
+        [Obsolete("Do not use in production.", true)]
+#endif
+        public List<ScreenConfig> ScreenConfig_All()
+        {
+            return base.ExecuteFunction(nameof(ScreenConfig_Get), delegate ()
+            {
+                return this.Realm.All<db.ScreenConfig>().ToUIModel();
+            });
+        }
         public ScreenConfig ScreenConfig_Get(string screenIdentifier)
         {
             return base.ExecuteFunction(nameof(ScreenConfig_Get), delegate ()
@@ -80,6 +89,22 @@ namespace Stencil.Native.Data
                     realm.Write(() =>
                     {
                         screenConfig.invalidated_utc = DateTimeOffset.UtcNow;
+                    });
+                }
+            });
+        }
+        public void ScreenConfig_Remove(string screenIdentifier)
+        {
+            base.ExecuteMethod(nameof(ScreenConfig_Remove), delegate ()
+            {
+                Realm realm = this.Realm;
+
+                db.ScreenConfig screenConfig = realm.Find<db.ScreenConfig>(screenIdentifier);
+                if (screenConfig != null)
+                {
+                    realm.Write(() =>
+                    {
+                        realm.Remove(screenConfig);
                     });
                 }
             });

@@ -13,6 +13,7 @@ namespace Stencil.Native.Data.Sync
     {
         public string ScreenName { get; set; }
         public string ScreenParameter { get; set; }
+        public string NavigationData { get; set; }
         public bool ForceDownload { get; set; }
         public Lifetime Lifetime { get; set; }
 

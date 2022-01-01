@@ -3,15 +3,17 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Stencil.Native.Views.Standard.v1_1.H1">
     <DataTemplate x:Key="h1">
-        <Grid RowSpacing="0"
-              ColumnSpacing="0"
-              Margin="0"
-              Padding="0">
+        <!--<ViewCell>-->
+        <StackLayout HorizontalOptions="Fill" Padding="0" Margin="0" BackgroundColor="{Binding PreparedData.BackgroundColor}">
             <Label Text="{Binding PreparedData.Text}"
-                   FormattedText="{Binding PreparedData.FormattedText}"
-                   TextColor="Yellow"
-                   HorizontalTextAlignment="Center">
-            </Label>
-        </Grid>
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       FontSize="{StaticResource FontSizeH1}"
+                       FontFamily="{StaticResource SansBold}"
+                       TextColor="{Binding PreparedData.TextColor}"
+                       HorizontalTextAlignment="Center"
+                       Margin="0,8" />
+        </StackLayout>
+        <!--</ViewCell>-->
     </DataTemplate>
 </ResourceDictionary>

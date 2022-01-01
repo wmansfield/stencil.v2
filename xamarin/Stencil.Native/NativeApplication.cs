@@ -140,7 +140,7 @@ namespace Stencil.Native
                 byte[] encryptionKey = this.GetEncryptionKeySynchronous();
                 RealmConfiguration configuration = new RealmConfiguration(string.Format("native.{0}.realm", this.InternalAppName.ToLower()))
                 {
-                    SchemaVersion = 2,
+                    SchemaVersion = 3,
                     EncryptionKey = encryptionKey,
                     MigrationCallback = (migration, oldSchemaVersion) =>
                     {

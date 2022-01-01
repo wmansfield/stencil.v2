@@ -1,6 +1,8 @@
-﻿using Stencil.Native.Commanding;
+﻿using Newtonsoft.Json;
+using Stencil.Native.Commanding;
 using Stencil.Native.Data;
 using Stencil.Native.Presentation.Menus;
+using Stencil.Native.Resourcing;
 using Stencil.Native.Views;
 using Stencil.Native.Views.Standard;
 using System;
@@ -8,8 +10,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using v1_0 = Stencil.Native.Views.Standard.v1_0;
-using v1_1 = Stencil.Native.Views.Standard.v1_1;
 
 namespace Stencil.Native.Screens
 {
@@ -21,10 +21,10 @@ namespace Stencil.Native.Screens
         public ScreenManager(TAPI api)
             : base(api, nameof(ScreenManager<TAPI>))
         {
-
         }
 
         #endregion
+
 
         #region Public Methods
 
@@ -36,19 +36,34 @@ namespace Stencil.Native.Screens
 
                 if (!string.IsNullOrWhiteSpace(navigationData?.screen_name))
                 {
-                    IScreenConfig screenConfig = await this.LoadScreenConfigAsync(navigationData);
+                    IScreenConfig screenConfig = await this.LoadScreenConfigAsync(commandProcessor, navigationData);
                     if (screenConfig != null)
                     {
+                        result = new StandardDataViewModel(commandProcessor, this.CreateDataTemplateSelector);
+
                         // map to view elements
                         ObservableCollection<IDataViewItem> mainItems = new ObservableCollection<IDataViewItem>();
                         if (screenConfig.ViewConfigs != null)
                         {
                             foreach (IViewConfig viewConfig in screenConfig.ViewConfigs)
                             {
-                                IDataViewItem dataViewItem = this.GenerateViewItem(viewConfig);
+                                IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
                                 if (dataViewItem != null)
                                 {
                                     mainItems.Add(dataViewItem);
+                                }
+                            }
+                        }
+
+                        ObservableCollection<IDataViewItem> headerItems = new ObservableCollection<IDataViewItem>();
+                        if (screenConfig.HeaderConfigs != null)
+                        {
+                            foreach (IViewConfig viewConfig in screenConfig.HeaderConfigs)
+                            {
+                                IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
+                                if (dataViewItem != null)
+                                {
+                                    headerItems.Add(dataViewItem);
                                 }
                             }
                         }
@@ -58,7 +73,7 @@ namespace Stencil.Native.Screens
                         {
                             foreach (IViewConfig viewConfig in screenConfig.FooterConfigs)
                             {
-                                IDataViewItem dataViewItem = this.GenerateViewItem(viewConfig);
+                                IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
                                 if (dataViewItem != null)
                                 {
                                     footerItems.Add(dataViewItem);
@@ -81,18 +96,60 @@ namespace Stencil.Native.Screens
                         }
 
 
-                        // build the view and return it
-                        result = new StandardDataViewModel(commandProcessor)
-                        {
-                            IsMenuSupported = screenConfig.IsMenuSupported,
-                            MainItems = mainItems,
-                            FooterItems = footerItems,
-                            ShowFooter = footerItems.Count > 0,
-                            MenuEntries = menuEntries,
-                            ShowCommands = screenConfig.ShowCommands
-                        };
+                        // assign mapped element
+                        result.IsMenuSupported = screenConfig.IsMenuSupported;
+                        result.MainItemsUnFiltered = mainItems;
+                        result.HeaderItems = headerItems;
+                        result.ShowHeader = headerItems.Count > 0;
+                        result.FooterItems = footerItems;
+                        result.ShowFooter = footerItems.Count > 0;
+                        result.MenuEntries = menuEntries;
+                        result.ShowCommands = screenConfig.ShowCommands;
 
-                        if(screenConfig.VisualConfig != null)
+
+                        // extract filters or augmentations
+
+                        IResolvableTemplateSelector resolvableTemplateSelector = result.DataTemplateSelector as IResolvableTemplateSelector;
+                        if(resolvableTemplateSelector != null)
+                        {
+                            if (result.MainItemsUnFiltered != null)
+                            {
+                                foreach (IDataViewItem item in result.MainItemsUnFiltered)
+                                {
+                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(item);
+                                    if (item.PreparedData is IDataViewFilter dataViewFilter)
+                                    {
+                                        result.Filters.Add(dataViewFilter);
+                                    }
+                                }
+                            }
+                            if (result.HeaderItems != null)
+                            {
+                                foreach (IDataViewItem item in result.HeaderItems)
+                                {
+                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(item);
+                                    if (item.PreparedData is IDataViewFilter dataViewFilter)
+                                    {
+                                        result.Filters.Add(dataViewFilter);
+                                    }
+                                }
+                            }
+                            if (result.FooterItems != null)
+                            {
+                                foreach (IDataViewItem item in result.FooterItems)
+                                {
+                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(item);
+                                    if (item.PreparedData is IDataViewFilter dataViewFilter)
+                                    {
+                                        result.Filters.Add(dataViewFilter);
+                                    }
+                                }
+                            }
+                        }
+                        
+
+                        // apply page visuals
+                        if (screenConfig.VisualConfig != null)
                         {
                             result.BackgroundImage = screenConfig.VisualConfig.BackgroundImage;
 
@@ -100,11 +157,11 @@ namespace Stencil.Native.Screens
                             {
                                 result.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
                             }
-                            if(screenConfig.VisualConfig.Padding != null)
-                            {
-                                result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
-                            }
+                            result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
                         }
+
+
+                        await result.InitializeData();
                     }
                 }
 
@@ -112,7 +169,7 @@ namespace Stencil.Native.Screens
             });
         }
 
-        public virtual IDataViewItem GenerateViewItem(IViewConfig viewConfig)
+        public virtual IDataViewItem GenerateViewItem(IDataViewModel dataViewModel, IViewConfig viewConfig)
         {
             return base.ExecuteFunction(nameof(GenerateViewItem), delegate ()
             {
@@ -122,6 +179,7 @@ namespace Stencil.Native.Screens
                 }
                 StandardDataViewItem result = new StandardDataViewItem()
                 {
+                    DataViewModel = dataViewModel,
                     Library = viewConfig.library,
                     Component = viewConfig.component,
                     ConfigurationJson = viewConfig.configuration_json,
@@ -138,7 +196,7 @@ namespace Stencil.Native.Screens
 
                             foreach (IViewConfig item in section.ViewConfigs)
                             {
-                                IDataViewItem childViewItem = this.GenerateViewItem(item);
+                                IDataViewItem childViewItem = this.GenerateViewItem(dataViewModel, item);
                                 if (childViewItem != null)
                                 {
                                     children.Add(childViewItem);
@@ -156,6 +214,17 @@ namespace Stencil.Native.Screens
             });
         }
 
+        public virtual Task RemoveScreenConfigAsync(string screenStorageKey)
+        {
+            return base.ExecuteFunction(nameof(RemoveScreenConfigAsync), delegate ()
+            {
+                using (IStencilDatabase database = this.API.StencilDatabase.OpenStencilDatabase())
+                {
+                    database.ScreenConfig_Remove(screenStorageKey);
+                }
+                return Task.CompletedTask;
+            });
+        }
         public virtual Task InvalidateScreenConfigAsync(string screenStorageKey)
         {
             return base.ExecuteFunction(nameof(InvalidateScreenConfigAsync), delegate ()
@@ -180,7 +249,7 @@ namespace Stencil.Native.Screens
                 {
                     if(result != null)
                     {
-                        if (result.ExpireUTC.HasValue && result.ExpireUTC.Value > DateTimeOffset.Now)
+                        if (result.ExpireUTC.HasValue && result.ExpireUTC.Value < DateTimeOffset.Now)
                         {
                             result = null; //TODO:MUST: How do we clean expired items?
                         }
@@ -249,6 +318,14 @@ namespace Stencil.Native.Screens
 
         #region Protected Methods
 
+        protected virtual DataTemplateSelector CreateDataTemplateSelector(ICommandScope scope)
+        {
+            return base.ExecuteFunction(nameof(CreateDataTemplateSelector), delegate ()
+            {
+                return new ComponentLibraryTemplateSelector(scope);
+            });
+        }
+
         protected IMenuEntry GenerateMenuItem(IMenuConfig viewConfig)
         {
             return base.ExecuteFunction(nameof(GenerateMenuItem), delegate ()
@@ -259,18 +336,26 @@ namespace Stencil.Native.Screens
                 }
                 MenuEntry result = new MenuEntry()
                 {
+                    Identifier = viewConfig.identifier,
+                    UISelected = viewConfig.is_selected,
                     Label = viewConfig.label,
                     IconCharacter = viewConfig.icon_character,
                     IsIcon = viewConfig.is_icon,
                     CommandName = viewConfig.command,
-                    CommandParameter = viewConfig.command_parameter
+                    CommandParameter = viewConfig.command_parameter,
+                    SelectedBackgroundColor = AppColors.MenuSelectedBackground,
+                    UnselectedBackgroundColor = AppColors.MenuUnselectedBackground,
+                    SelectedTextColor = AppColors.MenuSelectedText,
+                    UnselectedTextColor = AppColors.MenuUnselectedText,
+                    ActiveBackgroundColor = AppColors.MenuActiveBackground,
+                    ActiveTextColor = AppColors.MenuActiveText
                 };
 
                 return result;
             });
         }
 
-        protected Task<IScreenConfig> LoadScreenConfigAsync(INavigationData navigationData)
+        protected Task<IScreenConfig> LoadScreenConfigAsync(ICommandProcessor commandProcessor, INavigationData navigationData)
         {
             return base.ExecuteFunctionAsync(nameof(LoadScreenConfigAsync), async delegate ()
             {
@@ -290,20 +375,44 @@ namespace Stencil.Native.Screens
                 {
                     // manually build if missing from database
                     result = await this.GenerateMissingScreenConfigAsync(navigationData);
-
-                    if (result != null && !result.SuppressPersist)
+                    
+                    if(result != null)
                     {
-                        // ensure we have an id, in case implementor forgot
-                        if (string.IsNullOrWhiteSpace(result.ScreenStorageKey))
+                        if (result.DownloadCommands?.Count > 0)
                         {
-                            result.ScreenStorageKey = ScreenConfig.FormatStorageKey(navigationData.screen_name, navigationData.screen_parameter);
-                        }
-                        if(!result.DownloadedUTC.HasValue)
-                        {
-                            result.DownloadedUTC = DateTimeOffset.UtcNow;
+                            CommandScope commandScope = new CommandScope(commandProcessor);
+
+                            foreach (ICommandConfig item in result.DownloadCommands)
+                            {
+                                try
+                                {
+                                    await this.API.CommandProcessor.ExecuteCommandAsync(commandScope, item.CommandName, item.CommandParameter);
+                                }
+                                catch (Exception ex)
+                                {
+                                    this.LogError(ex, string.Format("ProcessScreenJob.DownloadCommand:{0}:{1}" + item.CommandName, item.CommandParameter));
+                                }
+                            }
                         }
 
-                        await this.SaveScreenConfigAsync(result);
+                        if (!result.SuppressPersist)
+                        {
+                            // ensure we have an id, in case implementor forgot
+                            if (string.IsNullOrWhiteSpace(result.ScreenStorageKey))
+                            {
+                                result.ScreenStorageKey = ScreenConfig.FormatStorageKey(navigationData.screen_name, navigationData.screen_parameter);
+                            }
+                            if (!result.DownloadedUTC.HasValue)
+                            {
+                                result.DownloadedUTC = DateTimeOffset.UtcNow;
+                            }
+                            if (result.ScreenNavigationData != null)
+                            {
+                                result.ScreenNavigationData.last_retrieved_utc = DateTime.UtcNow;
+                            }
+
+                            await this.SaveScreenConfigAsync(result);
+                        }
                     }
                 }
 

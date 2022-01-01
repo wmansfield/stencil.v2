@@ -23,7 +23,7 @@ namespace Stencil.Native.Views
         /// </summary>
         object PreparedData { get; set; }
 
-
+        IDataViewModel DataViewModel { get; set; }
         IDataViewSection[] Sections { get; set; }
 
     }

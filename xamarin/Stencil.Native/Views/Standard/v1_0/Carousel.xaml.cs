@@ -13,9 +13,17 @@ namespace Stencil.Native.Views.Standard.v1_0
             InitializeComponent();
         }
 
-        public const string COMPONENT_NAME = "carousel-" + StandardComponentsV1_0.NAME;
+        public const string COMPONENT_NAME = "carousel";
 
         private const string TEMPLATE_KEY = "carousel";
+
+        public bool PreparedDataCacheDisabled
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public DataTemplate GetDataTemplate()
         {
@@ -24,7 +32,7 @@ namespace Stencil.Native.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, DataTemplateSelector selector, string configuration_json, IDataViewSection[] sections)
+        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
             {
@@ -40,18 +48,18 @@ namespace Stencil.Native.Views.Standard.v1_0
 
                 List<IDataViewModel> cells = new List<IDataViewModel>();
                 
-                if (sections != null)
+                if (dataViewItem?.Sections != null)
                 {
-                    foreach (IDataViewSection section in sections)
+                    foreach (IDataViewSection section in dataViewItem.Sections)
                     {
                         if (section.ViewItems != null)
                         {
-                            StandardDataViewModel dataViewModel = new StandardDataViewModel(commandScope.CommandProcessor, selector)
+                            StandardDataViewModel childViewModel = new StandardDataViewModel(commandScope.CommandProcessor, selector)
                             {
-                                MainItems = new ObservableCollection<IDataViewItem>(section.ViewItems)
+                                MainItemsFiltered = new ObservableCollection<IDataViewItem>(section.ViewItems)
                             };
 
-                            cells.Add(dataViewModel);
+                            cells.Add(childViewModel);
                         }
                     }
                 }

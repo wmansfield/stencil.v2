@@ -2,7 +2,7 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Stencil.Native.Views.Standard.v1_0.H1">
-    <DataTemplate x:Key="h1">
+    <DataTemplate x:Key="h1-1.0">
         <!--<ViewCell>-->
             <StackLayout HorizontalOptions="Fill" Padding="0" Margin="0" BackgroundColor="{Binding PreparedData.BackgroundColor}">
                 <Label Text="{Binding PreparedData.Text}"

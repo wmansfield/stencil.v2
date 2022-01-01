@@ -23,6 +23,14 @@ namespace Stencil.Native.Views.Markdown
         public const string COMPONENT_NAME = "markdown-container";
         private const string TEMPLATE_KEY = "markdownContainer";
 
+        public bool PreparedDataCacheDisabled
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public DataTemplate GetDataTemplate()
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
@@ -30,7 +38,7 @@ namespace Stencil.Native.Views.Markdown
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, DataTemplateSelector selector, string configuration_json, IDataViewSection[] sections)
+        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
             {

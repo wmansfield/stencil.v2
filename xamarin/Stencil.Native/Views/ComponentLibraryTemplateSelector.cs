@@ -3,13 +3,14 @@ using Stencil.Native.Views.Markdown;
 using Stencil.Native.Views.Standard;
 using Stencil.Native.Views.Standard.v1_0;
 using Stencil.Native.Views.Standard.v1_1;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Stencil.Native.Views
 {
-    public class ComponentLibraryTemplateSelector : DataTemplateSelector
+    public class ComponentLibraryTemplateSelector : DataTemplateSelector, IResolvableTemplateSelector
     {
         #region Constructors
 
@@ -40,34 +41,90 @@ namespace Stencil.Native.Views
 
         public ICommandScope CommandScope { get; set; }
 
-        #endregion
 
-
-        protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+        private DataTemplate _missingTemplate;
+        protected virtual DataTemplate MissingTemplate
         {
-            IDataViewItem dataViewItem = item as IDataViewItem;
-            string library = dataViewItem.Library;
-            if (library == null)
+            get
             {
-                library = string.Empty;
-            }
-            if(dataViewItem != null && !string.IsNullOrWhiteSpace(dataViewItem.Component))
-            {
-                if(ComponentLibraries.TryGetValue(library, out List<IComponentLibrary> componentLibraries))
+                if(_missingTemplate == null)
                 {
-                    foreach (IComponentLibrary componentLibrary in componentLibraries)
+                    _missingTemplate = new DataTemplate(() => 
                     {
-                        IDataViewComponent dataViewComponent = componentLibrary.GetComponent(dataViewItem.Component);
-                        if (dataViewComponent != null)
+                        Label label = new Label();
+#if DEBUG
+                        label.BackgroundColor = Color.Red;
+                        label.TextColor = Color.White;
+                        label.SetBinding(Label.TextProperty, "PreparedData");
+#endif
+                        return label;
+                    });
+                }
+                return _missingTemplate;
+            }
+        }
+
+#endregion
+
+        public IDataViewComponent ResolveTemplateAndPrepareData(IDataViewItem dataViewItem)
+        {
+            return CoreUtility.ExecuteFunction(nameof(ResolveTemplateAndPrepareData), delegate ()
+            {
+                if (dataViewItem != null && !string.IsNullOrWhiteSpace(dataViewItem.Component))
+                {
+                    string library = dataViewItem.Library;
+                    if (library == null)
+                    {
+                        library = string.Empty;
+                    }
+                    if (ComponentLibraries.TryGetValue(library, out List<IComponentLibrary> componentLibraries))
+                    {
+                        foreach (IComponentLibrary componentLibrary in componentLibraries)
                         {
-                            dataViewItem.PreparedData = dataViewComponent.PrepareData(this.CommandScope, this, dataViewItem.ConfigurationJson, dataViewItem.Sections);
-                            DataTemplate result = dataViewComponent.GetDataTemplate();
-                            return result;
+                            IDataViewComponent dataViewComponent = componentLibrary.GetComponent(dataViewItem.Component);
+                            if (dataViewComponent != null)
+                            {
+                                if (dataViewItem.PreparedData == null || dataViewComponent.PreparedDataCacheDisabled)
+                                {
+                                    dataViewItem.PreparedData = dataViewComponent.PrepareData(this.CommandScope, dataViewItem.DataViewModel, dataViewItem, this, dataViewItem.ConfigurationJson);
+                                }
+                                return dataViewComponent;
+                            }
                         }
                     }
                 }
-            }
-            return null;//TODO:MUST: Figure out a graceful way to fail here
+                return null;
+            });
+        }
+
+        protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+        {
+            return CoreUtility.ExecuteFunction(nameof(OnSelectTemplate), delegate ()
+            {
+                IDataViewItem dataViewItem = item as IDataViewItem;
+
+                IDataViewComponent dataViewComponent = this.ResolveTemplateAndPrepareData(dataViewItem);
+
+                if (dataViewComponent != null)
+                {
+                    DataTemplate result = dataViewComponent.GetDataTemplate();
+                    return result;
+                }
+
+                // log failure
+                string componentName = dataViewItem?.Component;
+                if(string.IsNullOrWhiteSpace(componentName) && item != null)
+                {
+                    componentName = item.GetType().ToString();
+                }
+                dataViewItem.PreparedData = componentName;
+#if !DEBUG
+                CoreUtility.Logger.LogError("ComponentLibraryTemplateSelector", new Exception("Unable to find component with the name " + componentName));
+#endif
+
+                // return empty
+                return this.MissingTemplate;
+            });
         }
     }
 }

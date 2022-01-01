@@ -13,7 +13,7 @@
                         VerticalOptions="Start"
                         HorizontalOptions="Fill"
                         SelectionMode="None"
-                        ItemsSource="{Binding DataViewItems}"
+                        ItemsSource="{Binding MainItemsFiltered}"
                         ItemTemplate="{Binding DataTemplateSelector}" />
                 </DataTemplate>
             </CarouselView.ItemTemplate>

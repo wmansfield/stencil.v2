@@ -1,12 +1,8 @@
 ﻿
 namespace Stencil.Native.Views
 {
-    public class ThicknessInfo
+    public struct ThicknessInfo
     {
-        public ThicknessInfo()
-        {
-
-        }
         public ThicknessInfo(double all)
         {
             this.top = all;

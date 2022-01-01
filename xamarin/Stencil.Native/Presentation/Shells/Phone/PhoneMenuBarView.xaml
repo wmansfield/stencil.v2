@@ -21,29 +21,29 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <FlexLayout Grid.Row="1" VerticalOptions="Fill" HorizontalOptions="Fill" 
-                                    Direction="Column" JustifyContent="Center">
+                                    Direction="Column" JustifyContent="Center"
+                                    BackgroundColor="{Binding UIBackgroundColor}">
                             <Label IsVisible="{Binding IsIcon}" 
                                    Text="{Binding IconCharacter}"
                                    FlexLayout.AlignSelf="Center"
                                    HorizontalTextAlignment="Center"
                                    FontFamily="{StaticResource FontAwesome}"
-                                   TextColor="{x:StaticResource Primary900}"
-                                   FontSize="22"
-                                   Margin="4"
+                                   TextColor="{Binding UITextColor}"
+                                   FontSize="{StaticResource FontSizeMenuIcon}"
+                                   Margin="4,4,4,8"
                                    Padding="0"/>
                             <Label FlexLayout.AlignSelf="Center"
                                    HorizontalTextAlignment="Center"
                                    Text="{Binding Label}"
-                                   TextColor="{x:StaticResource Primary900}"
+                                   TextColor="{Binding UITextColor}"
                                    FontFamily="{StaticResource SansRegular}"
-                                   FontSize="14"
+                                   FontSize="{StaticResource FontSizeMenuText}"
                                    Margin="0"
                                    Padding="0"/>
                             <FlexLayout.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                             </FlexLayout.GestureRecognizers>
                         </FlexLayout>
-                        <BoxView Grid.Row="0" BackgroundColor="{x:StaticResource Accent100}" HorizontalOptions="Fill" />
                     </Grid>
                 </DataTemplate>
             </BindableLayout.ItemTemplate>

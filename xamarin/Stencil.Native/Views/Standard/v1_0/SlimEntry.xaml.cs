@@ -7,10 +7,10 @@ using Xamarin.Forms;
 
 namespace Stencil.Native.Views.Standard.v1_0
 {
-    public partial class LightEntry : ResourceDictionary, IDataViewComponent
+    public partial class SlimEntry : ResourceDictionary, IDataViewComponent
     {
         #region Constructor
-        public LightEntry()
+        public SlimEntry()
         {
             InitializeComponent();
         }
@@ -19,12 +19,22 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         #region Constants
 
-        public const string COMPONENT_NAME = "lightEntry-" + StandardComponentsV1_0.NAME;
-        private const string TEMPLATE_KEY = "lightEntry";
+        public const string COMPONENT_NAME = "slimEntry";
+        private const string TEMPLATE_KEY = "slimEntry";
 
         #endregion
 
         #region DataViewComponent
+
+
+        public bool PreparedDataCacheDisabled
+        {
+            get
+            {
+                return false;
+            }
+        }
+
 
         public DataTemplate GetDataTemplate()
         {
@@ -33,7 +43,7 @@ namespace Stencil.Native.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, DataTemplateSelector selector, string configuration_json, IDataViewSection[] sections)
+        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
             {

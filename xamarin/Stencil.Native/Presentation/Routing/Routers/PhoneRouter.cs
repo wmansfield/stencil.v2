@@ -2,6 +2,7 @@
 using Stencil.Native.Presentation.Menus;
 using Stencil.Native.Presentation.Shells;
 using Stencil.Native.Presentation.Shells.Phone;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -72,55 +73,66 @@ namespace Stencil.Native.Presentation.Routing.Routers
         {
             return base.ExecuteMethodAsync(nameof(PushViewAsync), async delegate ()
             {
-                PhoneMenuShellPage menuShellPage = this.CurrentPage as PhoneMenuShellPage;
-
-                bool isMainMenuContent = false;
-
-                if (knownMainMenuEntry != null && menuShellPage != null)
+                try
                 {
-                    IMainMenuView mainMenu = menuShellPage.MenuContent as IMainMenuView;
-                    if (mainMenu != null && mainMenu.MenuViewModel != null && mainMenu.MenuViewModel.MenuEntries != null)
+                    PhoneMenuShellPage menuShellPage = this.CurrentPage as PhoneMenuShellPage;
+
+                    bool isMainMenuContent = false;
+
+                    IMainMenuView mainMenu = null;
+                    if (knownMainMenuEntry != null && menuShellPage != null)
                     {
-                        isMainMenuContent = mainMenu.MenuViewModel.MenuEntries.Contains(knownMainMenuEntry);
+                        mainMenu = menuShellPage.MenuContent as IMainMenuView;
+                        if (mainMenu != null && mainMenu.MenuViewModel != null && mainMenu.MenuViewModel.MenuEntries != null)
+                        {
+                            isMainMenuContent = mainMenu.MenuViewModel.MenuEntries.Contains(knownMainMenuEntry);
+                        }
+                    }
+
+                    if (isMainMenuContent)
+                    {
+                        ShellModel newShellModel = new ShellModel()
+                        {
+                            Parent = this.CurrentShellModel,
+                            View = view,
+                        };
+
+                        this.CurrentShellModel = newShellModel;
+
+                        Task onNavigatingTask = view.OnNavigatingToAsync();
+
+                        menuShellPage.ViewContent = view.GetSelf();
+
+                        mainMenu.MenuViewModel.SelectedIdentifier = knownMainMenuEntry.Identifier;
+
+                        await onNavigatingTask;
+                    }
+                    else
+                    {
+                        ShellModel newShellModel = new ShellModel()
+                        {
+                            Parent = this.CurrentShellModel,
+                            View = view,
+                        };
+                        PhoneBlankShellPage navShellPage = new PhoneBlankShellPage()
+                        {
+                            ViewContent = view.GetSelf(),
+                        };
+
+                        navShellPage.BindingContext = navShellPage.ViewContent.BindingContext;
+
+                        this.CurrentShellModel = newShellModel;
+
+                        Task onNavigatingTask = view.OnNavigatingToAsync();
+
+                        await this.CurrentPage.Navigation.PushAsync(navShellPage);
+                        await onNavigatingTask;
                     }
                 }
-
-                if (isMainMenuContent)
+                catch (Exception ex)
                 {
-                    ShellModel newShellModel = new ShellModel()
-                    {
-                        Parent = this.CurrentShellModel,
-                        View = view,
-                    };
-
-                    this.CurrentShellModel = newShellModel;
-
-                    Task onNavigatingTask = view.OnNavigatingToAsync();
-
-                    menuShellPage.ViewContent = view.GetSelf();
-
-                    await onNavigatingTask;
-                }
-                else
-                {
-                    ShellModel newShellModel = new ShellModel()
-                    {
-                        Parent = this.CurrentShellModel,
-                        View = view,
-                    };
-                    PhoneBlankShellPage navShellPage = new PhoneBlankShellPage()
-                    {
-                        ViewContent = view.GetSelf(),
-                    };
-                    
-                    navShellPage.BindingContext = navShellPage.ViewContent.BindingContext;
-                    
-                    this.CurrentShellModel = newShellModel;
-
-                    Task onNavigatingTask = view.OnNavigatingToAsync();
-                    
-                    await this.CurrentPage.Navigation.PushAsync(navShellPage);
-                    await onNavigatingTask;
+                    //TODO:MUST: Localize
+                    this.API.Alerts.Toast("Error loading data. Reason: " + ex.FirstNonAggregateException().Message, TimeSpan.FromSeconds(3));
                 }
 
             });

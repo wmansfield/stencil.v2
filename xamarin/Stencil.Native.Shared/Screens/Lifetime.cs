@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Stencil.Native.Data.Sync
+namespace Stencil.Native.Screens
 {
     public enum Lifetime
     {

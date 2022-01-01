@@ -1,4 +1,5 @@
-﻿using Stencil.Native.Commanding;
+﻿using Newtonsoft.Json;
+using Stencil.Native.Commanding;
 using Stencil.Native.Screens;
 using System;
 using System.Collections.Generic;
@@ -212,28 +213,43 @@ namespace Stencil.Native.Data.Sync
             {
                 if (screenJob.DownloadCommand != null && !string.IsNullOrWhiteSpace(screenJob.ScreenName))
                 {
-                    if(!screenJob.ForceDownload)
+                    NavigationData navigationData = null;
+                    if (!string.IsNullOrWhiteSpace(screenJob.NavigationData))
                     {
-                        string storageKey = ScreenConfig.FormatStorageKey(screenJob.ScreenName, screenJob.ScreenParameter);
-                        ScreenConfig currentConfig = await this.API.Screens.RetrieveScreenConfigAsync(storageKey, false);
-                        if(currentConfig != null)
+                        navigationData = JsonConvert.DeserializeObject<NavigationData>(screenJob.NavigationData);
+                    }
+                    else
+                    {
+                        navigationData = new NavigationData()
                         {
-                            bool shouldDownload = this.ShouldDownload(screenJob.Lifetime, currentConfig.DownloadedUTC, currentConfig.ExpireUTC, currentConfig.CacheUntilUTC);
-                            if(!shouldDownload)
+                            screen_name = screenJob.ScreenName,
+                            screen_parameter = screenJob.ScreenParameter,
+                        };
+                    }
+
+                    string storageKey = ScreenConfig.FormatStorageKey(screenJob.ScreenName, screenJob.ScreenParameter);
+                    ScreenConfig currentConfig = await this.API.Screens.RetrieveScreenConfigAsync(storageKey, true);
+                    if (currentConfig != null)
+                    {
+                        // abort if not needed
+                        if (!screenJob.ForceDownload)
+                        {
+                            bool shouldDownload = this.ShouldDownload(screenJob.Lifetime, currentConfig.DownloadedUTC, currentConfig.ExpireUTC, currentConfig.CacheUntilUTC, currentConfig.InvalidatedUTC);
+                            if (!shouldDownload)
                             {
                                 //====---------------------------------------------------->>  Short Circuit, cache allowed
                                 return;
                             }
                         }
+
+                        // use stored nav data
+                        if(currentConfig.ScreenNavigationData != null)
+                        {
+                            navigationData = JsonConvert.DeserializeObject<NavigationData>(JsonConvert.SerializeObject(currentConfig.ScreenNavigationData));
+                        }
                     }
 
                     CommandScope scope = new CommandScope(this.API.CommandProcessor);
-
-                    NavigationData navigationData = new NavigationData()
-                    {
-                        screen_name = screenJob.ScreenName,
-                        screen_parameter = screenJob.ScreenParameter
-                    };
                     
                     object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, screenJob.DownloadCommand.CommandName, navigationData);
                     
@@ -241,7 +257,27 @@ namespace Stencil.Native.Data.Sync
                     
                     if (screenConfig != null)
                     {
+                        if(screenConfig.ScreenNavigationData != null)
+                        {
+                            screenConfig.ScreenNavigationData.last_retrieved_utc = DateTime.UtcNow;
+                        }
+                        
                         await this.API.Screens.SaveScreenConfigAsync(screenConfig);
+
+                        if(screenConfig.DownloadCommands?.Count > 0)
+                        {
+                            foreach (ICommandConfig item in screenConfig.DownloadCommands)
+                            {
+                                try
+                                {
+                                    await this.API.CommandProcessor.ExecuteCommandAsync(scope, item.CommandName, item.CommandParameter);
+                                }
+                                catch (Exception ex)
+                                {
+                                    this.LogError(ex, string.Format("ProcessScreenJob.DownloadCommand:{0}:{1}" + item.CommandName, item.CommandParameter));
+                                }
+                            }
+                        }
                         
                         if (screenJob.DownloadSuccessCommand != null)
                         {
@@ -259,12 +295,18 @@ namespace Stencil.Native.Data.Sync
             });
         }
 
-        protected virtual bool ShouldDownload(Lifetime lifeTime, DateTimeOffset? lastDownloadUTC, DateTimeOffset? expireUTC, DateTimeOffset? cacheUntilUTC)
+        protected virtual bool ShouldDownload(Lifetime lifeTime, DateTimeOffset? lastDownloadUTC, DateTimeOffset? expireUTC, DateTimeOffset? cacheUntilUTC, DateTimeOffset? invalidatedUTC)
         {
             return base.ExecuteFunction(nameof(ShouldDownload), delegate ()
             {
                 switch (lifeTime)
                 {
+                    case Lifetime.until_invalidated:
+                        if (invalidatedUTC.HasValue)
+                        {
+                            return invalidatedUTC.Value < DateTimeOffset.UtcNow;
+                        }
+                        return false;
                     case Lifetime.until_expired:
                         bool isExpired = false;
                         if(expireUTC.HasValue)

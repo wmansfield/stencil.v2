@@ -15,9 +15,17 @@ namespace Stencil.Native.Views.Standard.v1_0
             InitializeComponent();
         }
 
-        public const string COMPONENT_NAME = "dualColumnMarkdown-" + StandardComponentsV1_0.NAME;
+        public const string COMPONENT_NAME = "dualColumnMarkdown";
 
         private const string TEMPLATE_KEY = "dualColumnMarkdown";
+
+        public bool PreparedDataCacheDisabled
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         public DataTemplate GetDataTemplate()
         {
@@ -26,7 +34,7 @@ namespace Stencil.Native.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, DataTemplateSelector selector, string configuration_json, IDataViewSection[] sections)
+        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
             {

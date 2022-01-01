@@ -43,6 +43,15 @@ namespace Stencil.Native.Resourcing
         public static string TextOverAccent = "#ffffff";
 
         public static string MenuBarBackground = "#ffffff";
-        
+
+        public static string MenuSelectedBackground = "#ffffff";
+        public static string MenuSelectedText = "#000000";
+
+        public static string MenuUnselectedBackground = "#ffffff";
+        public static string MenuUnselectedText = "#000000";
+
+        public static string MenuActiveBackground = "#ffffff";
+        public static string MenuActiveText = "#000000";
+
     }
 }

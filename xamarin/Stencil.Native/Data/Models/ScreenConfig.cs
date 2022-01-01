@@ -1,4 +1,5 @@
 ﻿using Realms;
+using Stencil.Native.Screens;
 using System;
 
 namespace Stencil.Native.Data.Models
@@ -9,13 +10,19 @@ namespace Stencil.Native.Data.Models
         {
         }
 
+        /// <summary>
+        /// ScreenStorageKey
+        /// </summary>
         [PrimaryKey]
         public string id { get; set; }
         public string screen_name { get; set; }
         public string screen_parameter { get; set; }
+        public string screen_navigation_data { get; set; }
         public bool suppress_persist { get; set; }
         public bool automatic_download { get; set; }
         public bool is_menu_supported { get; set; }
+        public int lifetime { get; set; }
+
 
         /// <summary>
         /// effecitvely json_view_configs
@@ -25,6 +32,9 @@ namespace Stencil.Native.Data.Models
         public string json_visual_config { get; set; }
         public string json_menu { get; set; }
         public string json_show_commands { get; set; }
+        public string json_header_configs { get; set; }
+        public string json_footer_configs { get; set; }
+
 
         public DateTimeOffset? invalidated_utc { get; set; }
         public DateTimeOffset? download_utc { get; set; }

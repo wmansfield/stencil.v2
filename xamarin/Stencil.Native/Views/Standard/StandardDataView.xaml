@@ -17,6 +17,12 @@
                    HorizontalOptions="Fill" 
                    Aspect="AspectFill" />
             <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Fill" Spacing="0" Margin="0">
+                <StackLayout HorizontalOptions="Fill"
+                      IsVisible="{Binding ShowHeader}"
+                      BindableLayout.ItemsSource="{Binding HeaderItems}"
+                      BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
+                </StackLayout>
+                
                 <!--- ListView.Margin as Padding is Not a mistake -->
                 <CollectionView Margin="{Binding Padding}" 
                       BackgroundColor="{Binding BackgroundColor}"
@@ -24,7 +30,7 @@
                       HorizontalOptions="Fill"
                       ItemSizingStrategy="MeasureAllItems"
                       SelectionMode="None"
-                      ItemsSource="{Binding MainItems}"
+                      ItemsSource="{Binding MainItemsFiltered}"
                       ItemTemplate="{Binding DataTemplateSelector}">
                 </CollectionView>
 

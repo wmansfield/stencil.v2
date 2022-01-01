@@ -25,8 +25,8 @@
 	  <Compile Update="Views\Standard\v1_0\PrimaryButton.xaml.cs">
 	    <DependentUpon>PrimaryButton.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Standard\v1_0\LightEntry.xaml.cs">
-	    <DependentUpon>LightEntry.xaml</DependentUpon>
+	  <Compile Update="Views\Standard\v1_0\SlimEntry.xaml.cs">
+	    <DependentUpon>SlimEntry.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Standard\v1_0\FullEntry.xaml.cs">
 	    <DependentUpon>FullEntry.xaml</DependentUpon>
