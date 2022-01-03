@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    x:Class="Stencil.Native.Views.Standard.v1_0.H1">
-    <DataTemplate x:Key="h1">
+                    x:Class="Stencil.Native.Views.Standard.v1_0.H2">
+    <DataTemplate x:Key="h2">
         <!--<ViewCell>-->
         <StackLayout Orientation="Vertical" HorizontalOptions="Fill" Padding="0" Margin="0" Spacing="0" BackgroundColor="{Binding PreparedData.BackgroundColor}">
             <Label Text="{Binding PreparedData.Text}"
                        HorizontalOptions="Fill"
                        VerticalOptions="Start"
-                       FontSize="{StaticResource FontSizeH1}"
+                       FontSize="{StaticResource FontSizeH2}"
                        FontFamily="{StaticResource SansBold}"
                        TextColor="{Binding PreparedData.TextColor}"
                        HorizontalTextAlignment="Center"

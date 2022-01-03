@@ -17,6 +17,13 @@ namespace Stencil.Native.Views
             this.left = horizontal;
             this.right = horizontal;
         }
+        public ThicknessInfo(double left, double top, double right, double bottom)
+        {
+            this.top = top;
+            this.bottom = bottom;
+            this.left = left;
+            this.right = right;
+        }
         public double top { get; set; }
         public double bottom { get; set; }
         public double left { get; set; }

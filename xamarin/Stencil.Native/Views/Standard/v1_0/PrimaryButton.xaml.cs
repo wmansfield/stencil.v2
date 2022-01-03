@@ -110,7 +110,21 @@ namespace Stencil.Native.Views.Standard.v1_0
                 get { return _padding; }
                 set { SetProperty(ref _padding, value); }
             }
-            
+
+            private bool _showIcon;
+            public bool ShowIcon
+            {
+                get { return _showIcon; }
+                set { SetProperty(ref _showIcon, value); }
+            }
+
+            private string _icon;
+            public string Icon
+            {
+                get { return _icon; }
+                set { SetProperty(ref _icon, value); }
+            }
+
 
             [JsonIgnore]
             public ICommandScope CommandScope { get; set; }

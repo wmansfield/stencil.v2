@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Stencil.Native.Views
 {
-    public interface IDataViewFilter
+    public interface IDataViewAdjuster
     {
-        Task<bool> ShouldSuppressItem(IDataViewModel viewModel, IDataViewItem dataViewItem, ObservableCollection<IDataViewItem> dataSoFar);
+        Task AdjustItems(IDataViewModel viewModel, ObservableCollection<IDataViewItem> dataViewItems);
     }
 }

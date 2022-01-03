@@ -5,16 +5,16 @@ using Xamarin.Forms;
 
 namespace Stencil.Native.Views.Standard.v1_0
 {
-    public partial class H1 : ResourceDictionary, IDataViewComponent
+    public partial class H2 : ResourceDictionary, IDataViewComponent
     {
-        public H1()
+        public H2()
         {
             InitializeComponent();
         }
 
-        public const string COMPONENT_NAME = "h1";
+        public const string COMPONENT_NAME = "h2";
 
-        private const string TEMPLATE_KEY = "h1";
+        private const string TEMPLATE_KEY = "h2";
 
         public bool PreparedDataCacheDisabled
         {

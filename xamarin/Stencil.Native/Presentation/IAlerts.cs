@@ -10,6 +10,7 @@ namespace Stencil.Native.Presentation
     {
         Task AlertAsync(string message, string title = null, string okText = null, CancellationToken? cancelToken = null);
         IDisposable Toast(string title, TimeSpan? dismissTimer = null);
+        Task<string> ActionSheetAsync(string title, string cancel, string destructive, CancellationToken? cancelToken = null, params string[] buttons);
 
     }
 }

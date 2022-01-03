@@ -1,7 +1,12 @@
 ﻿
 namespace Stencil.Native.Views.Standard
 {
-    public class StandardDataViewItem : PropertyClass, IDataViewItem
+    public class StandardDataViewItem : StandardDataViewItem<object>
+    {
+
+    }
+    public class StandardDataViewItem<TPrepareData> : PropertyClass, IDataViewItem
+        where TPrepareData : class
     {
         public StandardDataViewItem()
         {
@@ -10,8 +15,8 @@ namespace Stencil.Native.Views.Standard
         public string Library { get; set; }
         public string Component { get; set; }
 
-        private object _preparedData;
-        public object PreparedData
+        private TPrepareData _preparedData;
+        public TPrepareData PreparedData
         {
             get { return _preparedData; }
             set { SetProperty(ref _preparedData, value); }
@@ -40,5 +45,16 @@ namespace Stencil.Native.Views.Standard
         /// Warning: Does not support change notification, rely on custom application of changes instead
         /// </summary>
         public IDataViewModel DataViewModel { get; set; }
+        object IDataViewItem.PreparedData
+        {
+            get
+            {
+                return this.PreparedData;
+            }
+            set
+            {
+                this.PreparedData = value as TPrepareData;
+            }
+        }
     }
 }

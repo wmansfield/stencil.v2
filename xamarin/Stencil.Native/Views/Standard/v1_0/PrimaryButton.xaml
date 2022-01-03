@@ -5,6 +5,8 @@
     <DataTemplate x:Key="primaryButton">
         <!--<ViewCell>-->
         <Grid HeightRequest="52"
+              ColumnSpacing="0"
+              RowSpacing="0"
               Padding="{Binding PreparedData.Padding}"
               BackgroundColor="{Binding PreparedData.BackgroundColor}"
               HorizontalOptions="Fill"
@@ -13,12 +15,30 @@
                      BackgroundColor="{Binding PreparedData.UIButtonBackgroundColor}"
                      HorizontalOptions="FillAndExpand"
                      VerticalOptions="FillAndExpand"/>
-            <Label Text="{Binding PreparedData.Text}"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"
-                   TextColor="{StaticResource PrimaryWhite}"
-                   FontFamily="{StaticResource SansRegular}"
-                   FontSize="{StaticResource FontSizeStandard}" />
+            <StackLayout Orientation="Horizontal" 
+                         HorizontalOptions="Center" 
+                         Padding="{Binding PreparedData.Padding}" 
+                         Margin="0" 
+                         Spacing="0">
+                <Label Text="{Binding PreparedData.Text}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       TextColor="{StaticResource PrimaryWhite}"
+                       FontFamily="{StaticResource SansRegular}"
+                       FontSize="{StaticResource FontSizeStandard}" />
+                <Label IsVisible="{Binding PreparedData.ShowIcon}"
+                       Text="{Binding PreparedData.Icon}"
+                       Margin="8,0,0,0"
+                       Padding="0,0"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       FontSize="{StaticResource FontSizeStandard}"
+                       FontFamily="{StaticResource FontAwesome}"
+                       TextColor="{StaticResource PrimaryWhite}"
+                       HorizontalTextAlignment="Center">
+                </Label>
+            </StackLayout>
+            
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Tapped="Button_Clicked" />
             </Grid.GestureRecognizers>

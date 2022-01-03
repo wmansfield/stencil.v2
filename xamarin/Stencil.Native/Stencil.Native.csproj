@@ -22,6 +22,18 @@
 	  <Compile Update="Views\Standard\v1_0\GroupBegin.xaml.cs">
 	    <DependentUpon>GroupBegin.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\PlainText.xaml.cs">
+	    <DependentUpon>PlainText.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\HeaderWithIcon.xaml.cs">
+	    <DependentUpon>HeaderWithIcon.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\H3.xaml.cs">
+	    <DependentUpon>H3.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Standard\v1_0\H2.xaml.cs">
+	    <DependentUpon>H2.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Standard\v1_0\PrimaryButton.xaml.cs">
 	    <DependentUpon>PrimaryButton.xaml</DependentUpon>
 	  </Compile>
@@ -46,7 +58,13 @@
 	  <EmbeddedResource Update="Views\Standard\v1_0\GroupBegin.xaml">
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\Standard\v1_0\HeaderBackBar.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
 	  <EmbeddedResource Update="Views\Standard\v1_0\Image.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\Standard\v1_0\NamedValue.xaml">
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Views\Standard\v1_0\Spacer.xaml">

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Stencil.Native.Views.Standard.v1_0.HeaderWithIcon">
+    <DataTemplate x:Key="headerWithIcon">
+        <!--<ViewCell>-->
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Padding="{Binding PreparedData.Padding}" Margin="0" Spacing="0" BackgroundColor="{Binding PreparedData.BackgroundColor}">
+            <Label Grid.Column="0"
+                       IsVisible="{Binding PreparedData.ShowIcon}"
+                       Text="{Binding PreparedData.Icon}"
+                       Margin="0,0,8,0"
+                       Padding="0,0"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       FontSize="{StaticResource FontSizeH4}"
+                       FontFamily="{StaticResource FontAwesome}"
+                       TextColor="{Binding PreparedData.TextColor}"
+                       HorizontalTextAlignment="Center">
+            </Label>
+            <Label Text="{Binding PreparedData.Text}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Start"
+                       FontSize="{StaticResource FontSizeH4}"
+                       FontFamily="{StaticResource SansBold}"
+                       TextColor="{Binding PreparedData.TextColor}"
+                       HorizontalTextAlignment="Start"
+                       Margin="0,8" />
+        </StackLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

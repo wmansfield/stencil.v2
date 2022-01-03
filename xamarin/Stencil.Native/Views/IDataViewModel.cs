@@ -24,7 +24,7 @@ namespace Stencil.Native.Views
         string BackgroundImage { get; }
 
         Task InitializeData();
-        Task ApplyFiltersAsync();
+        Task ApplyFiltersAndAdjustmentsAsync();
 
     }
 }

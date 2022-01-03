@@ -16,6 +16,7 @@ namespace Stencil.Native.Views.Standard
         public StandardDataViewModel(ICommandProcessor commandProcessor, Func<ICommandScope, DataTemplateSelector> dataTemplateSelectorCreator)
             : base(nameof(StandardDataViewModel))
         {
+            this.Adjusters = new List<IDataViewAdjuster>();
             this.Filters = new List<IDataViewFilter>();
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelectorCreator(this.CommandScope);
@@ -24,6 +25,7 @@ namespace Stencil.Native.Views.Standard
         public StandardDataViewModel(ICommandProcessor commandProcessor, DataTemplateSelector dataTemplateSelector)
             : base(nameof(StandardDataViewModel))
         {
+            this.Adjusters = new List<IDataViewAdjuster>();
             this.Filters = new List<IDataViewFilter>();
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelector;
@@ -109,19 +111,20 @@ namespace Stencil.Native.Views.Standard
         }
 
         public List<IDataViewFilter> Filters { get; set; }
+        public List<IDataViewAdjuster> Adjusters { get; set; }
 
 
         public Task InitializeData()
         {
             return base.ExecuteMethodAsync(nameof(InitializeData), async delegate ()
             {
-                await this.ApplyFiltersAsync();
+                await this.ApplyFiltersAndAdjustmentsAsync();
             });
         }
 
-        public Task ApplyFiltersAsync()
+        public Task ApplyFiltersAndAdjustmentsAsync()
         {
-            return base.ExecuteMethodAsync(nameof(ApplyFiltersAsync), async delegate ()
+            return base.ExecuteMethodAsync(nameof(ApplyFiltersAndAdjustmentsAsync), async delegate ()
             {
                 ObservableCollection<IDataViewItem> filteredItems = new ObservableCollection<IDataViewItem>();
                 ObservableCollection<IDataViewItem> unFilteredItems = this.MainItemsUnFiltered;
@@ -137,7 +140,7 @@ namespace Stencil.Native.Views.Standard
                             {
                                 try
                                 {
-                                    shouldSuppress = await filter.ApplyFilter(this, item);
+                                    shouldSuppress = await filter.ShouldSuppressItem(this, item, filteredItems);
                                     if (shouldSuppress)
                                     {
                                         break;
@@ -160,6 +163,20 @@ namespace Stencil.Native.Views.Standard
                     }
                 }
 
+                if(this.Adjusters?.Count > 0)
+                {
+                    foreach (IDataViewAdjuster adjuster in this.Adjusters)
+                    {
+                        try
+                        {
+                            await adjuster.AdjustItems(this, filteredItems);
+                        }
+                        catch (Exception ex)
+                        {
+                            this.LogError(ex, $"Error applying adjustment with '{adjuster.GetType()}'");
+                        }
+                    }
+                }
                 this.MainItemsFiltered = filteredItems;
             });
         }

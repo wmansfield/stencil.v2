@@ -5,16 +5,16 @@ using Xamarin.Forms;
 
 namespace Stencil.Native.Views.Standard.v1_0
 {
-    public partial class H1 : ResourceDictionary, IDataViewComponent
+    public partial class HeaderWithIcon : ResourceDictionary, IDataViewComponent
     {
-        public H1()
+        public HeaderWithIcon()
         {
             InitializeComponent();
         }
 
-        public const string COMPONENT_NAME = "h1";
+        public const string COMPONENT_NAME = "headerWithIcon";
 
-        private const string TEMPLATE_KEY = "h1";
+        private const string TEMPLATE_KEY = "headerWithIcon";
 
         public bool PreparedDataCacheDisabled
         {
@@ -35,15 +35,31 @@ namespace Stencil.Native.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
             {
+                PreparedData result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
                     return JsonConvert.DeserializeObject<PreparedData>(configuration_json);
                 }
-                return new PreparedData();
+                if(result == null)
+                {
+                    result = new PreparedData();
+                }
+                if(result.Fontsize <= 0)
+                {
+                    result.Fontsize = 16;
+                }
+                return result;
             });
         }
         public class PreparedData : PropertyClass
         {
+            private int _fontSize;
+            public int Fontsize
+            {
+                get { return _fontSize; }
+                set { SetProperty(ref _fontSize, value); }
+            }
+
             private string _text;
             public string Text
             {
@@ -63,6 +79,27 @@ namespace Stencil.Native.Views.Standard.v1_0
             {
                 get { return _backgroundColor; }
                 set { SetProperty(ref _backgroundColor, value); }
+            }
+
+            private string _icon;
+            public string Icon
+            {
+                get { return _icon; }
+                set { SetProperty(ref _icon, value); }
+            }
+
+            private bool _showIcon;
+            public bool ShowIcon
+            {
+                get { return _showIcon; }
+                set { SetProperty(ref _showIcon, value); }
+            }
+
+            private Thickness _padding;
+            public Thickness Padding
+            {
+                get { return _padding; }
+                set { SetProperty(ref _padding, value); }
             }
         }
     }

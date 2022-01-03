@@ -8,7 +8,7 @@
         <Grid RowSpacing="0" ColumnSpacing="0" Margin="0" Padding="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="75"/>
+                <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
             <ContentView x:Name="vwContent" Grid.Row="0" />
             <ContentView x:Name="vwMenu" Grid.Row="1" />

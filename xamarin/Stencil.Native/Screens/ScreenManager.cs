@@ -121,6 +121,10 @@ namespace Stencil.Native.Screens
                                     {
                                         result.Filters.Add(dataViewFilter);
                                     }
+                                    if (item.PreparedData is IDataViewAdjuster dataViewAdjuster)
+                                    {
+                                        result.Adjusters.Add(dataViewAdjuster);
+                                    }
                                 }
                             }
                             if (result.HeaderItems != null)
@@ -132,6 +136,10 @@ namespace Stencil.Native.Screens
                                     {
                                         result.Filters.Add(dataViewFilter);
                                     }
+                                    if (item.PreparedData is IDataViewAdjuster dataViewAdjuster)
+                                    {
+                                        result.Adjusters.Add(dataViewAdjuster);
+                                    }
                                 }
                             }
                             if (result.FooterItems != null)
@@ -142,6 +150,10 @@ namespace Stencil.Native.Screens
                                     if (item.PreparedData is IDataViewFilter dataViewFilter)
                                     {
                                         result.Filters.Add(dataViewFilter);
+                                    }
+                                    if (item.PreparedData is IDataViewAdjuster dataViewAdjuster)
+                                    {
+                                        result.Adjusters.Add(dataViewAdjuster);
                                     }
                                 }
                             }

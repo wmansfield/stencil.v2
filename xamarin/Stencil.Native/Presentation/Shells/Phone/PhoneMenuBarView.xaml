@@ -16,12 +16,11 @@
                     <Grid BackgroundColor="Transparent"
                           Padding="0" Margin="0"
                           RowSpacing="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <FlexLayout Grid.Row="1" VerticalOptions="Fill" HorizontalOptions="Fill" 
-                                    Direction="Column" JustifyContent="Center"
+                        <FlexLayout Grid.Row="0" 
+                                    VerticalOptions="Fill" 
+                                    HorizontalOptions="Fill" 
+                                    Direction="Column" 
+                                    JustifyContent="Center"
                                     BackgroundColor="{Binding UIBackgroundColor}">
                             <Label IsVisible="{Binding IsIcon}" 
                                    Text="{Binding IconCharacter}"
@@ -30,7 +29,7 @@
                                    FontFamily="{StaticResource FontAwesome}"
                                    TextColor="{Binding UITextColor}"
                                    FontSize="{StaticResource FontSizeMenuIcon}"
-                                   Margin="4,4,4,8"
+                                   Margin="4,2,4,6"
                                    Padding="0"/>
                             <Label FlexLayout.AlignSelf="Center"
                                    HorizontalTextAlignment="Center"
