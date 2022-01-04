@@ -22,7 +22,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "groupEnd";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -32,37 +32,53 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
+                GroupEndContext result = null;
+
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    return JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<GroupEndContext>(configuration_json);
                 }
-                return new PreparedData();
+
+                if(result == null)
+                {
+                    result = new GroupEndContext();
+                }
+                result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
+                return result;
             });
         }
-        public class PreparedData : PropertyClass
-        {
-            private string _innerColor;
-            public string InnerColor
-            {
-                get { return _innerColor; }
-                set { SetProperty(ref _innerColor, value); }
-            }
+    }
 
-            private string _outerColor;
-            public string OuterColor
-            {
-                get { return _outerColor; }
-                set { SetProperty(ref _outerColor, value); }
-            }
+    public class GroupEndContext : PreparedBingingContext
+    {
+        public GroupEndContext()
+            : base(nameof(GroupEndContext))
+        {
+
+        }
+
+        private string _innerColor;
+        public string InnerColor
+        {
+            get { return _innerColor; }
+            set { SetProperty(ref _innerColor, value); }
+        }
+
+        private string _outerColor;
+        public string OuterColor
+        {
+            get { return _outerColor; }
+            set { SetProperty(ref _outerColor, value); }
         }
     }
 }

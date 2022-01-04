@@ -23,7 +23,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "headerBackBar";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -33,19 +33,19 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
-                PreparedData result = null;
+                HeaderBackBarContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<HeaderBackBarContext>(configuration_json);
                 }
                 if (string.IsNullOrWhiteSpace(result.CommandName))
                 {
@@ -66,6 +66,7 @@ namespace Stencil.Native.Views.Standard.v1_0
                 }
 
                 result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
                 return result;
             });
         }
@@ -75,58 +76,58 @@ namespace Stencil.Native.Views.Standard.v1_0
             await CoreUtility.ExecuteMethodAsync(nameof(TapGestureRecognizer_Tapped), async delegate ()
             {
                 View view = (sender as View);
-                IDataViewItem dataViewItem = view.BindingContext as IDataViewItem;
-                if (dataViewItem != null)
+                HeaderBackBarContext context = view?.BindingContext as HeaderBackBarContext;
+                if (context != null)
                 {
-                    PreparedData preparedData = dataViewItem.PreparedData as PreparedData;
-                    if(preparedData != null)
+                    if (context.CommandScope?.CommandProcessor != null)
                     {
-                        if (preparedData?.CommandScope?.CommandProcessor != null)
-                        {
-                            await preparedData.CommandScope.CommandProcessor.ExecuteCommandAsync(preparedData.CommandScope, preparedData.CommandName, preparedData.CommandParameter);
-                        }
+                        await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.CommandName, context.CommandParameter);
                     }
                 }
             });
         }
+    }
 
-        public class PreparedData : PropertyClass
+    public class HeaderBackBarContext : PreparedBingingContext
+    {
+        public HeaderBackBarContext()
+            : base(nameof(HeaderBackBarContext))
         {
-            private string _textColor;
-            public string TextColor
-            {
-                get { return _textColor; }
-                set { SetProperty(ref _textColor, value); }
-            }
 
-            private string _backgroundColor;
-            public string BackgroundColor
-            {
-                get { return _backgroundColor; }
-                set { SetProperty(ref _backgroundColor, value); }
-            }
-
-            private string _backIcon;
-            public string BackIcon
-            {
-                get { return _backIcon; }
-                set { SetProperty(ref _backIcon, value); }
-            }
-
-            private string _title;
-            public string Title
-            {
-                get { return _title; }
-                set { SetProperty(ref _title, value); }
-            }
-
-            public string CommandName { get; set; }
-            public string CommandParameter { get; set; }
-
-            [JsonIgnore]
-            public ICommandScope CommandScope { get; set; }
         }
 
+        private string _textColor;
+        public string TextColor
+        {
+            get { return _textColor; }
+            set { SetProperty(ref _textColor, value); }
+        }
 
+        private string _backgroundColor;
+        public string BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { SetProperty(ref _backgroundColor, value); }
+        }
+
+        private string _backIcon;
+        public string BackIcon
+        {
+            get { return _backIcon; }
+            set { SetProperty(ref _backIcon, value); }
+        }
+
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set { SetProperty(ref _title, value); }
+        }
+
+        public string CommandName { get; set; }
+        public string CommandParameter { get; set; }
+
+        [JsonIgnore]
+        public ICommandScope CommandScope { get; set; }
     }
 }

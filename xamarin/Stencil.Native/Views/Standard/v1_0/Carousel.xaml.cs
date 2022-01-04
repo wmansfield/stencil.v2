@@ -2,6 +2,7 @@
 using Stencil.Native.Commanding;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Stencil.Native.Views.Standard.v1_0
@@ -17,7 +18,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "carousel";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -27,23 +28,23 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
-                PreparedData result = null;
+                CarouselContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<CarouselContext>(configuration_json);
                 }
                 if(result == null)
                 {
-                    result = new PreparedData();
+                    result = new CarouselContext();
                 }
 
                 List<IDataViewModel> cells = new List<IDataViewModel>();
@@ -52,11 +53,12 @@ namespace Stencil.Native.Views.Standard.v1_0
                 {
                     foreach (IDataViewSection section in dataViewItem.Sections)
                     {
-                        if (section.ViewItems != null)
+                        if (section.ViewItems?.Length > 0)
                         {
                             StandardDataViewModel childViewModel = new StandardDataViewModel(commandScope.CommandProcessor, selector)
                             {
-                                MainItemsFiltered = new ObservableCollection<IDataViewItem>(section.ViewItems)
+                                MainItemsUnFiltered = new ObservableCollection<IDataViewItem>(section.ViewItems),
+                                MainItemsFiltered = new ObservableCollection<object>(section.ViewItems.Select(x => x.PreparedContext))
                             };
 
                             cells.Add(childViewModel);
@@ -65,20 +67,29 @@ namespace Stencil.Native.Views.Standard.v1_0
                 }
                 result.Cells = cells.ToArray();
                 result.DataTemplateSelector = selector;
+
+                result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
                 return result;
             });
         }
-        public class PreparedData
+    }
+
+    public class CarouselContext : PreparedBingingContext
+    {
+        public CarouselContext()
+            : base(nameof(CarouselContext))
         {
-            public string BackgroundColor { get; set; }
 
-            public double HeightRequest { get; set; }
-
-            [JsonIgnore]
-            public DataTemplateSelector DataTemplateSelector { get; set; }
-
-            [JsonIgnore]
-            public IDataViewModel[] Cells { get; set; }
         }
+        public string BackgroundColor { get; set; }
+
+        public double HeightRequest { get; set; }
+
+        [JsonIgnore]
+        public DataTemplateSelector DataTemplateSelector { get; set; }
+
+        [JsonIgnore]
+        public IDataViewModel[] Cells { get; set; }
     }
 }

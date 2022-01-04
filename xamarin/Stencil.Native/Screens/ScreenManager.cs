@@ -39,7 +39,11 @@ namespace Stencil.Native.Screens
                     IScreenConfig screenConfig = await this.LoadScreenConfigAsync(commandProcessor, navigationData);
                     if (screenConfig != null)
                     {
+
                         result = new StandardDataViewModel(commandProcessor, this.CreateDataTemplateSelector);
+
+                        IResolvableTemplateSelector resolvableTemplateSelector = result.DataTemplateSelector as IResolvableTemplateSelector;
+                        //TODO:MUST: Null IResolvableTemplateSelector
 
                         // map to view elements
                         ObservableCollection<IDataViewItem> mainItems = new ObservableCollection<IDataViewItem>();
@@ -55,7 +59,7 @@ namespace Stencil.Native.Screens
                             }
                         }
 
-                        ObservableCollection<IDataViewItem> headerItems = new ObservableCollection<IDataViewItem>();
+                        ObservableCollection<object> headerItems = new ObservableCollection<object>();
                         if (screenConfig.HeaderConfigs != null)
                         {
                             foreach (IViewConfig viewConfig in screenConfig.HeaderConfigs)
@@ -63,12 +67,13 @@ namespace Stencil.Native.Screens
                                 IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
                                 if (dataViewItem != null)
                                 {
-                                    headerItems.Add(dataViewItem);
+                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
+                                    headerItems.Add(dataViewItem.PreparedContext);
                                 }
                             }
                         }
 
-                        ObservableCollection<IDataViewItem> footerItems = new ObservableCollection<IDataViewItem>();
+                        ObservableCollection<object> footerItems = new ObservableCollection<object>();
                         if (screenConfig.FooterConfigs != null)
                         {
                             foreach (IViewConfig viewConfig in screenConfig.FooterConfigs)
@@ -76,7 +81,8 @@ namespace Stencil.Native.Screens
                                 IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
                                 if (dataViewItem != null)
                                 {
-                                    footerItems.Add(dataViewItem);
+                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
+                                    footerItems.Add(dataViewItem.PreparedContext);
                                 }
                             }
                         }
@@ -109,7 +115,6 @@ namespace Stencil.Native.Screens
 
                         // extract filters or augmentations
 
-                        IResolvableTemplateSelector resolvableTemplateSelector = result.DataTemplateSelector as IResolvableTemplateSelector;
                         if(resolvableTemplateSelector != null)
                         {
                             if (result.MainItemsUnFiltered != null)
@@ -117,11 +122,11 @@ namespace Stencil.Native.Screens
                                 foreach (IDataViewItem item in result.MainItemsUnFiltered)
                                 {
                                     IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(item);
-                                    if (item.PreparedData is IDataViewFilter dataViewFilter)
+                                    if (item.PreparedContext is IDataViewFilter dataViewFilter)
                                     {
                                         result.Filters.Add(dataViewFilter);
                                     }
-                                    if (item.PreparedData is IDataViewAdjuster dataViewAdjuster)
+                                    if (item.PreparedContext is IDataViewAdjuster dataViewAdjuster)
                                     {
                                         result.Adjusters.Add(dataViewAdjuster);
                                     }
@@ -129,31 +134,57 @@ namespace Stencil.Native.Screens
                             }
                             if (result.HeaderItems != null)
                             {
-                                foreach (IDataViewItem item in result.HeaderItems)
+                                foreach (object headerItem in result.HeaderItems)
                                 {
-                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(item);
-                                    if (item.PreparedData is IDataViewFilter dataViewFilter)
+                                    IDataViewItem dataViewItem = headerItem as IDataViewItem;
+                                    if (dataViewItem == null)
                                     {
-                                        result.Filters.Add(dataViewFilter);
+                                        IDataViewItemReference dataViewItemReference = headerItem as IDataViewItemReference;
+                                        if (dataViewItemReference != null)
+                                        {
+                                            dataViewItem = dataViewItemReference.DataViewItem;
+                                        }
                                     }
-                                    if (item.PreparedData is IDataViewAdjuster dataViewAdjuster)
+                                    if (dataViewItem != null)
                                     {
-                                        result.Adjusters.Add(dataViewAdjuster);
+                                        IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
+                                        this.LogTrace($"{viewComponent.GetType()} -> {dataViewItem.PreparedContext.GetType()}");
+
+                                        if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
+                                        {
+                                            result.Filters.Add(dataViewFilter);
+                                        }
+                                        if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
+                                        {
+                                            result.Adjusters.Add(dataViewAdjuster);
+                                        }
                                     }
                                 }
                             }
                             if (result.FooterItems != null)
                             {
-                                foreach (IDataViewItem item in result.FooterItems)
+                                foreach (object footerItem in result.FooterItems)
                                 {
-                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(item);
-                                    if (item.PreparedData is IDataViewFilter dataViewFilter)
+                                    IDataViewItem dataViewItem = footerItem as IDataViewItem;
+                                    if (dataViewItem == null)
                                     {
-                                        result.Filters.Add(dataViewFilter);
+                                        IDataViewItemReference dataViewItemReference = footerItem as IDataViewItemReference;
+                                        if (dataViewItemReference != null)
+                                        {
+                                            dataViewItem = dataViewItemReference.DataViewItem;
+                                        }
                                     }
-                                    if (item.PreparedData is IDataViewAdjuster dataViewAdjuster)
+                                    if (dataViewItem != null)
                                     {
-                                        result.Adjusters.Add(dataViewAdjuster);
+                                        IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
+                                        if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
+                                        {
+                                            result.Filters.Add(dataViewFilter);
+                                        }
+                                        if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
+                                        {
+                                            result.Adjusters.Add(dataViewAdjuster);
+                                        }
                                     }
                                 }
                             }

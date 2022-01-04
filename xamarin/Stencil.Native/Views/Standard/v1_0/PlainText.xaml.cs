@@ -16,7 +16,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "plainText";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -26,67 +26,78 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
-                PreparedData result = null;
+                PlainTextContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    return JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<PlainTextContext>(configuration_json);
                 }
                 if(result == null)
                 {
-                    result = new PreparedData();
+                    result = new PlainTextContext();
                 }
-                if(result.Fontsize <= 0)
+                if(result.FontSize <= 0)
                 {
-                    result.Fontsize = 16;
+                    result.FontSize = 16;
                 }
+
+                result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
+
                 return result;
             });
         }
-        public class PreparedData : PropertyClass
+    }
+
+    public class PlainTextContext : PreparedBingingContext
+    {
+        public PlainTextContext()
+            : base(nameof(PlainTextContext))
         {
-            private int _fontSize;
-            public int Fontsize
-            {
-                get { return _fontSize; }
-                set { SetProperty(ref _fontSize, value); }
-            }
 
-            private string _text;
-            public string Text
-            {
-                get { return _text; }
-                set { SetProperty(ref _text, value); }
-            }
+        }
 
-            private string _textColor;
-            public string TextColor
-            {
-                get { return _textColor; }
-                set { SetProperty(ref _textColor, value); }
-            }
+        private int _fontSize;
+        public int FontSize
+        {
+            get { return _fontSize; }
+            set { SetProperty(ref _fontSize, value); }
+        }
 
-            private string _backgroundColor;
-            public string BackgroundColor
-            {
-                get { return _backgroundColor; }
-                set { SetProperty(ref _backgroundColor, value); }
-            }
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set { SetProperty(ref _text, value); }
+        }
 
-            private Thickness _padding;
-            public Thickness Padding
-            {
-                get { return _padding; }
-                set { SetProperty(ref _padding, value); }
-            }
+        private string _textColor;
+        public string TextColor
+        {
+            get { return _textColor; }
+            set { SetProperty(ref _textColor, value); }
+        }
+
+        private string _backgroundColor;
+        public string BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { SetProperty(ref _backgroundColor, value); }
+        }
+
+        private Thickness _padding;
+        public Thickness Padding
+        {
+            get { return _padding; }
+            set { SetProperty(ref _padding, value); }
         }
     }
 }

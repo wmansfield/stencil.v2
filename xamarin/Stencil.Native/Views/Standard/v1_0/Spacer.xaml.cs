@@ -22,7 +22,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "spacer";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -32,32 +32,49 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
+                SpacerContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    return JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<SpacerContext>(configuration_json);
                 }
-                return new PreparedData();
+
+                if(result == null)
+                {
+                    result = new SpacerContext();
+                }
+
+                result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
+
+                return result;
             });
         }
-        public class PreparedData : PropertyClass
-        {
-            public int Height { get; set; }
+    }
 
-            private string _backgroundColor;
-            public string BackgroundColor
-            {
-                get { return _backgroundColor; }
-                set { SetProperty(ref _backgroundColor, value); }
-            }
+    public class SpacerContext : PreparedBingingContext
+    {
+        public SpacerContext()
+            : base(nameof(SpacerContext))
+        {
+
+        }
+
+        public int Height { get; set; }
+
+        private string _backgroundColor;
+        public string BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { SetProperty(ref _backgroundColor, value); }
         }
     }
 }

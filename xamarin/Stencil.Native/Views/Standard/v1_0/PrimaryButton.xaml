@@ -1,33 +1,34 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     x:Class="Stencil.Native.Views.Standard.v1_0.PrimaryButton">
-    <DataTemplate x:Key="primaryButton">
+    <DataTemplate x:Key="primaryButton" x:DataType="local:PrimaryButtonContext">
         <!--<ViewCell>-->
         <Grid HeightRequest="52"
               ColumnSpacing="0"
               RowSpacing="0"
-              Padding="{Binding PreparedData.Padding}"
-              BackgroundColor="{Binding PreparedData.BackgroundColor}"
+              Padding="{Binding Padding}"
+              BackgroundColor="{Binding BackgroundColor}"
               HorizontalOptions="Fill"
               VerticalOptions="Fill">
             <BoxView CornerRadius="4"
-                     BackgroundColor="{Binding PreparedData.UIButtonBackgroundColor}"
+                     BackgroundColor="{Binding UIButtonBackgroundColor}"
                      HorizontalOptions="FillAndExpand"
                      VerticalOptions="FillAndExpand"/>
             <StackLayout Orientation="Horizontal" 
                          HorizontalOptions="Center" 
-                         Padding="{Binding PreparedData.Padding}" 
+                         Padding="{Binding Padding}" 
                          Margin="0" 
                          Spacing="0">
-                <Label Text="{Binding PreparedData.Text}"
+                <Label Text="{Binding Text}"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"
                        TextColor="{StaticResource PrimaryWhite}"
                        FontFamily="{StaticResource SansRegular}"
                        FontSize="{StaticResource FontSizeStandard}" />
-                <Label IsVisible="{Binding PreparedData.ShowIcon}"
-                       Text="{Binding PreparedData.Icon}"
+                <Label IsVisible="{Binding ShowIcon}"
+                       Text="{Binding Icon}"
                        Margin="8,0,0,0"
                        Padding="0,0"
                        HorizontalOptions="Start"

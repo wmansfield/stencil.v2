@@ -19,11 +19,18 @@ namespace Stencil.Native.Views
         string ConfigurationJson { get; }
         
         /// <summary>
-        /// Typed object used by the view component
+        /// Dynamically generated BindingContext used to bind against the current component
         /// </summary>
-        object PreparedData { get; set; }
+        object PreparedContext { get; set; }
 
+        /// <summary>
+        /// The current viewmodel driving the view that contains this component
+        /// </summary>
         IDataViewModel DataViewModel { get; set; }
+
+        /// <summary>
+        /// Child dataview elements for the current view
+        /// </summary>
         IDataViewSection[] Sections { get; set; }
 
     }

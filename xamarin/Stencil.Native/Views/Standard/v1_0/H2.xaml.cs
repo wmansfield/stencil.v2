@@ -16,7 +16,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "h2";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -26,44 +26,61 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
+                H2Context result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    return JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<H2Context>(configuration_json);
                 }
-                return new PreparedData();
+
+                if (result == null)
+                {
+                    result = new H2Context();
+                }
+
+                result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
+
+                return result;
             });
         }
-        public class PreparedData : PropertyClass
+    }
+
+    public class H2Context : PreparedBingingContext
+    {
+        public H2Context()
+            : base(nameof(H2Context))
         {
-            private string _text;
-            public string Text
-            {
-                get { return _text; }
-                set { SetProperty(ref _text, value); }
-            }
 
-            private string _textColor;
-            public string TextColor
-            {
-                get { return _textColor; }
-                set { SetProperty(ref _textColor, value); }
-            }
+        }
 
-            private string _backgroundColor;
-            public string BackgroundColor
-            {
-                get { return _backgroundColor; }
-                set { SetProperty(ref _backgroundColor, value); }
-            }
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set { SetProperty(ref _text, value); }
+        }
+
+        private string _textColor;
+        public string TextColor
+        {
+            get { return _textColor; }
+            set { SetProperty(ref _textColor, value); }
+        }
+
+        private string _backgroundColor;
+        public string BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { SetProperty(ref _backgroundColor, value); }
         }
     }
 }

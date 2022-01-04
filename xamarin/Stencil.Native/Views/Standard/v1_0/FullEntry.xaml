@@ -2,19 +2,20 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:effects="clr-namespace:Stencil.Native.Effects;assembly=Stencil.Native"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     x:Class="Stencil.Native.Views.Standard.v1_0.FullEntry">
-    <DataTemplate x:Key="fullEntry">
+    <DataTemplate x:Key="fullEntry" x:DataType="local:FullEntryContext">
         <!--<ViewCell>-->
         <Grid RowDefinitions="20,48,20"
               RowSpacing="4" ColumnSpacing="0"
               Margin="0" Padding="1"
-              BackgroundColor="{Binding PreparedData.BackgroundColor}">
+              BackgroundColor="{Binding BackgroundColor}">
             <Label Grid.Row="0"
-                   Text="{Binding PreparedData.Label}"
+                   Text="{Binding Label}"
                    TextColor="{StaticResource TextOverBackground}"
                    FontFamily="{StaticResource SansRegular}"
                    FontSize="{StaticResource FontSizeStandard}"
-                   IsVisible="{Binding PreparedData.Label, Converter={StaticResource isValidStringConverter}}"
+                   IsVisible="{Binding Label, Converter={StaticResource isValidStringConverter}}"
                    Padding="0,0,0,0"/>
             <Frame Grid.Row="1"
                    HeightRequest="48"
@@ -22,37 +23,37 @@
                    CornerRadius="4"
                    Margin="0"
                    Padding="0,0,0,0">
-                <Entry Text="{Binding PreparedData.Input}"
+                <Entry Text="{Binding Input}"
                        FontFamily="{StaticResource SansRegular}"
                        FontSize="{StaticResource FontSizeStandard}"
-                       IsPassword="{Binding PreparedData.UIAsPassword}"
-                       Placeholder="{Binding PreparedData.Placeholder}"
-                       IsFocused="{Binding PreparedData.UIEntryFocused, Mode=OneWayToSource}"
-                       PlaceholderColor="{Binding PreparedData.PlaceholderColor}"
-                       TextColor="{Binding PreparedData.TextColor}"
-                       BackgroundColor="{Binding PreparedData.InputBackgroundColor}"
-                       effects:BorderlessEntryEffect.IsBorderless="{Binding PreparedData.Borderless}">
+                       IsPassword="{Binding UIAsPassword}"
+                       Placeholder="{Binding Placeholder}"
+                       IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                       PlaceholderColor="{Binding PlaceholderColor}"
+                       TextColor="{Binding TextColor}"
+                       BackgroundColor="{Binding InputBackgroundColor}"
+                       effects:BorderlessEntryEffect.IsBorderless="{Binding Borderless}">
                 </Entry>
             </Frame>
-            <Frame IsVisible="{Binding PreparedData.IsPassword}"
+            <Frame IsVisible="{Binding IsPassword}"
                    Grid.Row="1"
                    HasShadow="False"
                    Padding="10"
                    Margin="0,0,10,0"
-                   BackgroundColor="{Binding PreparedData.InputBackgroundColor}"
+                   BackgroundColor="{Binding InputBackgroundColor}"
                    HorizontalOptions="End"
                    VerticalOptions="Center">
                 <Label Padding="0"
                        Margin="0"
                        Grid.Row="1"
-                       Text="{Binding PreparedData.UIPasswordIcon}"
+                       Text="{Binding UIPasswordIcon}"
                        FontFamily="{StaticResource FontAwesome}"
                        FontSize="{StaticResource FontSizeStandard}"
-                       TextColor="{Binding PreparedData.TextColor}"
+                       TextColor="{Binding TextColor}"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"/>
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding PreparedData.UITogglePasswordVisibilityCommand}"/>
+                    <TapGestureRecognizer Command="{Binding UITogglePasswordVisibilityCommand}"/>
                 </Frame.GestureRecognizers>
             </Frame>
             <Label Grid.Row="2"

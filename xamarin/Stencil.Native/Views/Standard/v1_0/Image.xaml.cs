@@ -22,7 +22,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "image";
         
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -32,73 +32,89 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
+                ImageContext result = null;
+
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    return JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<ImageContext>(configuration_json);
                 }
-                return new PreparedData();
+                if(result == null)
+                {
+                    result = new ImageContext();
+                }
+                
+                result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
+
+                return result;
             });
         }
-        public class PreparedData : PropertyClass
+    }
+    public class ImageContext : PreparedBingingContext
+    {
+        public ImageContext()
+            : base(nameof(ImageContext))
         {
-            private string _source;
-            public string Source
-            {
-                get { return _source; }
-                set { SetProperty(ref _source, value); }
-            }
 
-            private int _width = -1;
-            public int Width
-            {
-                get { return _width; }
-                set { SetProperty(ref _width, value); }
-            }
+        }
 
-            private int _height = -1;
-            public int Height
-            {
-                get { return _height; }
-                set { SetProperty(ref _height, value); }
-            }
+        private string _source;
+        public string Source
+        {
+            get { return _source; }
+            set { SetProperty(ref _source, value); }
+        }
+
+        private int _width = -1;
+        public int Width
+        {
+            get { return _width; }
+            set { SetProperty(ref _width, value); }
+        }
+
+        private int _height = -1;
+        public int Height
+        {
+            get { return _height; }
+            set { SetProperty(ref _height, value); }
+        }
 
 
-            private int _mimimumWidth = -1;
-            public int MinimumWidth
-            {
-                get { return _mimimumWidth; }
-                set { SetProperty(ref _mimimumWidth, value); }
-            }
+        private int _mimimumWidth = -1;
+        public int MinimumWidth
+        {
+            get { return _mimimumWidth; }
+            set { SetProperty(ref _mimimumWidth, value); }
+        }
 
-            private int _minimumHeight = -1;
-            public int MinimumHeight
-            {
-                get { return _minimumHeight; }
-                set { SetProperty(ref _minimumHeight, value); }
-            }
+        private int _minimumHeight = -1;
+        public int MinimumHeight
+        {
+            get { return _minimumHeight; }
+            set { SetProperty(ref _minimumHeight, value); }
+        }
 
-            private Thickness _padding = new Thickness();
-            public Thickness Padding
-            {
-                get { return _padding; }
-                set { SetProperty(ref _padding, value); }
-            }
+        private Thickness _padding = new Thickness();
+        public Thickness Padding
+        {
+            get { return _padding; }
+            set { SetProperty(ref _padding, value); }
+        }
 
-            private string _backgroundColor;
-            public string BackgroundColor
-            {
-                get { return _backgroundColor; }
-                set { SetProperty(ref _backgroundColor, value); }
-            }
+        private string _backgroundColor;
+        public string BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { SetProperty(ref _backgroundColor, value); }
         }
     }
 }

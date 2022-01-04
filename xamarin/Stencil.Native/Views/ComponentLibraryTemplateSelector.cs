@@ -55,7 +55,7 @@ namespace Stencil.Native.Views
 #if DEBUG
                         label.BackgroundColor = Color.Red;
                         label.TextColor = Color.White;
-                        label.SetBinding(Label.TextProperty, "PreparedData");
+                        label.SetBinding(Label.TextProperty, nameof(IDataViewItem.PreparedContext));
 #endif
                         return label;
                     });
@@ -84,9 +84,9 @@ namespace Stencil.Native.Views
                             IDataViewComponent dataViewComponent = componentLibrary.GetComponent(dataViewItem.Component);
                             if (dataViewComponent != null)
                             {
-                                if (dataViewItem.PreparedData == null || dataViewComponent.PreparedDataCacheDisabled)
+                                if (dataViewItem.PreparedContext == null || !dataViewComponent.BindingContextCacheEnabled)
                                 {
-                                    dataViewItem.PreparedData = dataViewComponent.PrepareData(this.CommandScope, dataViewItem.DataViewModel, dataViewItem, this, dataViewItem.ConfigurationJson);
+                                    dataViewItem.PreparedContext = dataViewComponent.PrepareBindingContext(this.CommandScope, dataViewItem.DataViewModel, dataViewItem, this, dataViewItem.ConfigurationJson);
                                 }
                                 return dataViewComponent;
                             }
@@ -102,6 +102,14 @@ namespace Stencil.Native.Views
             return CoreUtility.ExecuteFunction(nameof(OnSelectTemplate), delegate ()
             {
                 IDataViewItem dataViewItem = item as IDataViewItem;
+                if (dataViewItem == null)
+                {
+                    IDataViewItemReference dataViewItemReference = item as IDataViewItemReference;
+                    if(dataViewItemReference != null)
+                    {
+                        dataViewItem = dataViewItemReference.DataViewItem;
+                    }
+                }
 
                 IDataViewComponent dataViewComponent = this.ResolveTemplateAndPrepareData(dataViewItem);
 
@@ -117,7 +125,10 @@ namespace Stencil.Native.Views
                 {
                     componentName = item.GetType().ToString();
                 }
-                dataViewItem.PreparedData = componentName;
+                if (dataViewItem != null)
+                {
+                    dataViewItem.PreparedContext = componentName;
+                }
 #if !DEBUG
                 CoreUtility.Logger.LogError("ComponentLibraryTemplateSelector", new Exception("Unable to find component with the name " + componentName));
 #endif

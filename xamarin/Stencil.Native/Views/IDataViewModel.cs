@@ -15,8 +15,9 @@ namespace Stencil.Native.Views
         bool IsMenuSupported { get; }
         ObservableCollection<IMenuEntry> MenuEntries { get; }
         ObservableCollection<IDataViewItem> MainItemsUnFiltered { get; }
-        ObservableCollection<IDataViewItem> MainItemsFiltered { get; }
-        ObservableCollection<IDataViewItem> FooterItems { get; }
+        ObservableCollection<object> MainItemsFiltered { get; }
+        ObservableCollection<object> FooterItems { get; }
+        ObservableCollection<object> HeaderItems { get; }
         bool ShowFooter { get; }
         DataTemplateSelector DataTemplateSelector { get; }
         Thickness Padding { get; }

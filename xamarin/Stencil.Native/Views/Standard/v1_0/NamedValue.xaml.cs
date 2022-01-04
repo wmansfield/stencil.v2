@@ -16,7 +16,7 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "namedValue";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -26,81 +26,92 @@ namespace Stencil.Native.Views.Standard.v1_0
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
-                PreparedData result = null;
+                NamedValueContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<NamedValueContext>(configuration_json);
                 }
                 if(result == null)
                 {
-                    result = new PreparedData();
+                    result = new NamedValueContext();
                 }
                 if(result.FontSize <= 0)
                 {
                     result.FontSize = 16;
                 }
+
+                result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
+
                 return result;
             });
         }
-        public class PreparedData : PropertyClass
+    }
+
+    public class NamedValueContext : PreparedBingingContext
+    {
+        public NamedValueContext()
+            : base(nameof(NamedValueContext))
         {
-            private string _nameText;
-            public string NameText
-            {
-                get { return _nameText; }
-                set { SetProperty(ref _nameText, value); }
-            }
 
-            private string _nameTextColor;
-            public string NameTextColor
-            {
-                get { return _nameTextColor; }
-                set { SetProperty(ref _nameTextColor, value); }
-            }
+        }
 
-            private string _valueText;
-            public string ValueText
-            {
-                get { return _valueText; }
-                set { SetProperty(ref _valueText, value); }
-            }
+        private string _nameText;
+        public string NameText
+        {
+            get { return _nameText; }
+            set { SetProperty(ref _nameText, value); }
+        }
 
-            private string _valueTextColor;
-            public string ValueTextColor
-            {
-                get { return _valueTextColor; }
-                set { SetProperty(ref _valueTextColor, value); }
-            }
+        private string _nameTextColor;
+        public string NameTextColor
+        {
+            get { return _nameTextColor; }
+            set { SetProperty(ref _nameTextColor, value); }
+        }
 
-            private string _backgroundColor;
-            public string BackgroundColor
-            {
-                get { return _backgroundColor; }
-                set { SetProperty(ref _backgroundColor, value); }
-            }
+        private string _valueText;
+        public string ValueText
+        {
+            get { return _valueText; }
+            set { SetProperty(ref _valueText, value); }
+        }
 
-            private int _fontSize;
-            public int FontSize
-            {
-                get { return _fontSize; }
-                set { SetProperty(ref _fontSize, value); }
-            }
+        private string _valueTextColor;
+        public string ValueTextColor
+        {
+            get { return _valueTextColor; }
+            set { SetProperty(ref _valueTextColor, value); }
+        }
 
-            private Thickness _padding;
-            public Thickness Padding
-            {
-                get { return _padding; }
-                set { SetProperty(ref _padding, value); }
-            }
+        private string _backgroundColor;
+        public string BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { SetProperty(ref _backgroundColor, value); }
+        }
+
+        private int _fontSize;
+        public int FontSize
+        {
+            get { return _fontSize; }
+            set { SetProperty(ref _fontSize, value); }
+        }
+
+        private Thickness _padding;
+        public Thickness Padding
+        {
+            get { return _padding; }
+            set { SetProperty(ref _padding, value); }
         }
     }
 }

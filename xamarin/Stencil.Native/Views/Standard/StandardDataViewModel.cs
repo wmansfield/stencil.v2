@@ -6,6 +6,7 @@ using Stencil.Native.Screens;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -46,13 +47,12 @@ namespace Stencil.Native.Views.Standard
         }
 
 
-        private ObservableCollection<IDataViewItem> _mainItemsFiltered;
-        public ObservableCollection<IDataViewItem> MainItemsFiltered
+        private ObservableCollection<object> _mainItemsFiltered;
+        public ObservableCollection<object> MainItemsFiltered
         {
             get { return _mainItemsFiltered; }
             set { SetProperty(ref _mainItemsFiltered, value); }
         }
-
 
         private ObservableCollection<IMenuEntry> _menuEntries;
         public ObservableCollection<IMenuEntry> MenuEntries
@@ -82,8 +82,8 @@ namespace Stencil.Native.Views.Standard
             set { SetProperty(ref _backgroundImage, value); }
         }
 
-        private ObservableCollection<IDataViewItem> _headerItems;
-        public ObservableCollection<IDataViewItem> HeaderItems
+        private ObservableCollection<object> _headerItems;
+        public ObservableCollection<object> HeaderItems
         {
             get { return _headerItems; }
             set { SetProperty(ref _headerItems, value); }
@@ -96,8 +96,8 @@ namespace Stencil.Native.Views.Standard
             set { SetProperty(ref _showHeader, value); }
         }
 
-        private ObservableCollection<IDataViewItem> _footerItems;
-        public ObservableCollection<IDataViewItem> FooterItems
+        private ObservableCollection<object> _footerItems;
+        public ObservableCollection<object> FooterItems
         {
             get { return _footerItems; }
             set { SetProperty(ref _footerItems, value); }
@@ -126,7 +126,7 @@ namespace Stencil.Native.Views.Standard
         {
             return base.ExecuteMethodAsync(nameof(ApplyFiltersAndAdjustmentsAsync), async delegate ()
             {
-                ObservableCollection<IDataViewItem> filteredItems = new ObservableCollection<IDataViewItem>();
+                List<IDataViewItem> filteredItems = new List<IDataViewItem>();
                 ObservableCollection<IDataViewItem> unFilteredItems = this.MainItemsUnFiltered;
                 
                 if (unFilteredItems?.Count > 0)
@@ -148,7 +148,7 @@ namespace Stencil.Native.Views.Standard
                                 }
                                 catch (Exception ex)
                                 {
-                                    this.LogError(ex, $"Error applying filter with '{filter.GetType()}' against item '{JsonConvert.SerializeObject(item.PreparedData)}'");
+                                    this.LogError(ex, $"Error applying filter with '{filter.GetType()}' against item '{JsonConvert.SerializeObject(item.PreparedContext)}'");
                                 }
                             }
                             if(!shouldSuppress)
@@ -159,7 +159,7 @@ namespace Stencil.Native.Views.Standard
                     }
                     else
                     {
-                        filteredItems = unFilteredItems;
+                        filteredItems.AddRange(unFilteredItems);
                     }
                 }
 
@@ -177,7 +177,8 @@ namespace Stencil.Native.Views.Standard
                         }
                     }
                 }
-                this.MainItemsFiltered = filteredItems;
+
+                this.MainItemsFiltered = new ObservableCollection<object>(filteredItems.Select(x => x.PreparedContext));
             });
         }
 

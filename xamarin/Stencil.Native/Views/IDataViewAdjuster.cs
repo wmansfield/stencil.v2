@@ -8,6 +8,6 @@ namespace Stencil.Native.Views
 {
     public interface IDataViewAdjuster
     {
-        Task AdjustItems(IDataViewModel viewModel, ObservableCollection<IDataViewItem> dataViewItems);
+        Task AdjustItems(IDataViewModel viewModel, List<IDataViewItem> dataViewItems);
     }
 }

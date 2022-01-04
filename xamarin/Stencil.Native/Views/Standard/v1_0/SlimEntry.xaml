@@ -1,15 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     xmlns:effects="clr-namespace:Stencil.Native.Effects;assembly=Stencil.Native"
                     x:Class="Stencil.Native.Views.Standard.v1_0.SlimEntry">
-    <DataTemplate x:Key="slimEntry">
+    <DataTemplate x:Key="slimEntry" x:DataType="local:SlimEntryContext">
         <!--<ViewCell>-->
         <Grid RowDefinitions="48,20"
               RowSpacing="4" ColumnSpacing="0"
               Margin="0"
-              Padding="{Binding PreparedData.Padding}"
-              BackgroundColor="{Binding PreparedData.BackgroundColor}">
+              Padding="{Binding Padding}"
+              BackgroundColor="{Binding BackgroundColor}">
             <Frame Grid.Row="0"
                    HeightRequest="48"
                    HasShadow="False"
@@ -19,35 +20,35 @@
                 <Entry x:Name="entText"
                        FontFamily="{StaticResource SansRegular}"
                        FontSize="{StaticResource FontSizeStandard}"
-                       Text="{Binding PreparedData.Input}"
-                       IsPassword="{Binding PreparedData.UIAsPassword}"
-                       Placeholder="{Binding PreparedData.Placeholder}"
-                       IsFocused="{Binding PreparedData.UIEntryFocused, Mode=OneWayToSource}"
-                       PlaceholderColor="{Binding PreparedData.PlaceholderColor}"
-                       TextColor="{Binding PreparedData.TextColor}"
-                       BackgroundColor="{Binding PreparedData.InputBackgroundColor}"
-                       effects:BorderlessEntryEffect.IsBorderless="{Binding PreparedData.Borderless}">
+                       Text="{Binding Input}"
+                       IsPassword="{Binding UIAsPassword}"
+                       Placeholder="{Binding Placeholder}"
+                       IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                       PlaceholderColor="{Binding PlaceholderColor}"
+                       TextColor="{Binding TextColor}"
+                       BackgroundColor="{Binding InputBackgroundColor}"
+                       effects:BorderlessEntryEffect.IsBorderless="{Binding Borderless}">
                 </Entry>
             </Frame>
             <Frame Grid.Row="0"
-                   IsVisible="{Binding PreparedData.IsPassword}"
+                   IsVisible="{Binding IsPassword}"
                    HasShadow="False"
                    Padding="10"
                    Margin="0,0,10,0"
-                   BackgroundColor="{Binding PreparedData.InputBackgroundColor}"
+                   BackgroundColor="{Binding InputBackgroundColor}"
                    HorizontalOptions="End"
                    VerticalOptions="Center">
                 <Label Padding="0"
                        Margin="0"
                        Grid.Row="1"
-                       Text="{Binding PreparedData.UIPasswordIcon}"
+                       Text="{Binding UIPasswordIcon}"
                        FontFamily="{StaticResource FontAwesome}"
                        FontSize="{StaticResource FontSizeStandard}"
-                       TextColor="{Binding PreparedData.TextColor}"
+                       TextColor="{Binding TextColor}"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"/>
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding PreparedData.UITogglePasswordVisibilityCommand}"/>
+                    <TapGestureRecognizer Command="{Binding UITogglePasswordVisibilityCommand}"/>
                 </Frame.GestureRecognizers>
             </Frame>
             <Label x:Name="lblFeedback"

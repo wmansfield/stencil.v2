@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     x:Class="Stencil.Native.Views.Standard.v1_0.HeaderBackBar">
-    <DataTemplate x:Key="headerBackBar">
+    <DataTemplate x:Key="headerBackBar" x:DataType="local:HeaderBackBarContext">
         <!--<ViewCell>-->
         <Grid HorizontalOptions="Fill"
               ColumnDefinitions="48,*"
@@ -10,30 +11,30 @@
               HeightRequest="55"
               RowSpacing="0"
               ColumnSpacing="0"
-              BackgroundColor="{Binding PreparedData.BackgroundColor}">
+              BackgroundColor="{Binding BackgroundColor}">
             <Label Grid.Column="0"
-                   Text="{Binding PreparedData.BackIcon}"
+                   Text="{Binding BackIcon}"
                    Margin="0,0"
                    Padding="4,0"
                    HorizontalOptions="Fill"
                    VerticalOptions="Center"
                    FontSize="{StaticResource FontSizeHeaderIcon}"
                    FontFamily="{StaticResource FontAwesome}"
-                   TextColor="{Binding PreparedData.TextColor}"
+                   TextColor="{Binding TextColor}"
                    HorizontalTextAlignment="Center">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                 </Label.GestureRecognizers>
             </Label>
             <Label Grid.Column="1"
-                   Text="{Binding PreparedData.Title}"
+                   Text="{Binding Title}"
                    HorizontalOptions="Fill"
                    VerticalOptions="Center"
                    LineBreakMode="TailTruncation"
                    Padding="8,0,54,0"
                    FontSize="{StaticResource FontSizeStandard}"
                    FontFamily="{StaticResource SansRegular}"
-                   TextColor="{Binding PreparedData.TextColor}"
+                   TextColor="{Binding TextColor}"
                    HorizontalTextAlignment="Center" />
         </Grid>
         <!--</ViewCell>-->

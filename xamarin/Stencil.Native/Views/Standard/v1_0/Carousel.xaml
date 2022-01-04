@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     x:Class="Stencil.Native.Views.Standard.v1_0.Carousel">
-    <DataTemplate x:Key="carousel">
-        <CarouselView BackgroundColor="{Binding PreparedData.BackgroundColor}"
-                      HeightRequest="{Binding PreparedData.HeightRequest}"
-                      ItemsSource="{Binding PreparedData.Cells}">
+    <DataTemplate x:Key="carousel" x:DataType="local:CarouselContext">
+        <CarouselView BackgroundColor="{Binding BackgroundColor}"
+                      HeightRequest="{Binding HeightRequest}"
+                      ItemsSource="{Binding Cells}">
             <CarouselView.ItemTemplate>
                 <DataTemplate>
                     <CollectionView
@@ -13,7 +14,7 @@
                         VerticalOptions="Start"
                         HorizontalOptions="Fill"
                         SelectionMode="None"
-                        ItemsSource="{Binding MainItemsFiltered}"
+                        ItemsSource="{Binding Cells}"
                         ItemTemplate="{Binding DataTemplateSelector}" />
                 </DataTemplate>
             </CarouselView.ItemTemplate>

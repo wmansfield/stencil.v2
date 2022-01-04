@@ -8,6 +8,6 @@ namespace Stencil.Native.Views
 {
     public interface IDataViewFilter
     {
-        Task<bool> ShouldSuppressItem(IDataViewModel viewModel, IDataViewItem dataViewItem, ObservableCollection<IDataViewItem> dataSoFar);
+        Task<bool> ShouldSuppressItem(IDataViewModel viewModel, IDataViewItem dataViewItem, List<IDataViewItem> dataSoFar);
     }
 }

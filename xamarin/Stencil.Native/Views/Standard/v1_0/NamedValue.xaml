@@ -1,30 +1,31 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     x:Class="Stencil.Native.Views.Standard.v1_0.NamedValue">
-    <DataTemplate x:Key="namedValue">
+    <DataTemplate x:Key="namedValue" x:DataType="local:NamedValueContext">
         <!--<ViewCell>-->
         <Grid HorizontalOptions="Fill" 
-              Padding="{Binding PreparedData.Padding}" Margin="0" 
+              Padding="{Binding Padding}" Margin="0" 
               ColumnDefinitions="*,2*"
-              BackgroundColor="{Binding PreparedData.BackgroundColor}">
+              BackgroundColor="{Binding BackgroundColor}">
             <Label Grid.Column="0"
-                   Text="{Binding PreparedData.NameText}"
+                   Text="{Binding NameText}"
                    HorizontalOptions="End"
                    VerticalOptions="Center"
-                   FontSize="{Binding PreparedData.FontSize}"
+                   FontSize="{Binding FontSize}"
                    FontFamily="{StaticResource SansRegular}"
-                   TextColor="{Binding PreparedData.NameTextColor}"
+                   TextColor="{Binding NameTextColor}"
                    HorizontalTextAlignment="Center"
                    Margin="0,0,6,0"
                    Padding="0"/>
             <Label Grid.Column="1"
-                   Text="{Binding PreparedData.ValueText}"
+                   Text="{Binding ValueText}"
                    HorizontalOptions="Start"
                    VerticalOptions="Center"
-                   FontSize="{Binding PreparedData.FontSize}"
+                   FontSize="{Binding FontSize}"
                    FontFamily="{StaticResource SansRegular}"
-                   TextColor="{Binding PreparedData.ValueTextColor}"
+                   TextColor="{Binding ValueTextColor}"
                    HorizontalTextAlignment="Center"
                    Margin="6,0,0,0"
                    Padding="0"/>

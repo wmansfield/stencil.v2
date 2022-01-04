@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Native.Commanding;
 using Stencil.Native.Markdown;
+using Stencil.Native.Views.Standard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Stencil.Native.Views.Markdown
         public const string COMPONENT_NAME = "markdown-container";
         private const string TEMPLATE_KEY = "markdownContainer";
 
-        public bool PreparedDataCacheDisabled
+        public bool BindingContextCacheEnabled
         {
             get
             {
@@ -33,42 +34,47 @@ namespace Stencil.Native.Views.Markdown
 
         public DataTemplate GetDataTemplate()
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.GetDataTemplate", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public object PrepareData(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.PrepareData", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
             {
-                PreparedData result = null;
+                MarkdownContainerContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<PreparedData>(configuration_json);
+                    result = JsonConvert.DeserializeObject<MarkdownContainerContext>(configuration_json);
                 }
                 if (result == null)
                 {
-                    result = new PreparedData();
+                    result = new MarkdownContainerContext();
                 }
                 result.LinkTappedCommand = new Command<string>(async (destination) => await NativeApplication.CommandProcessor.LinkTapped(destination));
+                
                 result.CommandScope = commandScope;
+                result.DataViewItem = dataViewItem;
+
                 return result;
             });
         }
+    }
 
-        public class PreparedData
+    public class MarkdownContainerContext : PreparedBingingContext
+    {
+        public MarkdownContainerContext()
+            : base(nameof(MarkdownContainerContext))
         {
-            public bool SuppressDivider { get; set; }
-            public int FontSize { get; set; }
-            public List<MarkdownSection> sections { get; set; }
 
-            [JsonIgnore]
-            public ICommand LinkTappedCommand { get; set; }
-
-            [JsonIgnore]
-            public ICommandScope CommandScope { get; set; }
         }
 
+        public bool SuppressDivider { get; set; }
+        public int FontSize { get; set; }
+        public List<MarkdownSection> sections { get; set; }
+
+        [JsonIgnore]
+        public ICommand LinkTappedCommand { get; set; }
     }
 }

@@ -2,33 +2,34 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:stencil="clr-namespace:Stencil.Native.Views;assembly=Stencil.Native"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     x:Class="Stencil.Native.Views.Standard.v1_0.DualColumnMarkdown">
-    <DataTemplate x:Key="dualColumnMarkdown">
+    <DataTemplate x:Key="dualColumnMarkdown" x:DataType="local:DualColumnMarkdownContext">
         <!--<ViewCell>-->
         <Grid ColumnDefinitions="*,*" 
               RowDefinitions="Auto"
               RowSpacing="0" 
               ColumnSpacing="0" 
               HorizontalOptions="Fill"
-              Padding="{Binding PreparedData.Padding}"
-              BackgroundColor="{Binding PreparedData.BackgroundColor}">
+              Padding="{Binding Padding}"
+              BackgroundColor="{Binding BackgroundColor}">
             <stencil:MarkdownView Grid.Column="0"
                                   HorizontalOptions="Start"
                                   VerticalOptions="Center"
-                                  LinkTappedCommand="{Binding PreparedData.LinkTappedCommand}"
-                                  TextColor="{Binding PreparedData.TextColor}"
-                                  Sections="{Binding PreparedData.MarkdownLeft}"
-                                  FontSize="{Binding PreparedData.FontSize}"
-                                  SuppressDivider="{Binding PreparedData.SuppressDivider}">
+                                  LinkTappedCommand="{Binding LinkTappedCommand}"
+                                  TextColor="{Binding TextColor}"
+                                  Sections="{Binding MarkdownLeft}"
+                                  FontSize="{Binding FontSize}"
+                                  SuppressDivider="{Binding SuppressDivider}">
             </stencil:MarkdownView>
             <stencil:MarkdownView Grid.Column="1"
                                   HorizontalOptions="End"
                                   VerticalOptions="Center"
-                                  LinkTappedCommand="{Binding PreparedData.LinkTappedCommand}"
-                                  TextColor="{Binding PreparedData.TextColor}"
-                                  Sections="{Binding PreparedData.MarkdownRight}"
-                                  FontSize="{Binding PreparedData.FontSize}"
-                                  SuppressDivider="{Binding PreparedData.SuppressDivider}">
+                                  LinkTappedCommand="{Binding LinkTappedCommand}"
+                                  TextColor="{Binding TextColor}"
+                                  Sections="{Binding MarkdownRight}"
+                                  FontSize="{Binding FontSize}"
+                                  SuppressDivider="{Binding SuppressDivider}">
             </stencil:MarkdownView>
         </Grid>
         <!--</ViewCell>-->

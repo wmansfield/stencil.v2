@@ -1,21 +1,22 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Native.Views.Standard.v1_0"
                     x:Class="Stencil.Native.Views.Standard.v1_0.PlainText">
-    <DataTemplate x:Key="plainText">
+    <DataTemplate x:Key="plainText" x:DataType="local:PlainTextContext">
         <!--<ViewCell>-->
         <StackLayout Orientation="Vertical" 
                      HorizontalOptions="Fill" 
-                     Padding="{Binding PreparedData.Padding}" 
+                     Padding="{Binding Padding}" 
                      Margin="0" 
                      Spacing="0" 
-                     BackgroundColor="{Binding PreparedData.BackgroundColor}">
-            <Label Text="{Binding PreparedData.Text}"
+                     BackgroundColor="{Binding BackgroundColor}">
+            <Label Text="{Binding Text}"
                        HorizontalOptions="Start"
                        VerticalOptions="Start"
-                       FontSize="{Binding PreparedData.FontSize}"
+                       FontSize="{Binding FontSize}"
                        FontFamily="{StaticResource SansRegular}"
-                       TextColor="{Binding PreparedData.TextColor}"
+                       TextColor="{Binding TextColor}"
                        HorizontalTextAlignment="Start"
                        Margin="0" />
         </StackLayout>
