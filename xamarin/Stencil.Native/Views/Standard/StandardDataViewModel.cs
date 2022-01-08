@@ -177,7 +177,7 @@ namespace Stencil.Native.Views.Standard
                         }
                     }
                 }
-
+                this.LogTrace($"Count is {filteredItems.Count}");
                 this.MainItemsFiltered = new ObservableCollection<object>(filteredItems.Select(x => x.PreparedContext));
             });
         }

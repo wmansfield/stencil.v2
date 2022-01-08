@@ -26,7 +26,7 @@ namespace Stencil.Native.Views.Standard.v1_0
         {
             get
             {
-                return false;
+                return true;
             }
         }
 
