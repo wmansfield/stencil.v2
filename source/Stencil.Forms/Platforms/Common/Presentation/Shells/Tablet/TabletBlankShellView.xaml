@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Forms.Base"
+             x:Class="Stencil.Forms.Presentation.Shells.Tablet.TabletBlankShellView">
+  <ContentView.Content>
+        <ContentView x:Name="vwContent"/>
+    </ContentView.Content>
+</base:BaseContentView>

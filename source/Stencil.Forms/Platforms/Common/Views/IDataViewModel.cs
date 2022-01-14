@@ -1,0 +1,31 @@
+﻿using Stencil.Forms.Base;
+using Stencil.Forms.Presentation.Menus;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
+
+namespace Stencil.Forms.Views
+{
+    public interface IDataViewModel : IBaseViewModel
+    {
+        IDataViewVisual DataViewVisual { get; set; }
+        ICommand NavigateBackCommand { get; }
+        bool IsMenuSupported { get; }
+        ObservableCollection<IMenuEntry> MenuEntries { get; }
+        ObservableCollection<IDataViewItem> MainItemsUnFiltered { get; }
+        ObservableCollection<object> MainItemsFiltered { get; }
+        ObservableCollection<object> FooterItems { get; }
+        ObservableCollection<object> HeaderItems { get; }
+        bool ShowFooter { get; }
+        DataTemplateSelector DataTemplateSelector { get; }
+        Thickness Padding { get; }
+        Color BackgroundColor { get; }
+        string BackgroundImage { get; }
+
+        Task InitializeData();
+        Task ApplyFiltersAndAdjustmentsAsync();
+
+    }
+}

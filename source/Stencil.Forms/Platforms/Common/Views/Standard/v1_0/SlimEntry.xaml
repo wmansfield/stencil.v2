@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Native"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.SlimEntry">
+    <DataTemplate x:Key="slimEntry" x:DataType="local:SlimEntryContext">
+        <!--<ViewCell>-->
+        <Grid RowDefinitions="48,20"
+              RowSpacing="4" ColumnSpacing="0"
+              Margin="0"
+              Padding="{Binding Padding}"
+              BackgroundColor="{Binding BackgroundColor}">
+            <Frame Grid.Row="0"
+                   HeightRequest="48"
+                   HasShadow="False"
+                   CornerRadius="4"
+                   Margin="0"
+                   Padding="0,0,0,0">
+                <Entry x:Name="entText"
+                       FontFamily="{StaticResource SansRegular}"
+                       FontSize="{StaticResource FontSizeStandard}"
+                       Text="{Binding Input}"
+                       IsPassword="{Binding UIAsPassword}"
+                       Placeholder="{Binding Placeholder}"
+                       IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                       PlaceholderColor="{Binding PlaceholderColor}"
+                       TextColor="{Binding TextColor}"
+                       BackgroundColor="{Binding InputBackgroundColor}"
+                       effects:BorderlessEntryEffect.IsBorderless="{Binding Borderless}">
+                </Entry>
+            </Frame>
+            <Frame Grid.Row="0"
+                   IsVisible="{Binding IsPassword}"
+                   HasShadow="False"
+                   Padding="10"
+                   Margin="0,0,10,0"
+                   BackgroundColor="{Binding InputBackgroundColor}"
+                   HorizontalOptions="End"
+                   VerticalOptions="Center">
+                <Label Padding="0"
+                       Margin="0"
+                       Grid.Row="1"
+                       Text="{Binding UIPasswordIcon}"
+                       FontFamily="{StaticResource FontAwesome}"
+                       FontSize="{StaticResource FontSizeStandard}"
+                       TextColor="{Binding TextColor}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding UITogglePasswordVisibilityCommand}"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+            <Label x:Name="lblFeedback"
+                   Grid.Row="1"
+                   IsVisible="false"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontSize="{StaticResource FontSizeSmall}"
+                   TextColor="{x:StaticResource Warning}"
+                   Padding="8,0,8,0"/>
+        </Grid>
+            <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.PrimaryButton">
+    <DataTemplate x:Key="primaryButton" x:DataType="local:PrimaryButtonContext">
+        <!--<ViewCell>-->
+        <Grid HeightRequest="52"
+              ColumnSpacing="0"
+              RowSpacing="0"
+              Padding="{Binding Padding}"
+              BackgroundColor="{Binding BackgroundColor}"
+              HorizontalOptions="Fill"
+              VerticalOptions="Fill">
+            <BoxView CornerRadius="4"
+                     BackgroundColor="{Binding UIButtonBackgroundColor}"
+                     HorizontalOptions="FillAndExpand"
+                     VerticalOptions="FillAndExpand"/>
+            <StackLayout Orientation="Horizontal" 
+                         HorizontalOptions="Center" 
+                         Padding="{Binding Padding}" 
+                         Margin="0" 
+                         Spacing="0">
+                <Label Text="{Binding Text}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       TextColor="{StaticResource PrimaryWhite}"
+                       FontFamily="{StaticResource SansRegular}"
+                       FontSize="{StaticResource FontSizeStandard}" />
+                <Label IsVisible="{Binding ShowIcon}"
+                       Text="{Binding Icon}"
+                       Margin="8,0,0,0"
+                       Padding="0,0"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       FontSize="{StaticResource FontSizeStandard}"
+                       FontFamily="{StaticResource FontAwesome}"
+                       TextColor="{StaticResource PrimaryWhite}"
+                       HorizontalTextAlignment="Center">
+                </Label>
+            </StackLayout>
+            
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Button_Clicked" />
+            </Grid.GestureRecognizers>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>
