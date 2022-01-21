@@ -1,4 +1,5 @@
 ﻿using Stencil.Common.Screens;
+using Stencil.Forms.Presentation.Routing;
 using Stencil.Forms.Screens;
 using Stencil.Forms.Views;
 using Stencil.Forms.Views.Standard;
@@ -10,6 +11,11 @@ namespace Stencil.Forms.Commanding.Commands
     {
         public NavigateRootCommand()
             : base(StencilAPI.Instance, nameof(NavigateRootCommand))
+        {
+
+        }
+        public NavigateRootCommand(string trackPrefix)
+            : base(StencilAPI.Instance, trackPrefix)
         {
 
         }
@@ -35,9 +41,17 @@ namespace Stencil.Forms.Commanding.Commands
                 NavigationData navigationData = this.ParseNavigationData<NavigationData>(commandParameter);
 
                 IDataViewModel dataViewModel = await this.API.Screens.GenerateViewModelAsync(this.API.CommandProcessor, navigationData);
-                StandardDataView dataView = new StandardDataView(dataViewModel);
+                IRouterView dataView = this.GenerateView(dataViewModel);
                 await this.API.Router.SetInitialViewAsync(dataView);
                 return true;
+            });
+        }
+
+        protected virtual IRouterView GenerateView(IDataViewModel dataViewModel)
+        {
+            return base.ExecuteFunction(nameof(GenerateView), delegate ()
+            {
+                return new StandardDataView(dataViewModel);
             });
         }
     }

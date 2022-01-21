@@ -2,7 +2,7 @@
 <base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:base="clr-namespace:Stencil.Forms.Base"
-             xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Native"
+             xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Forms"
              x:Class="Stencil.Forms.Views.Standard.StandardDataView">
     <ContentView.Content>
         <Grid x:Name="grdContainer"

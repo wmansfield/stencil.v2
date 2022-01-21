@@ -5,6 +5,7 @@ rcf/
 
 # Visual Studio code
 .vscode/
+.vs/
 
 # mstest test results
 TestResults

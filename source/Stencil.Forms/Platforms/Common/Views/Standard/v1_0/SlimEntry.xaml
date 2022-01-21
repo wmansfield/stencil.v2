@@ -2,7 +2,7 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
-                    xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Native"
+                    xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Forms"
                     x:Class="Stencil.Forms.Views.Standard.v1_0.SlimEntry">
     <DataTemplate x:Key="slimEntry" x:DataType="local:SlimEntryContext">
         <!--<ViewCell>-->

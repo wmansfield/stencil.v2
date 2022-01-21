@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Common.Screens;
+using Stencil.Forms.Presentation.Routing;
 using Stencil.Forms.Screens;
 using Stencil.Forms.Views;
 using Stencil.Forms.Views.Standard;
@@ -11,6 +12,11 @@ namespace Stencil.Forms.Commanding.Commands
     {
         public NavigatePushCommand()
             : base(StencilAPI.Instance, nameof(NavigatePushCommand))
+        {
+
+        }
+        public NavigatePushCommand(string trackPrefix)
+            : base(StencilAPI.Instance, trackPrefix)
         {
 
         }
@@ -44,13 +50,20 @@ namespace Stencil.Forms.Commanding.Commands
                 }
                 else
                 {
-                    StandardDataView dataView = new StandardDataView(dataViewModel);
+                    IRouterView dataView = this.GenerateView(dataViewModel);
                     await this.API.Router.PushViewAsync(dataView, commandScope.TargetMenuEntry);
                     return true;
                 }
             });
         }
 
+        protected virtual IRouterView GenerateView(IDataViewModel dataViewModel)
+        {
+            return base.ExecuteFunction(nameof(GenerateView), delegate ()
+            {
+                return new StandardDataView(dataViewModel);
+            });
+        }
         
     }
 }

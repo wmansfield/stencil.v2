@@ -8,8 +8,8 @@
     <PackageId>Stencil.Forms</PackageId>
     
     <Product>Stencil</Product>
-    <AssemblyVersion>2.0.4.0</AssemblyVersion>
-    <Version>2.0.4</Version>
+    <AssemblyVersion>2.0.6.0</AssemblyVersion>
+    <Version>2.0.6</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>
