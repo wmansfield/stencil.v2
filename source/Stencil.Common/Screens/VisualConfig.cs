@@ -8,6 +8,7 @@ namespace Stencil.Common.Screens
     public class VisualConfig : IVisualConfig
     {
         public ThicknessInfo Padding { get; set; }
+        public ThicknessInfo Margin { get; set; }
         public string BackgroundColor { get; set; }
         public string BackgroundImage { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Stencil.Forms.Views;
+using System.Threading.Tasks;
 
 namespace Stencil.Forms.Commanding
 {
@@ -12,9 +13,9 @@ namespace Stencil.Forms.Commanding
         }
 
         public abstract bool AlertErrors { get; }
-        public abstract Task<string> CanExecuteAsync(ICommandScope commandScope);
+        public abstract Task<string> CanExecuteAsync(ICommandScope commandScope, IDataViewModel dataViewModel);
 
-        public abstract Task<object> ExecuteAsync(ICommandScope commandScope, object commandParameter);
+        public abstract Task<object> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel);
 
 
     }

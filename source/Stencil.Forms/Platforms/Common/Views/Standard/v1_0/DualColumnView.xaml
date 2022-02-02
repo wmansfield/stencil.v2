@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.DualColumnView">
+    <DataTemplate x:Key="dualColumnView" x:DataType="local:DualColumnViewContext">
+        <Grid HorizontalOptions="Fill"
+              VerticalOptions="StartAndExpand"
+              Padding="0" Margin="0"
+              HeightRequest="{Binding HeightRequest}"
+              RowSpacing="0"
+              ColumnSpacing="0"
+              BackgroundColor="{Binding BackgroundColor}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Column1Config.ColumnWidth}" />
+                <ColumnDefinition Width="{Binding Column2Config.ColumnWidth}" />
+            </Grid.ColumnDefinitions>
+
+            <ContentView Grid.Column="0" Content="{Binding FirstContent}" HorizontalOptions="{Binding Column1Config.HorizontalOptions}" VerticalOptions="{Binding Column1Config.VerticalOptions}" BackgroundColor="{Binding Column1Config.BackgroundColor}" Margin="{Binding Column2Config.Margin}"/>
+            <ContentView Grid.Column="1" Content="{Binding SecondContent}" HorizontalOptions="{Binding Column2Config.HorizontalOptions}" VerticalOptions="{Binding Column2Config.VerticalOptions}" BackgroundColor="{Binding Column2Config.BackgroundColor}" Margin="{Binding Column2Config.Margin}"/>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

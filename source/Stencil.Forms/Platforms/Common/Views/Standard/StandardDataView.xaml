@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:base="clr-namespace:Stencil.Forms.Base"
-             xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Forms"
-             x:Class="Stencil.Forms.Views.Standard.StandardDataView">
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:standard="clr-namespace:Stencil.Forms.Views.Standard"
+                      xmlns:base="clr-namespace:Stencil.Forms.Base"
+                      x:Class="Stencil.Forms.Views.Standard.StandardDataView"
+                      x:DataType="standard:StandardNestedDataViewModel">
     <ContentView.Content>
         <Grid x:Name="grdContainer"
               BackgroundColor="{Binding BackgroundColor}"
@@ -26,7 +27,7 @@
                 <!--- ListView.Margin as Padding is Not a mistake -->
                 <CollectionView Margin="{Binding Padding}" 
                       BackgroundColor="{Binding BackgroundColor}"
-                      VerticalOptions="FillAndExpand"
+                      VerticalOptions="Fill"
                       HorizontalOptions="Fill"
                       ItemSizingStrategy="MeasureAllItems"
                       SelectionMode="None"

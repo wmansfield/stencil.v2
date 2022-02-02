@@ -50,7 +50,7 @@ namespace Stencil.Forms.Presentation.Shells.Phone
                         {
                             entry.UIActive = true;
 
-                            await menuViewModel.CommandProcessor.ExecuteCommandAsync(commandScope, entry.CommandName, entry.CommandParameter);
+                            await menuViewModel.CommandProcessor.ExecuteCommandAsync(commandScope, entry.CommandName, entry.CommandParameter, null);
                         }
                         finally
                         {

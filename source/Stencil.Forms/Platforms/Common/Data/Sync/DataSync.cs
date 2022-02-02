@@ -190,19 +190,19 @@ namespace Stencil.Forms.Data.Sync
                 if (dataDownloadJob.DownloadCommand != null)
                 {
                     CommandScope scope = new CommandScope(this.API.CommandProcessor);
-                    bool success = await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadCommand.CommandName, dataDownloadJob.DownloadCommand.CommandParameter);
+                    bool success = await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadCommand.CommandName, dataDownloadJob.DownloadCommand.CommandParameter, null);
                     if (success)
                     {
                         if (dataDownloadJob.DownloadSuccessCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadSuccessCommand.CommandName, dataDownloadJob.DownloadSuccessCommand.CommandParameter);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadSuccessCommand.CommandName, dataDownloadJob.DownloadSuccessCommand.CommandParameter, null);
                         }
                     }
                     else
                     {
                         if (dataDownloadJob.DownloadFailCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadFailCommand.CommandName, dataDownloadJob.DownloadFailCommand.CommandParameter);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadFailCommand.CommandName, dataDownloadJob.DownloadFailCommand.CommandParameter, null);
                         }
                     }
                 }
@@ -252,7 +252,7 @@ namespace Stencil.Forms.Data.Sync
 
                     CommandScope scope = new CommandScope(this.API.CommandProcessor);
                     
-                    object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, screenJob.DownloadCommand.CommandName, navigationData);
+                    object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, screenJob.DownloadCommand.CommandName, navigationData, null);
                     
                     ScreenConfig screenConfig = response as ScreenConfig;
                     
@@ -271,7 +271,7 @@ namespace Stencil.Forms.Data.Sync
                             {
                                 try
                                 {
-                                    await this.API.CommandProcessor.ExecuteCommandAsync(scope, item.CommandName, item.CommandParameter);
+                                    await this.API.CommandProcessor.ExecuteCommandAsync(scope, item.CommandName, item.CommandParameter, null);
                                 }
                                 catch (Exception ex)
                                 {
@@ -282,14 +282,14 @@ namespace Stencil.Forms.Data.Sync
                         
                         if (screenJob.DownloadSuccessCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.DownloadSuccessCommand.CommandName, screenJob.DownloadSuccessCommand.CommandParameter);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.DownloadSuccessCommand.CommandName, screenJob.DownloadSuccessCommand.CommandParameter, null);
                         }
                     }
                     else
                     {
                         if (screenJob.DownloadFailCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.DownloadFailCommand.CommandName, screenJob.DownloadFailCommand.CommandParameter);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.DownloadFailCommand.CommandName, screenJob.DownloadFailCommand.CommandParameter, null);
                         }
                     }
                 }

@@ -25,6 +25,7 @@ namespace Stencil.Forms.Views
 
         /// <summary>
         /// The current viewmodel driving the view that contains this component
+        /// Warning: Does not support property changed notification, rely on custom application of changes instead
         /// </summary>
         IDataViewModel DataViewModel { get; set; }
 
@@ -32,6 +33,19 @@ namespace Stencil.Forms.Views
         /// Child dataview elements for the current view
         /// </summary>
         IDataViewSection[] Sections { get; set; }
+
+        /// <summary>
+        /// Nested elemnts wrapped in a layout
+        /// Warning: Does not support property changed notification, rely on custom application of changes instead
+        /// </summary>
+        IDataViewItem[] EncapsulatedItems { get; set; }
+
+        /// <summary>
+        /// Optional filter for the view
+        /// Warning: Does not support property changed notification, rely on custom application of changes instead
+        /// </summary>
+        IDataViewFilter ViewFilter { get; }
+
 
     }
 }

@@ -6,6 +6,7 @@ using Stencil.Forms.Views.Standard.v1_1;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Stencil.Forms.Views
@@ -66,9 +67,9 @@ namespace Stencil.Forms.Views
 
 #endregion
 
-        public IDataViewComponent ResolveTemplateAndPrepareData(IDataViewItem dataViewItem)
+        public Task<IDataViewComponent> ResolveTemplateAndPrepareDataAsync(IDataViewItem dataViewItem)
         {
-            return CoreUtility.ExecuteFunction(nameof(ResolveTemplateAndPrepareData), delegate ()
+            return CoreUtility.ExecuteFunctionAsync(nameof(ResolveTemplateAndPrepareDataAsync), async delegate ()
             {
                 if (dataViewItem != null && !string.IsNullOrWhiteSpace(dataViewItem.Component))
                 {
@@ -86,7 +87,7 @@ namespace Stencil.Forms.Views
                             {
                                 if (dataViewItem.PreparedContext == null || !dataViewComponent.BindingContextCacheEnabled)
                                 {
-                                    dataViewItem.PreparedContext = dataViewComponent.PrepareBindingContext(this.CommandScope, dataViewItem.DataViewModel, dataViewItem, this, dataViewItem.ConfigurationJson);
+                                    dataViewItem.PreparedContext = await dataViewComponent.PrepareBindingContextAsync(this.CommandScope, dataViewItem.DataViewModel, dataViewItem, this, dataViewItem.ConfigurationJson);
                                 }
                                 return dataViewComponent;
                             }
@@ -110,8 +111,8 @@ namespace Stencil.Forms.Views
                         dataViewItem = dataViewItemReference.DataViewItem;
                     }
                 }
-
-                IDataViewComponent dataViewComponent = this.ResolveTemplateAndPrepareData(dataViewItem);
+                
+                IDataViewComponent dataViewComponent = this.ResolveTemplateAndPrepareDataAsync(dataViewItem).Result; //TODO:SHOULD: Bad Async Result
 
                 if (dataViewComponent != null)
                 {

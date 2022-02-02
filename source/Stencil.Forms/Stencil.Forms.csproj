@@ -1,15 +1,15 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.44">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;xamarin.ios10;monoandroid10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;xamarin.ios10;monoandroid11.0</TargetFrameworks>
 
     <AssemblyName>Stencil.Forms</AssemblyName>
     <RootNamespace>Stencil.Forms</RootNamespace>
     <PackageId>Stencil.Forms</PackageId>
     
     <Product>Stencil</Product>
-    <AssemblyVersion>2.0.6.0</AssemblyVersion>
-    <Version>2.0.6</Version>
+    <AssemblyVersion>2.0.7.0</AssemblyVersion>
+    <Version>2.0.7</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>

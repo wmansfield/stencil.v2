@@ -8,24 +8,10 @@ using Xamarin.Forms;
 
 namespace Stencil.Forms.Views
 {
-    public interface IDataViewModel : IBaseViewModel
+    public interface IDataViewModel : INestedDataViewModel
     {
-        IDataViewVisual DataViewVisual { get; set; }
         ICommand NavigateBackCommand { get; }
         bool IsMenuSupported { get; }
         ObservableCollection<IMenuEntry> MenuEntries { get; }
-        ObservableCollection<IDataViewItem> MainItemsUnFiltered { get; }
-        ObservableCollection<object> MainItemsFiltered { get; }
-        ObservableCollection<object> FooterItems { get; }
-        ObservableCollection<object> HeaderItems { get; }
-        bool ShowFooter { get; }
-        DataTemplateSelector DataTemplateSelector { get; }
-        Thickness Padding { get; }
-        Color BackgroundColor { get; }
-        string BackgroundImage { get; }
-
-        Task InitializeData();
-        Task ApplyFiltersAndAdjustmentsAsync();
-
     }
 }

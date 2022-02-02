@@ -10,6 +10,7 @@
               RowSpacing="0"
               Padding="{Binding Padding}"
               BackgroundColor="{Binding BackgroundColor}"
+              IsVisible="{Binding Visible}"
               HorizontalOptions="Fill"
               VerticalOptions="Fill">
             <BoxView CornerRadius="4"

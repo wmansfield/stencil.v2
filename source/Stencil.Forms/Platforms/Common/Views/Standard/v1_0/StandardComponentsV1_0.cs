@@ -26,7 +26,10 @@ namespace Stencil.Forms.Views.Standard.v1_0
             _dataViewComponents[Image.COMPONENT_NAME] = new Image();
             _dataViewComponents[DualColumnMarkdown.COMPONENT_NAME] = new DualColumnMarkdown();
             _dataViewComponents[HeaderBackBar.COMPONENT_NAME] = new HeaderBackBar();
-            
+            _dataViewComponents[Indicator.COMPONENT_NAME] = new Indicator();
+            _dataViewComponents[DualColumnView.COMPONENT_NAME] = new DualColumnView();
+            _dataViewComponents[TriColumnView.COMPONENT_NAME] = new TriColumnView();
+
             foreach (string key in _dataViewComponents.Keys.ToList())
             {
                 _dataViewComponents[ComponentUtility.GenerateVersionedName(key, VERSION)] = _dataViewComponents[key];

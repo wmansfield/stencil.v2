@@ -8,6 +8,6 @@ namespace Stencil.Forms.Views
 {
     public interface IDataViewFilter
     {
-        Task<bool> ShouldSuppressItem(IDataViewModel viewModel, IDataViewItem dataViewItem, List<IDataViewItem> dataSoFar);
+        Task<bool> ShouldSuppressItem(INestedDataViewModel viewModel, IDataViewItem dataViewItem, List<IDataViewItem> dataSoFar);
     }
 }

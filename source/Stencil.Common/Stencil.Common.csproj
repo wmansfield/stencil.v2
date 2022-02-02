@@ -12,13 +12,13 @@
     <Copyright />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/wmansfield/stencil.v2</PackageProjectUrl>
-    <Version>2.0.1</Version>
+    <Version>2.0.7</Version>
     <RepositoryUrl>https://github.com/wmansfield/stencil.v2</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>https://raw.githubusercontent.com/wmansfield/stencil.v2/main/ChangeLog.md</PackageReleaseNotes>
     <PackageTags>Stencil</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>2.0.1.0</AssemblyVersion>
+    <AssemblyVersion>2.0.7.0</AssemblyVersion>
   </PropertyGroup>
 
 	<ItemGroup>

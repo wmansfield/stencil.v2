@@ -1,4 +1,5 @@
 ﻿using Stencil.Forms.Commanding;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Stencil.Forms.Views
@@ -26,6 +27,6 @@ namespace Stencil.Forms.Views
         /// <param name="selector">The DataTemplateSelector that generated this component.</param>
         /// <param name="configuration_json">Remote/Local configuration requested for this component</param>
         /// <returns></returns>
-        IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json);
+        Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json);
     }
 }

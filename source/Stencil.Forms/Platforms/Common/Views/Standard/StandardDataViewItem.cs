@@ -30,15 +30,23 @@ namespace Stencil.Forms.Views.Standard
             set { SetProperty(ref _sections, value); }
         }
 
+
         /// <summary>
-        /// Warning: Does not support change notification, rely on custom application of changes instead
+        /// Warning: Does not support property changed notification, rely on custom application of changes instead
+        /// </summary>
+        public IDataViewItem[] EncapsulatedItems { get; set; }
+
+        /// <summary>
+        /// Warning: Does not support property changed notification, rely on custom application of changes instead
         /// </summary>
         public IDataViewFilter ViewFilter { get; set; }
 
 
         /// <summary>
-        /// Warning: Does not support change notification, rely on custom application of changes instead
+        /// Warning: Does not support property changed notification, rely on custom application of changes instead
         /// </summary>
         public IDataViewModel DataViewModel { get; set; }
+
+
     }
 }

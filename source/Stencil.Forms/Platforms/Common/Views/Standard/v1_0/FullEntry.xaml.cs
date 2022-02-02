@@ -42,9 +42,9 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
                 FullEntryContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
@@ -63,14 +63,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
                 commandScope.RegisterCommandField(result);
 
-                return result;
+                return Task.FromResult<IDataViewItemReference>(result);
             });
         }
 
         #endregion
     }
     
-    public class FullEntryContext : PreparedBingingContext, ICommandField
+    public class FullEntryContext : PreparedBindingContext, ICommandField
     {
         #region Constructor
 

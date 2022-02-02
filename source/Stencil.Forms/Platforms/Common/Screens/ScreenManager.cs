@@ -7,6 +7,7 @@ using Stencil.Forms.Presentation.Menus;
 using Stencil.Forms.Resourcing;
 using Stencil.Forms.Views;
 using Stencil.Forms.Views.Standard;
+using Stencil.Forms.Views.Standard.v1_0;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,11 +42,11 @@ namespace Stencil.Forms.Screens
                     IScreenConfig screenConfig = await this.LoadScreenConfigAsync(commandProcessor, navigationData);
                     if (screenConfig != null)
                     {
-
                         result = new StandardDataViewModel(commandProcessor, this.CreateDataTemplateSelector);
 
                         IResolvableTemplateSelector resolvableTemplateSelector = result.DataTemplateSelector as IResolvableTemplateSelector;
                         //TODO:MUST: Null IResolvableTemplateSelector
+
 
                         // map to view elements
                         ObservableCollection<IDataViewItem> mainItems = new ObservableCollection<IDataViewItem>();
@@ -69,7 +70,7 @@ namespace Stencil.Forms.Screens
                                 IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
                                 if (dataViewItem != null)
                                 {
-                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
+                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
                                     headerItems.Add(dataViewItem.PreparedContext);
                                 }
                             }
@@ -83,7 +84,7 @@ namespace Stencil.Forms.Screens
                                 IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
                                 if (dataViewItem != null)
                                 {
-                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
+                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
                                     footerItems.Add(dataViewItem.PreparedContext);
                                 }
                             }
@@ -119,77 +120,7 @@ namespace Stencil.Forms.Screens
 
                         if(resolvableTemplateSelector != null)
                         {
-                            if (result.MainItemsUnFiltered != null)
-                            {
-                                foreach (IDataViewItem item in result.MainItemsUnFiltered)
-                                {
-                                    IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(item);
-                                    if (item.PreparedContext is IDataViewFilter dataViewFilter)
-                                    {
-                                        result.Filters.Add(dataViewFilter);
-                                    }
-                                    if (item.PreparedContext is IDataViewAdjuster dataViewAdjuster)
-                                    {
-                                        result.Adjusters.Add(dataViewAdjuster);
-                                    }
-                                }
-                            }
-                            if (result.HeaderItems != null)
-                            {
-                                foreach (object headerItem in result.HeaderItems)
-                                {
-                                    IDataViewItem dataViewItem = headerItem as IDataViewItem;
-                                    if (dataViewItem == null)
-                                    {
-                                        IDataViewItemReference dataViewItemReference = headerItem as IDataViewItemReference;
-                                        if (dataViewItemReference != null)
-                                        {
-                                            dataViewItem = dataViewItemReference.DataViewItem;
-                                        }
-                                    }
-                                    if (dataViewItem != null)
-                                    {
-                                        IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
-                                        this.LogTrace($"{viewComponent.GetType()} -> {dataViewItem.PreparedContext.GetType()}");
-
-                                        if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
-                                        {
-                                            result.Filters.Add(dataViewFilter);
-                                        }
-                                        if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
-                                        {
-                                            result.Adjusters.Add(dataViewAdjuster);
-                                        }
-                                    }
-                                }
-                            }
-                            if (result.FooterItems != null)
-                            {
-                                foreach (object footerItem in result.FooterItems)
-                                {
-                                    IDataViewItem dataViewItem = footerItem as IDataViewItem;
-                                    if (dataViewItem == null)
-                                    {
-                                        IDataViewItemReference dataViewItemReference = footerItem as IDataViewItemReference;
-                                        if (dataViewItemReference != null)
-                                        {
-                                            dataViewItem = dataViewItemReference.DataViewItem;
-                                        }
-                                    }
-                                    if (dataViewItem != null)
-                                    {
-                                        IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
-                                        if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
-                                        {
-                                            result.Filters.Add(dataViewFilter);
-                                        }
-                                        if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
-                                        {
-                                            result.Adjusters.Add(dataViewAdjuster);
-                                        }
-                                    }
-                                }
-                            }
+                            await result.ExtractAndPrepareExtensionsAsync();
                         }
                         
 
@@ -206,8 +137,210 @@ namespace Stencil.Forms.Screens
                         }
 
 
-                        await result.InitializeData();
+                        await result.Initialize();
                     }
+                }
+
+                return result;
+            });
+        }
+        public virtual Task<IDataViewModel> GenerateViewModelAsync(ICommandProcessor commandProcessor, IScreenConfig screenConfig)
+        {
+            return base.ExecuteFunctionAsync<IDataViewModel>(nameof(GenerateViewModelAsync), async delegate ()
+            {
+                StandardDataViewModel result = null;
+
+                if (screenConfig != null)
+                {
+                    result = new StandardDataViewModel(commandProcessor, this.CreateDataTemplateSelector);
+
+                    IResolvableTemplateSelector resolvableTemplateSelector = result.DataTemplateSelector as IResolvableTemplateSelector;
+                    //TODO:MUST: Null IResolvableTemplateSelector [not really supported, should we harden the requirement?]
+
+                    // map to view elements
+                    ObservableCollection<IDataViewItem> mainItems = new ObservableCollection<IDataViewItem>();
+                    if (screenConfig.ViewConfigs != null)
+                    {
+                        foreach (IViewConfig viewConfig in screenConfig.ViewConfigs)
+                        {
+                            IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
+                            if (dataViewItem != null)
+                            {
+                                mainItems.Add(dataViewItem);
+                            }
+                        }
+                    }
+
+                    ObservableCollection<object> headerItems = new ObservableCollection<object>();
+                    if (screenConfig.HeaderConfigs != null)
+                    {
+                        foreach (IViewConfig viewConfig in screenConfig.HeaderConfigs)
+                        {
+                            IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
+                            if (dataViewItem != null)
+                            {
+                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                headerItems.Add(dataViewItem.PreparedContext);
+                            }
+                        }
+                    }
+
+                    ObservableCollection<object> footerItems = new ObservableCollection<object>();
+                    if (screenConfig.FooterConfigs != null)
+                    {
+                        foreach (IViewConfig viewConfig in screenConfig.FooterConfigs)
+                        {
+                            IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
+                            if (dataViewItem != null)
+                            {
+                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                footerItems.Add(dataViewItem.PreparedContext);
+                            }
+                        }
+                    }
+
+                    ObservableCollection<IMenuEntry> menuEntries = null;
+                    if (screenConfig.MenuConfigs != null)
+                    {
+                        menuEntries = new ObservableCollection<IMenuEntry>();
+                        foreach (IMenuConfig menuConfig in screenConfig.MenuConfigs)
+                        {
+                            IMenuEntry entry = this.GenerateMenuItem(menuConfig);
+                            if (entry != null)
+                            {
+                                menuEntries.Add(entry);
+                            }
+                        }
+                    }
+
+
+                    // assign mapped element
+                    result.IsMenuSupported = screenConfig.IsMenuSupported;
+                    result.MainItemsUnFiltered = mainItems;
+                    result.HeaderItems = headerItems;
+                    result.ShowHeader = headerItems.Count > 0;
+                    result.FooterItems = footerItems;
+                    result.ShowFooter = footerItems.Count > 0;
+                    result.MenuEntries = menuEntries;
+                    result.ShowCommands = screenConfig.ShowCommands;
+
+
+                    // extract filters or augmentations
+
+                    if (resolvableTemplateSelector != null)
+                    {
+                        if (result.MainItemsUnFiltered != null)
+                        {
+                            foreach (IDataViewItem item in result.MainItemsUnFiltered)
+                            {
+                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(item);
+                                if (item.PreparedContext is IDataViewFilter dataViewFilter)
+                                {
+                                    result.Filters.Add(dataViewFilter);
+                                }
+                                if (item.PreparedContext is IDataViewAdjuster dataViewAdjuster)
+                                {
+                                    result.Adjusters.Add(dataViewAdjuster);
+                                }
+                                if (item.PreparedContext is IStateResponder stateResponder)
+                                {
+                                    result.AddStateResponder(stateResponder);
+                                }
+                                if (item.PreparedContext is IStateEmitter stateEmitter)
+                                {
+                                    result.StateEmitters.Add(stateEmitter);
+                                }
+                            }
+                        }
+                        if (result.HeaderItems != null)
+                        {
+                            foreach (object headerItem in result.HeaderItems)
+                            {
+                                IDataViewItem dataViewItem = headerItem as IDataViewItem;
+                                if (dataViewItem == null)
+                                {
+                                    IDataViewItemReference dataViewItemReference = headerItem as IDataViewItemReference;
+                                    if (dataViewItemReference != null)
+                                    {
+                                        dataViewItem = dataViewItemReference.DataViewItem;
+                                    }
+                                }
+                                if (dataViewItem != null)
+                                {
+                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                    this.LogTrace($"{viewComponent.GetType()} -> {dataViewItem.PreparedContext.GetType()}");
+
+                                    if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
+                                    {
+                                        result.Filters.Add(dataViewFilter);
+                                    }
+                                    if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
+                                    {
+                                        result.Adjusters.Add(dataViewAdjuster);
+                                    }
+                                    if (dataViewItem.PreparedContext is IStateResponder stateResponder)
+                                    {
+                                        result.AddStateResponder(stateResponder);
+                                    }
+                                    if (dataViewItem.PreparedContext is IStateEmitter stateEmitter)
+                                    {
+                                        result.StateEmitters.Add(stateEmitter);
+                                    }
+                                }
+                            }
+                        }
+                        if (result.FooterItems != null)
+                        {
+                            foreach (object footerItem in result.FooterItems)
+                            {
+                                IDataViewItem dataViewItem = footerItem as IDataViewItem;
+                                if (dataViewItem == null)
+                                {
+                                    IDataViewItemReference dataViewItemReference = footerItem as IDataViewItemReference;
+                                    if (dataViewItemReference != null)
+                                    {
+                                        dataViewItem = dataViewItemReference.DataViewItem;
+                                    }
+                                }
+                                if (dataViewItem != null)
+                                {
+                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                    if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
+                                    {
+                                        result.Filters.Add(dataViewFilter);
+                                    }
+                                    if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
+                                    {
+                                        result.Adjusters.Add(dataViewAdjuster);
+                                    }
+                                    if (dataViewItem.PreparedContext is IStateResponder stateResponder)
+                                    {
+                                        result.AddStateResponder(stateResponder);
+                                    }
+                                    if (dataViewItem.PreparedContext is IStateEmitter stateEmitter)
+                                    {
+                                        result.StateEmitters.Add(stateEmitter);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    // apply page visuals
+                    if (screenConfig.VisualConfig != null)
+                    {
+                        result.BackgroundImage = screenConfig.VisualConfig.BackgroundImage;
+
+                        if (!string.IsNullOrWhiteSpace(screenConfig.VisualConfig.BackgroundColor))
+                        {
+                            result.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
+                        }
+                        result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
+                    }
+
+
+                    await result.Initialize();
                 }
 
                 return result;
@@ -253,6 +386,20 @@ namespace Stencil.Forms.Screens
                         sections.Add(dataSection);
                     }
                     result.Sections = sections.ToArray();
+                }
+
+                if (viewConfig.encapsulated_views != null)
+                {
+                    List<IDataViewItem> encapsulatedItems = new List<IDataViewItem>();
+                    foreach (IViewConfig childViewConfig in viewConfig.encapsulated_views)
+                    {
+                        IDataViewItem childViewItem = this.GenerateViewItem(dataViewModel, childViewConfig);
+                        if (childViewItem != null)
+                        {
+                            encapsulatedItems.Add(childViewItem);
+                        }
+                    }
+                    result.EncapsulatedItems = encapsulatedItems.ToArray();
                 }
 
                 return result;
@@ -431,7 +578,7 @@ namespace Stencil.Forms.Screens
                             {
                                 try
                                 {
-                                    await this.API.CommandProcessor.ExecuteCommandAsync(commandScope, item.CommandName, item.CommandParameter);
+                                    await this.API.CommandProcessor.ExecuteCommandAsync(commandScope, item.CommandName, item.CommandParameter, null);
                                 }
                                 catch (Exception ex)
                                 {

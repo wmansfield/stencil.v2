@@ -38,9 +38,9 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
                 HeaderBackBarContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
@@ -64,10 +64,10 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     result.BackIcon = "";
                 }
-
+                
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
-                return result;
+                return Task.FromResult<IDataViewItemReference>(result);
             });
         }
 
@@ -81,14 +81,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     if (context.CommandScope?.CommandProcessor != null)
                     {
-                        await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.CommandName, context.CommandParameter);
+                        await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.CommandName, context.CommandParameter, context?.DataViewItem?.DataViewModel);
                     }
                 }
             });
         }
     }
 
-    public class HeaderBackBarContext : PreparedBingingContext
+    public class HeaderBackBarContext : PreparedBindingContext
     {
         public HeaderBackBarContext()
             : base(nameof(HeaderBackBarContext))

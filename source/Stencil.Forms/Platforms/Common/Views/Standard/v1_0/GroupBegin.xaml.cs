@@ -37,9 +37,9 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
                 GroupBeginContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
@@ -55,12 +55,12 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
-                return result;
+                return Task.FromResult<IDataViewItemReference>(result);
             });
         }
     }
 
-    public class GroupBeginContext : PreparedBingingContext
+    public class GroupBeginContext : PreparedBindingContext
     {
         public GroupBeginContext()
             : base(nameof(GroupBeginContext))

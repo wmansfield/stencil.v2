@@ -26,7 +26,7 @@ namespace Stencil.Forms.Commanding.Commands
                 return false;
             }
         }
-        public override Task<string> CanExecuteAsync(ICommandScope commandScope)
+        public override Task<string> CanExecuteAsync(ICommandScope commandScope, IDataViewModel dataViewModel)
         {
             return base.ExecuteFunction(nameof(CanExecuteAsync), delegate ()
             {
@@ -34,7 +34,7 @@ namespace Stencil.Forms.Commanding.Commands
             });
         }
 
-        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter)
+        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel)
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate()
             {

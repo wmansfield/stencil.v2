@@ -8,6 +8,6 @@ namespace Stencil.Forms.Views
 {
     public interface IDataViewAdjuster
     {
-        Task AdjustItems(IDataViewModel viewModel, List<IDataViewItem> dataViewItems);
+        Task AdjustItems(INestedDataViewModel viewModel, List<IDataViewItem> dataViewItems);
     }
 }

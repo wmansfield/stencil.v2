@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Resourcing;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard.v1_0
@@ -31,9 +32,9 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
                 HeaderWithIconContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
@@ -52,12 +53,12 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
-                return result;
+                return Task.FromResult<IDataViewItemReference>(result);
             });
         }
     }
 
-    public class HeaderWithIconContext : PreparedBingingContext
+    public class HeaderWithIconContext : PreparedBindingContext
     {
         public HeaderWithIconContext()
             : base(nameof(HeaderWithIconContext))

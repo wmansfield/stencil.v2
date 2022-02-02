@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Resourcing;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard.v1_0
@@ -31,9 +34,9 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 return this[TEMPLATE_KEY] as DataTemplate;
             });
         }
-        public IDataViewItemReference PrepareBindingContext(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
+        public Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
         {
-            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContext)}", delegate ()
+            return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
                 PlainTextContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
@@ -44,6 +47,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     result = new PlainTextContext();
                 }
+                
                 if(result.FontSize <= 0)
                 {
                     result.FontSize = 16;
@@ -52,18 +56,22 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
-                return result;
+                result.PrepareInteractions();
+
+                return Task.FromResult<IDataViewItemReference>(result);
             });
         }
     }
 
-    public class PlainTextContext : PreparedBingingContext
+    public class PlainTextContext : PreparedBindingContext, IStateResponder
     {
         public PlainTextContext()
             : base(nameof(PlainTextContext))
         {
 
         }
+
+        public const string INTERACTION_KEY_TEXT = "text";
 
         private int _fontSize;
         public int FontSize
@@ -98,6 +106,21 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
+        }
+
+        protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
+        {
+            base.ExecuteMethod(nameof(ApplyStateValue), delegate ()
+            {
+                switch (value_key)
+                {
+                    case INTERACTION_KEY_TEXT:
+                        this.Text = value;
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
     }
 }
