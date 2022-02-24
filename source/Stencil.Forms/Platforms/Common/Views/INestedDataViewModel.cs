@@ -21,6 +21,8 @@ namespace Stencil.Forms.Views
         Color BackgroundColor { get; }
         string BackgroundImage { get; }
 
+        HashSet<string> Claims { get; }
+
         List<IStateEmitter> StateEmitters { get; }
         List<IDataViewFilter> Filters { get; }
         List<IDataViewAdjuster> Adjusters { get; }

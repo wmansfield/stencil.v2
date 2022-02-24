@@ -68,7 +68,13 @@ namespace Stencil.Forms.Views.Standard
                 return this.DataViewModel.OnNavigatingToAsync();
             });
         }
-
+        public Task OnNavigatedToAsync()
+        {
+            return base.ExecuteMethodAsync(nameof(OnNavigatedToAsync), delegate ()
+            {
+                return this.DataViewModel.OnNavigatedToAsync();
+            });
+        }
         #endregion
     }
 }

@@ -93,5 +93,12 @@ namespace Stencil.Forms.Presentation.Menus
                 }
             }
         }
+
+        private bool _uiSuppressed;
+        public bool UISuppressed
+        {
+            get { return _uiSuppressed; }
+            set { SetProperty(ref _uiSuppressed, value); }
+        }
     }
 }

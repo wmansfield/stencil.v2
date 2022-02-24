@@ -7,7 +7,7 @@ namespace Stencil.Forms.Commanding
     {
         bool AlertErrors { get; }
         ICommandProcessor CommandProcessor { get; }
-        ConcurrentDictionary<string, ConcurrentDictionary<string, ICommandField>> command_data { get; }
+        ConcurrentDictionary<string, ConcurrentDictionary<string, ICommandField>> CommandData { get; }
         IMenuEntry TargetMenuEntry { get; }
         void RegisterCommandField(ICommandField commandField);
     }

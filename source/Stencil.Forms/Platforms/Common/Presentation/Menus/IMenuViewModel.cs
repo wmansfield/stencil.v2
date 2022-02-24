@@ -7,6 +7,7 @@ namespace Stencil.Forms.Presentation.Menus
     {
         string SelectedIdentifier { get; set; }
         IList<IMenuEntry> MenuEntries { get; }
+        IList<IMenuEntry> MenuEntriesFiltered { get; }
         ICommandProcessor CommandProcessor { get; set; }
     }
 }

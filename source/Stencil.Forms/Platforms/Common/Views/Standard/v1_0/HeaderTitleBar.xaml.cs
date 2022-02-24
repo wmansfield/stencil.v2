@@ -12,16 +12,16 @@ using Xamarin.Forms.Xaml;
 
 namespace Stencil.Forms.Views.Standard.v1_0
 {
-    public partial class HeaderBackBar : ResourceDictionary, IDataViewComponent
+    public partial class HeaderTitleBar : ResourceDictionary, IDataViewComponent
     {
-        public HeaderBackBar()
+        public HeaderTitleBar()
         {
             InitializeComponent();
         }
 
-        public const string COMPONENT_NAME = "headerBackBar";
+        public const string COMPONENT_NAME = "headerTitleBar";
 
-        private const string TEMPLATE_KEY = "headerBackBar";
+        private const string TEMPLATE_KEY = "headerTitleBar";
 
         public bool BindingContextCacheEnabled
         {
@@ -42,10 +42,10 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
-                HeaderBackBarContext result = null;
+                HeaderTitleBarContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<HeaderBackBarContext>(configuration_json);
+                    result = JsonConvert.DeserializeObject<HeaderTitleBarContext>(configuration_json);
                 }
                 if (string.IsNullOrWhiteSpace(result.CommandName))
                 {
@@ -55,10 +55,6 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 if(string.IsNullOrWhiteSpace(result.TextColor))
                 {
                     result.TextColor = AppColors.TextOverPrimary;
-                }
-                if (string.IsNullOrWhiteSpace(result.BackgroundColor))
-                {
-                    result.BackgroundColor = AppColors.Primary900;
                 }
                 if (string.IsNullOrWhiteSpace(result.BackIcon))
                 {
@@ -76,7 +72,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             await CoreUtility.ExecuteMethodAsync(nameof(TapGestureRecognizer_Tapped), async delegate ()
             {
                 View view = (sender as View);
-                HeaderBackBarContext context = view?.BindingContext as HeaderBackBarContext;
+                HeaderTitleBarContext context = view?.BindingContext as HeaderTitleBarContext;
                 if (context != null)
                 {
                     if (context.CommandScope?.CommandProcessor != null)
@@ -88,12 +84,13 @@ namespace Stencil.Forms.Views.Standard.v1_0
         }
     }
 
-    public class HeaderBackBarContext : PreparedBindingContext
+    public class HeaderTitleBarContext : PreparedBindingContext
     {
-        public HeaderBackBarContext()
-            : base(nameof(HeaderBackBarContext))
+        public HeaderTitleBarContext()
+            : base(nameof(HeaderTitleBarContext))
         {
-
+            this.IconFontSize = 24;
+            this.TitleFontSize = 16;
         }
 
         private string _textColor;
@@ -122,6 +119,20 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
+        }
+
+        private double _iconFontSize;
+        public double IconFontSize
+        {
+            get { return _iconFontSize; }
+            set { SetProperty(ref _iconFontSize, value); }
+        }
+
+        private double _titleFontSize;
+        public double TitleFontSize
+        {
+            get { return _titleFontSize; }
+            set { SetProperty(ref _titleFontSize, value); }
         }
 
         public string CommandName { get; set; }

@@ -59,16 +59,16 @@ namespace Stencil.Forms.Commanding.Commands
                                 };
                             }
                         }
+                    }
 
-                        if(stateInfo != null)
+                    if (stateInfo != null)
+                    {
+                        List<IStateEmitter> emitters = dataViewModel.StateEmitters.Where(x => x.InteractionGroup == stateInfo.group).ToList();
+                        foreach (IStateEmitter emitter in emitters)
                         {
-                            List<IStateEmitter> emitters = dataViewModel.StateEmitters.Where(x => x.InteractionGroup == stateInfo.group).ToList();
-                            foreach (IStateEmitter emitter in emitters)
-                            {
-                                emitter.ChangeStateAsync(stateInfo.name, stateInfo.state);
-                            }
-                            return Task.FromResult(true);
+                            emitter.ChangeStateAsync(stateInfo.name, stateInfo.state);
                         }
+                        return Task.FromResult(true);
                     }
                 }
                 return Task.FromResult(false);

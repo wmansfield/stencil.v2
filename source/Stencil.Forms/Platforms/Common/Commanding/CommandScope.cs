@@ -10,14 +10,18 @@ namespace Stencil.Forms.Commanding
             : base(nameof(CommandScope))
         {
             this.CommandProcessor = commandProcessor;
-            this.command_data = new ConcurrentDictionary<string, ConcurrentDictionary<string, ICommandField>>(StringComparer.OrdinalIgnoreCase);
+            this.ExchangeData = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            this.CommandData = new ConcurrentDictionary<string, ConcurrentDictionary<string, ICommandField>>(StringComparer.OrdinalIgnoreCase);
         }
         public ICommandProcessor CommandProcessor { get; set; }
         public IMenuEntry TargetMenuEntry { get; set; }
 
         public bool AlertErrors { get; set; }
 
-        public ConcurrentDictionary<string, ConcurrentDictionary<string, ICommandField>> command_data { get; }
+        public ConcurrentDictionary<string, ConcurrentDictionary<string, ICommandField>> CommandData { get; }
+
+        public ConcurrentDictionary<string, object> ExchangeData { get; }
+
 
         public void RegisterCommandField(ICommandField commandField)
         {
@@ -35,10 +39,10 @@ namespace Stencil.Forms.Commanding
                 }
 
                 ConcurrentDictionary<string, ICommandField> groupFields = null;
-                if (!this.command_data.TryGetValue(groupName, out groupFields))
+                if (!this.CommandData.TryGetValue(groupName, out groupFields))
                 {
-                    this.command_data.TryAdd(groupName, new ConcurrentDictionary<string, ICommandField>());
-                    this.command_data.TryGetValue(groupName, out groupFields);// presume it works
+                    this.CommandData.TryAdd(groupName, new ConcurrentDictionary<string, ICommandField>());
+                    this.CommandData.TryGetValue(groupName, out groupFields);// presume it works
                 }
 
                 groupFields[commandField.FieldName] = commandField;

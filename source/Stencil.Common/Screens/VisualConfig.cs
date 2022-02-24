@@ -11,5 +11,6 @@ namespace Stencil.Common.Screens
         public ThicknessInfo Margin { get; set; }
         public string BackgroundColor { get; set; }
         public string BackgroundImage { get; set; }
+        public GradientBrushInfo BackgroundBrush { get; set; }
     }
 }

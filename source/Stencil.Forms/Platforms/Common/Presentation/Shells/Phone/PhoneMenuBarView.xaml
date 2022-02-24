@@ -2,7 +2,9 @@
 <base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:base="clr-namespace:Stencil.Forms.Base"
+             xmlns:menus="clr-namespace:Stencil.Forms.Presentation.Menus"
              x:Class="Stencil.Forms.Presentation.Shells.Phone.PhoneMenuBarView"
+             x:DataType="menus:IMenuViewModel"
              BackgroundColor="{StaticResource PageBackground}">
     <ContentView.Content>
         <FlexLayout Direction="Row"

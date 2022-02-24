@@ -1,6 +1,7 @@
 ﻿using Stencil.Forms.Base;
 using Stencil.Forms.Commanding;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Stencil.Forms.Presentation.Menus
 {
@@ -11,10 +12,29 @@ namespace Stencil.Forms.Presentation.Menus
         {
             this.MenuEntries = new List<IMenuEntry>();
         }
-        public IList<IMenuEntry> MenuEntries { get; set; }
+        private IList<IMenuEntry> _menuEntries;
+        public IList<IMenuEntry> MenuEntries
+        {
+            get { return _menuEntries; }
+            set
+            {
+                if (SetProperty(ref _menuEntries, value))
+                {
+                    if (value != null)
+                    {
+                        this.MenuEntriesFiltered = value.Where(x => !x.UISuppressed).ToList();
+                    }
+                    else
+                    {
+                        this.MenuEntriesFiltered = null;
+                    }
+                }
+            }
+        }
+
+        public IList<IMenuEntry> MenuEntriesFiltered { get; set; }
 
         public ICommandProcessor CommandProcessor { get; set; }
-
 
         private string _selectedIdentifier;
         public string SelectedIdentifier

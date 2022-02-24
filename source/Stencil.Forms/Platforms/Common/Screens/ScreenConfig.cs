@@ -20,9 +20,11 @@ namespace Stencil.Forms.Screens
             this.ViewConfigs = new List<IViewConfig>();
             this.HeaderConfigs = new List<IViewConfig>();
             this.FooterConfigs = new List<IViewConfig>();
-            this.ShowCommands = new List<ICommandConfig>();
+            this.BeforeShowCommands = new List<ICommandConfig>();
+            this.AfterShowCommands = new List<ICommandConfig>();
             this.MenuConfigs = new List<IMenuConfig>();
             this.DownloadCommands = new List<ICommandConfig>();
+            this.Claims = new List<string>();
         }
         public string ScreenStorageKey { get; set; }
 
@@ -47,10 +49,14 @@ namespace Stencil.Forms.Screens
         public List<IViewConfig> HeaderConfigs { get; set; }
         public List<IViewConfig> FooterConfigs { get; set; }
 
-        public List<ICommandConfig> ShowCommands { get; set; }
+        public List<ICommandConfig> BeforeShowCommands { get; set; }
+        public List<ICommandConfig> AfterShowCommands { get; set; }
         public List<ICommandConfig> DownloadCommands { get; set; }
 
         public List<IMenuConfig> MenuConfigs { get; set; }
+
+        public List<string> Claims { get; set; }
+
 
     }
 }

@@ -68,6 +68,10 @@ namespace Stencil.Forms.Base
         {
             return Task.CompletedTask;
         }
+        public virtual Task OnNavigatedToAsync()
+        {
+            return Task.CompletedTask;
+        }
         public virtual Task OnNavigatingFromAsync()
         {
             return Task.CompletedTask;

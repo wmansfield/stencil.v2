@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Common.Screens;
 using Stencil.Common.Views;
+using Stencil.Forms.Platforms.Common.Data.Sync;
 using Stencil.Forms.Screens;
 using Stencil.Forms.Views;
+using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using db = Stencil.Forms.Data.Models;
@@ -53,6 +55,30 @@ namespace Stencil.Forms.Data
 
         #endregion
 
+
+        public static Brush ToBrush(this GradientBrushInfo source)
+        {
+            LinearGradientBrush result = null;
+            if(source != null)
+            {
+                result = new LinearGradientBrush();
+                result.StartPoint = source.Start.ToPoint();
+                result.EndPoint = source.End.ToPoint();
+                if(source.Stops.Length > 0)
+                {
+                    foreach (GradientStopInfo item in source.Stops)
+                    {
+                        result.GradientStops.Add(new GradientStop()
+                        {
+                            Offset = item.Offset,
+                            Color = Color.FromHex(item.Color)
+                        });
+                    }
+                }
+            }
+            return result;
+        }
+
         public static ThicknessInfo ToThicknessInfo(this Thickness source)
         {
             return new ThicknessInfo()
@@ -66,6 +92,12 @@ namespace Stencil.Forms.Data
         public static Thickness ToThickness(this ThicknessInfo source)
         {
             return new Thickness(source.left, source.top, source.right, source.bottom);
+        }
+
+
+        public static Point ToPoint(this PointInfo source)
+        {
+            return new Point(source.x, source.y);
         }
 
         public static List<ScreenConfig> ToUIModel(this IEnumerable<db.ScreenConfig> items)
@@ -104,7 +136,8 @@ namespace Stencil.Forms.Data
                 HeaderConfigs = new List<IViewConfig>(),
                 FooterConfigs = new List<IViewConfig>(),
                 MenuConfigs = new List<IMenuConfig>(),
-                ShowCommands = new List<ICommandConfig>()
+                BeforeShowCommands = new List<ICommandConfig>(),
+                AfterShowCommands = new List<ICommandConfig>()
             };
 
             if (!string.IsNullOrWhiteSpace(source.screen_navigation_data))
@@ -139,12 +172,20 @@ namespace Stencil.Forms.Data
                     result.FooterConfigs.Add(item);
                 }
             }
-            if (!string.IsNullOrWhiteSpace(source.json_show_commands))
+            if (!string.IsNullOrWhiteSpace(source.json_before_show_commands))
             {
-                List<CommandConfig> showCommands = JsonConvert.DeserializeObject<List<CommandConfig>>(source.json_show_commands);
+                List<CommandConfig> showCommands = JsonConvert.DeserializeObject<List<CommandConfig>>(source.json_before_show_commands);
                 foreach (CommandConfig item in showCommands)
                 {
-                    result.ShowCommands.Add(item);
+                    result.BeforeShowCommands.Add(item);
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(source.json_after_show_commands))
+            {
+                List<CommandConfig> showCommands = JsonConvert.DeserializeObject<List<CommandConfig>>(source.json_after_show_commands);
+                foreach (CommandConfig item in showCommands)
+                {
+                    result.AfterShowCommands.Add(item);
                 }
             }
             // download commands ignored, ephemeral
@@ -201,9 +242,13 @@ namespace Stencil.Forms.Data
             {
                 destination.json_footer_configs = JsonConvert.SerializeObject(source.FooterConfigs);
             }
-            if (source.ShowCommands != null && source.ShowCommands.Count > 0)
+            if (source.AfterShowCommands != null && source.AfterShowCommands.Count > 0)
             {
-                destination.json_show_commands = JsonConvert.SerializeObject(source.ShowCommands);
+                destination.json_after_show_commands = JsonConvert.SerializeObject(source.AfterShowCommands);
+            }
+            if (source.BeforeShowCommands != null && source.BeforeShowCommands.Count > 0)
+            {
+                destination.json_before_show_commands = JsonConvert.SerializeObject(source.BeforeShowCommands);
             }
             // download commands ignored, ephemeral
 
@@ -211,6 +256,24 @@ namespace Stencil.Forms.Data
             {
                 destination.json_menu = JsonConvert.SerializeObject(source.MenuConfigs);
             }
+            return destination;
+        }
+
+        public static TrackedDownloadInfo ToUIModel(this db.TrackedDownloadInfo source)
+        {
+            if (source == null || string.IsNullOrWhiteSpace(source.json) ) { return null; }
+
+            return JsonConvert.DeserializeObject<TrackedDownloadInfo>(source.json);
+        }
+
+        public static db.TrackedDownloadInfo ToDbModel(this TrackedDownloadInfo source, db.TrackedDownloadInfo destination = null)
+        {
+            if (source == null) { return null; }
+            if (destination == null) { destination = new db.TrackedDownloadInfo(); }
+
+            destination.id = TrackedDownloadInfo.FormatStorageKey(source.EntityName, source.EntityIdentifier);
+            destination.json = JsonConvert.SerializeObject(source);
+
             return destination;
         }
     }

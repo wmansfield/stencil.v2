@@ -29,7 +29,8 @@ namespace Stencil.Forms.Views.Standard
         
         public bool IsMenuSupported { get; set; }
 
-        public List<ICommandConfig> ShowCommands { get; set; }
+        public List<ICommandConfig> BeforeShowCommands { get; set; }
+        public List<ICommandConfig> AfterShowCommands { get; set; }
 
         
         private ObservableCollection<IMenuEntry> _menuEntries;
@@ -45,9 +46,23 @@ namespace Stencil.Forms.Views.Standard
             return base.ExecuteMethodAsync(nameof(OnNavigatingToAsync), async delegate ()
             {
                 await base.OnNavigatingToAsync();
-                if(this.ShowCommands != null)
+                if(this.BeforeShowCommands != null)
                 {
-                    foreach (ICommandConfig showCommand in this.ShowCommands)
+                    foreach (ICommandConfig showCommand in this.BeforeShowCommands)
+                    {
+                        await this.API.CommandProcessor.ExecuteCommandAsync(this.CommandScope, showCommand.CommandName, showCommand.CommandParameter, this);
+                    }
+                }
+            });
+        }
+        public override Task OnNavigatedToAsync()
+        {
+            return base.ExecuteMethodAsync(nameof(OnNavigatedToAsync), async delegate ()
+            {
+                await base.OnNavigatedToAsync();
+                if (this.AfterShowCommands != null)
+                {
+                    foreach (ICommandConfig showCommand in this.AfterShowCommands)
                     {
                         await this.API.CommandProcessor.ExecuteCommandAsync(this.CommandScope, showCommand.CommandName, showCommand.CommandParameter, this);
                     }

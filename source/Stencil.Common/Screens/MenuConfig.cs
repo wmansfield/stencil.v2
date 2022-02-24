@@ -11,5 +11,6 @@ namespace Stencil.Common.Screens
         public string label { get; set; }
         public string command { get; set; }
         public string command_parameter { get; set; }
+        public bool ui_suppressed { get; set; }
     }
 }

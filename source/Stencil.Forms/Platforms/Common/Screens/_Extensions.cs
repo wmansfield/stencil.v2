@@ -32,8 +32,10 @@ namespace Stencil.Forms.Screens
                     ViewConfigs = (source as IScreenConfig).ViewConfigs,
                     HeaderConfigs = (source as IScreenConfig).HeaderConfigs,
                     FooterConfigs = (source as IScreenConfig).FooterConfigs,
-                    ShowCommands = (source as IScreenConfig).ShowCommands,
-                    DownloadCommands = (source as IScreenConfig).DownloadCommands
+                    BeforeShowCommands = (source as IScreenConfig).BeforeShowCommands,
+                    AfterShowCommands = (source as IScreenConfig).AfterShowCommands,
+                    DownloadCommands = (source as IScreenConfig).DownloadCommands,
+                    Claims = (source as IScreenConfig).Claims
                 };
             }
             return result;

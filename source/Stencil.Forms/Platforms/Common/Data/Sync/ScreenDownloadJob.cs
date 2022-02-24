@@ -7,8 +7,8 @@ using System.Text;
 namespace Stencil.Forms.Data.Sync
 {
     /// <summary>
-    /// Represents a download job that is persisted into Screen Manager
-    /// Jobs that do not fit this data model, should use DataDownloadJob and persist separately
+    /// Represents a download job that is persisted into Screen Manager.
+    /// Jobs that do not fit this data model, should use DataDownloadJob or TrackedDownloadJob and persist separately
     /// </summary>
     public class ScreenDownloadJob : DataDownloadJob
     {

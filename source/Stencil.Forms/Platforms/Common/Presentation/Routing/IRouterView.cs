@@ -13,6 +13,7 @@ namespace Stencil.Forms.Presentation.Routing
 
         View GetSelf();
         Task OnNavigatingToAsync();
+        Task OnNavigatedToAsync();
         ICommand NavigateBackCommand { get; }
     }
 }

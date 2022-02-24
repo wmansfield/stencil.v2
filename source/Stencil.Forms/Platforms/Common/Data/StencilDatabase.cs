@@ -4,6 +4,7 @@ using System;
 using db = Stencil.Forms.Data.Models;
 using System.Linq;
 using System.Collections.Generic;
+using Stencil.Forms.Platforms.Common.Data.Sync;
 
 namespace Stencil.Forms.Data
 {
@@ -133,6 +134,31 @@ namespace Stencil.Forms.Data
                                                     .Where(x => x.screen_name == screen_name)
                                                     .ToUIModel();
                 return screenConfigs;
+            });
+        }
+
+        #endregion
+
+
+        #region Data 
+
+        public TrackedDownloadInfo TrackedDownloadInfo_Get(string identifier)
+        {
+            return base.ExecuteFunction(nameof(TrackedDownloadInfo_Get), delegate ()
+            {
+                return this.Realm.Find<db.TrackedDownloadInfo>(identifier).ToUIModel();
+            });
+        }
+
+        public void TrackedDownloadInfo_Upsert(TrackedDownloadInfo trackedDownloadInfo)
+        {
+            base.ExecuteMethod(nameof(TrackedDownloadInfo_Upsert), delegate ()
+            {
+                Realm realm = this.Realm;
+                realm.Write(() =>
+                {
+                    realm.Add(trackedDownloadInfo.ToDbModel(), true);
+                });
             });
         }
 

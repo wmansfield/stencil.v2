@@ -12,5 +12,7 @@ namespace Stencil.Common.Screens
 
         string BackgroundColor { get; }
         string BackgroundImage { get; }
+        GradientBrushInfo BackgroundBrush { get; }
+
     }
 }

@@ -34,6 +34,20 @@ namespace Stencil.Forms.Base
                 return Task.CompletedTask;
             });
         }
+        public virtual Task OnNavigatedToAsync()
+        {
+            return this.ExecuteFunction(nameof(OnNavigatedToAsync), delegate ()
+            {
+                if (!this.DisableAppearanceLifeCycle)
+                {
+                    if (this.BaseViewModel != null)
+                    {
+                        return this.BaseViewModel.OnNavigatedToAsync();
+                    }
+                }
+                return Task.CompletedTask;
+            });
+        }
         public virtual Task OnNavigatingFromAsync()
         {
             return this.ExecuteFunction(nameof(OnNavigatingFromAsync), delegate ()

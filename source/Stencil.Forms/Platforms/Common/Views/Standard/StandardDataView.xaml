@@ -8,6 +8,7 @@
     <ContentView.Content>
         <Grid x:Name="grdContainer"
               BackgroundColor="{Binding BackgroundColor}"
+              Background="{Binding BackgroundBrush}"
               VerticalOptions="Fill" 
               HorizontalOptions="Fill"
               RowSpacing="0"

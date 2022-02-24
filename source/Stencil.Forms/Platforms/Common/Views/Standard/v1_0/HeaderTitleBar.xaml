@@ -2,8 +2,8 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
-                    x:Class="Stencil.Forms.Views.Standard.v1_0.HeaderBackBar">
-    <DataTemplate x:Key="headerBackBar" x:DataType="local:HeaderBackBarContext">
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.HeaderTitleBar">
+    <DataTemplate x:Key="headerTitleBar" x:DataType="local:HeaderTitleBarContext">
         <!--<ViewCell>-->
         <Grid HorizontalOptions="Fill"
               ColumnDefinitions="48,*"
@@ -18,7 +18,7 @@
                    Padding="4,0"
                    HorizontalOptions="Fill"
                    VerticalOptions="Center"
-                   FontSize="{StaticResource FontSizeHeaderIcon}"
+                   FontSize="{Binding IconFontSize}"
                    FontFamily="{StaticResource FontAwesome}"
                    TextColor="{Binding TextColor}"
                    HorizontalTextAlignment="Center">
@@ -32,7 +32,7 @@
                    VerticalOptions="Center"
                    LineBreakMode="TailTruncation"
                    Padding="8,0,54,0"
-                   FontSize="{StaticResource FontSizeStandard}"
+                   FontSize="{Binding TitleFontSize}"
                    FontFamily="{StaticResource SansRegular}"
                    TextColor="{Binding TextColor}"
                    HorizontalTextAlignment="Center" />

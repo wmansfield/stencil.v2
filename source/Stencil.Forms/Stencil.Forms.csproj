@@ -94,5 +94,4 @@
     <ProjectReference Include="..\Stencil.Common\Stencil.Common.csproj" />
   </ItemGroup>
 
-
 </Project>

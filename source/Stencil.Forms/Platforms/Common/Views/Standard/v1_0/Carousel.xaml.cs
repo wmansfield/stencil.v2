@@ -81,6 +81,10 @@ namespace Stencil.Forms.Views.Standard.v1_0
                                 {
                                     childViewModel.BackgroundColor = Color.FromHex(section.VisualConfig.BackgroundColor);
                                 }
+                                if (section.VisualConfig.BackgroundBrush != null)
+                                {
+                                    childViewModel.BackgroundBrush = section.VisualConfig.BackgroundBrush.ToBrush();
+                                }
                                 childViewModel.Padding = section.VisualConfig.Padding.ToThickness();
                             }
 

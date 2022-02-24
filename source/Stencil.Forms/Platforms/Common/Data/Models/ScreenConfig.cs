@@ -31,7 +31,8 @@ namespace Stencil.Forms.Data.Models
 
         public string json_visual_config { get; set; }
         public string json_menu { get; set; }
-        public string json_show_commands { get; set; }
+        public string json_before_show_commands { get; set; }
+        public string json_after_show_commands { get; set; }
         public string json_header_configs { get; set; }
         public string json_footer_configs { get; set; }
 

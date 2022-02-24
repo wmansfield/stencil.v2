@@ -43,7 +43,7 @@ namespace Stencil.Forms.Commanding.Commands
             {
                 NavigationData navigationData = this.ParseNavigationData<NavigationData>(commandParameter);
 
-                IDataViewModel dataViewModel = await this.API.Screens.GenerateViewModelAsync(this.API.CommandProcessor, navigationData);
+                IDataViewModel dataViewModel = await this.API.StencilScreens.GenerateViewModelAsync(this.API.CommandProcessor, navigationData);
                 if (dataViewModel == null)
                 {
                     return false;

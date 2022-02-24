@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Common.Screens;
 using Stencil.Forms.Commanding;
+using Stencil.Forms.Platforms.Common.Data.Sync;
 using Stencil.Forms.Screens;
 using System;
 using System.Collections.Generic;
@@ -157,10 +158,15 @@ namespace Stencil.Forms.Data.Sync
 
                     try
                     {
-                        ScreenDownloadJob downloadScreenJob = dataDownloadJob as ScreenDownloadJob;
-                        if(downloadScreenJob != null)
+                        ScreenDownloadJob screenDownloadJob = dataDownloadJob as ScreenDownloadJob;
+                        TrackedDownloadJob trackedScreenJob = dataDownloadJob as TrackedDownloadJob;
+                        if (screenDownloadJob != null)
                         {
-                            await this.ProcessScreenJobAsync(downloadScreenJob);
+                            await this.ProcessScreenJobAsync(screenDownloadJob);
+                        }
+                        else if (trackedScreenJob != null)
+                        {
+                            await this.ProcessTrackedJobAsync(trackedScreenJob);
                         }
                         else
                         {
@@ -208,6 +214,65 @@ namespace Stencil.Forms.Data.Sync
                 }
             });
         }
+        protected virtual Task ProcessTrackedJobAsync(TrackedDownloadJob trackedJob)
+        {
+            return base.ExecuteMethodAsync(nameof(ProcessTrackedJobAsync), async delegate ()
+            {
+                if (trackedJob.DownloadCommand != null && !string.IsNullOrWhiteSpace(trackedJob.EntityName))
+                {
+                    string storageKey = TrackedDownloadInfo.FormatStorageKey(trackedJob.EntityName, trackedJob.EntityIdentifier);
+                    TrackedDownloadInfo downloadInfo = await this.API.StencilTrackedData.RetrieveTrackedDownloadInfoAsync(storageKey, true);
+                    if (downloadInfo != null)
+                    {
+                        // abort if not needed
+                        if (!trackedJob.ForceDownload)
+                        {
+                            bool shouldDownload = this.ShouldDownload(trackedJob.Lifetime, downloadInfo.DownloadedUTC, downloadInfo.ExpireUTC, downloadInfo.CacheUntilUTC, downloadInfo.InvalidatedUTC);
+                            if (!shouldDownload)
+                            {
+                                //====---------------------------------------------------->>  Short Circuit, cache allowed
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        downloadInfo = new TrackedDownloadInfo()
+                        {
+                            EntityName = trackedJob.EntityName,
+                            EntityIdentifier = trackedJob.EntityIdentifier,
+                        };
+                    }
+
+                    CommandScope scope = new CommandScope(this.API.CommandProcessor);
+
+                    scope.ExchangeData[nameof(TrackedDownloadJob)] = trackedJob;
+                    scope.ExchangeData[nameof(TrackedDownloadInfo)] = downloadInfo;
+
+                    object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, trackedJob.DownloadCommand.CommandName, trackedJob.DownloadCommand.CommandParameter, null);
+
+                    downloadInfo = response as TrackedDownloadInfo;
+
+                    if (downloadInfo != null)
+                    {
+                        await this.API.StencilTrackedData.SaveTrackedDownloadInfoAsync(downloadInfo);
+
+                        if (trackedJob.DownloadSuccessCommand != null)
+                        {
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, trackedJob.DownloadSuccessCommand.CommandName, trackedJob.DownloadSuccessCommand.CommandParameter, null);
+                        }
+                    }
+                    else
+                    {
+                        if (trackedJob.DownloadFailCommand != null)
+                        {
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, trackedJob.DownloadFailCommand.CommandName, trackedJob.DownloadFailCommand.CommandParameter, null);
+                        }
+                    }
+                }
+            });
+        }
+
         protected virtual Task ProcessScreenJobAsync(ScreenDownloadJob screenJob)
         {
             return base.ExecuteMethodAsync(nameof(ProcessScreenJobAsync), async delegate ()
@@ -229,7 +294,7 @@ namespace Stencil.Forms.Data.Sync
                     }
 
                     string storageKey = ScreenConfig.FormatStorageKey(screenJob.ScreenName, screenJob.ScreenParameter);
-                    ScreenConfig currentConfig = await this.API.Screens.RetrieveScreenConfigAsync(storageKey, true);
+                    ScreenConfig currentConfig = await this.API.StencilScreens.RetrieveScreenConfigAsync(storageKey, true);
                     if (currentConfig != null)
                     {
                         // abort if not needed
@@ -263,7 +328,7 @@ namespace Stencil.Forms.Data.Sync
                             screenConfig.ScreenNavigationData.last_retrieved_utc = DateTime.UtcNow;
                         }
                         
-                        await this.API.Screens.SaveScreenConfigAsync(screenConfig);
+                        await this.API.StencilScreens.SaveScreenConfigAsync(screenConfig);
 
                         if(screenConfig.DownloadCommands?.Count > 0)
                         {
@@ -315,7 +380,7 @@ namespace Stencil.Forms.Data.Sync
                             isExpired = expireUTC.Value < DateTimeOffset.UtcNow;
                         }
 
-                        bool cacheInValid = true;
+                        bool cacheInValid = false;
                         if (cacheUntilUTC.HasValue)
                         {
                             cacheInValid = cacheUntilUTC.Value > DateTimeOffset.UtcNow;

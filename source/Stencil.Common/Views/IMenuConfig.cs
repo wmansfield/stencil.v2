@@ -10,5 +10,6 @@ namespace Stencil.Common.Views
         string label { get; }
         string command { get; }
         string command_parameter { get; }
+        bool ui_suppressed { get; }
     }
 }

@@ -2,6 +2,7 @@
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Data;
 using Stencil.Forms.Data.Sync;
+using Stencil.Forms.Data.Sync.Manager;
 using Stencil.Forms.Presentation;
 using Stencil.Forms.Presentation.Routing;
 using Stencil.Forms.Screens;
@@ -51,11 +52,18 @@ namespace Stencil.Forms
                 return NativeApplication.CommandProcessor;
             }
         }
-        public IScreenManager Screens
+        public IScreenManager StencilScreens
         {
             get
             {
                 return NativeApplication.ScreenManager;
+            }
+        }
+        public ITrackedDataManager StencilTrackedData
+        {
+            get
+            {
+                return NativeApplication.TrackedDataManager;
             }
         }
 

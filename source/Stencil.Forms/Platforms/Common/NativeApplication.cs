@@ -2,6 +2,7 @@
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Data;
 using Stencil.Forms.Data.Sync;
+using Stencil.Forms.Data.Sync.Manager;
 using Stencil.Forms.Presentation;
 using Stencil.Forms.Presentation.Routing;
 using Stencil.Forms.Screens;
@@ -55,6 +56,7 @@ namespace Stencil.Forms
         public static IRouter Router { get; protected set; }
         public static ICommandProcessor CommandProcessor { get; protected set; }
         public static IScreenManager ScreenManager { get; protected set; }
+        public static ITrackedDataManager TrackedDataManager { get; protected set; }
         public static NativeApplication Instance { get; protected set; }
         public static IDataSync DataSync { get; protected set; }
         public static IAlerts Alerts { get; protected set; }

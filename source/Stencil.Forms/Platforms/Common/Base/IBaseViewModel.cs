@@ -7,6 +7,8 @@ namespace Stencil.Forms.Base
         #region Lifecycle Methods
 
         Task OnNavigatingToAsync();
+        Task OnNavigatedToAsync();
+
         Task OnNavigatingFromAsync();
 
         void OnAppear();

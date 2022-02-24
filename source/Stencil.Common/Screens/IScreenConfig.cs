@@ -22,8 +22,10 @@ namespace Stencil.Common.Screens
         List<IViewConfig> FooterConfigs { get; }
         List<IViewConfig> ViewConfigs { get; }
         List<IMenuConfig> MenuConfigs { get;  }
-        List<ICommandConfig> ShowCommands { get; }
+        List<ICommandConfig> BeforeShowCommands { get; }
+        List<ICommandConfig> AfterShowCommands { get; }
         List<ICommandConfig> DownloadCommands { get; }
+        List<string> Claims { get; }
 
     }
 }

@@ -23,9 +23,11 @@ namespace Stencil.Common.Screens
             this.ViewConfigs = new List<ViewConfig>();
             this.HeaderConfigs = new List<ViewConfig>();
             this.FooterConfigs = new List<ViewConfig>();
-            this.ShowCommands = new List<CommandConfig>();
+            this.BeforeShowCommands = new List<CommandConfig>();
+            this.AfterShowCommands = new List<CommandConfig>();
             this.MenuConfigs = new List<MenuConfig>();
             this.DownloadCommands = new List<CommandConfig>();
+            this.Claims = new List<string>();
         }
         public string ScreenStorageKey { get; set; }
         public string ScreenName { get; set; }
@@ -48,9 +50,11 @@ namespace Stencil.Common.Screens
         public List<ViewConfig> ViewConfigs { get; set; }
         public List<ViewConfig> HeaderConfigs { get; set; }
         public List<ViewConfig> FooterConfigs { get; set; }
-        public List<CommandConfig> ShowCommands { get; set; }
+        public List<CommandConfig> BeforeShowCommands { get; set; }
+        public List<CommandConfig> AfterShowCommands { get; set; }
         public List<CommandConfig> DownloadCommands { get; set; }
         public List<MenuConfig> MenuConfigs { get; set; }
+        public List<string> Claims { get; set; }
 
         INavigationData IScreenConfig.ScreenNavigationData
         {
@@ -90,11 +94,18 @@ namespace Stencil.Common.Screens
             }
         }
 
-        List<ICommandConfig> IScreenConfig.ShowCommands
+        List<ICommandConfig> IScreenConfig.AfterShowCommands
         {
             get
             {
-                return this.ShowCommands.AsEnumerable<ICommandConfig>().ToList();
+                return this.AfterShowCommands.AsEnumerable<ICommandConfig>().ToList();
+            }
+        }
+        List<ICommandConfig> IScreenConfig.BeforeShowCommands
+        {
+            get
+            {
+                return this.BeforeShowCommands.AsEnumerable<ICommandConfig>().ToList();
             }
         }
         List<ICommandConfig> IScreenConfig.DownloadCommands

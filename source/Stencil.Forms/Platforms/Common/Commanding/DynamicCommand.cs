@@ -77,7 +77,7 @@ namespace Stencil.Forms.Commanding
             {
                 if (scope != null && group != null)
                 {
-                    if (scope.command_data.TryGetValue(group, out ConcurrentDictionary<string, ICommandField> values))
+                    if (scope.CommandData.TryGetValue(group, out ConcurrentDictionary<string, ICommandField> values))
                     {
                         return values;
                     }

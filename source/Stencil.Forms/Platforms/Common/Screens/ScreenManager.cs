@@ -113,15 +113,25 @@ namespace Stencil.Forms.Screens
                         result.FooterItems = footerItems;
                         result.ShowFooter = footerItems.Count > 0;
                         result.MenuEntries = menuEntries;
-                        result.ShowCommands = screenConfig.ShowCommands;
+                        result.BeforeShowCommands = screenConfig.BeforeShowCommands;
+                        result.AfterShowCommands = screenConfig.AfterShowCommands;
 
+                        if (screenConfig.Claims != null)
+                        {
+                            foreach (string item in screenConfig.Claims)
+                            {
+                                result.Claims.Add(item);
+                            }
+                        }
 
                         // extract filters or augmentations
 
-                        if(resolvableTemplateSelector != null)
+                        if (resolvableTemplateSelector != null)
                         {
                             await result.ExtractAndPrepareExtensionsAsync();
                         }
+
+
                         
 
                         // apply page visuals
@@ -132,6 +142,10 @@ namespace Stencil.Forms.Screens
                             if (!string.IsNullOrWhiteSpace(screenConfig.VisualConfig.BackgroundColor))
                             {
                                 result.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
+                            }
+                            if (screenConfig.VisualConfig.BackgroundBrush != null)
+                            {
+                                result.BackgroundBrush = screenConfig.VisualConfig.BackgroundBrush.ToBrush();
                             }
                             result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
                         }
@@ -222,7 +236,16 @@ namespace Stencil.Forms.Screens
                     result.FooterItems = footerItems;
                     result.ShowFooter = footerItems.Count > 0;
                     result.MenuEntries = menuEntries;
-                    result.ShowCommands = screenConfig.ShowCommands;
+                    result.BeforeShowCommands = screenConfig.BeforeShowCommands;
+                    result.AfterShowCommands = screenConfig.AfterShowCommands;
+
+                    if (screenConfig.Claims != null)
+                    {
+                        foreach (string item in screenConfig.Claims)
+                        {
+                            result.Claims.Add(item);
+                        }
+                    }
 
 
                     // extract filters or augmentations
@@ -326,6 +349,7 @@ namespace Stencil.Forms.Screens
                         }
                     }
 
+                    
 
                     // apply page visuals
                     if (screenConfig.VisualConfig != null)
@@ -336,9 +360,13 @@ namespace Stencil.Forms.Screens
                         {
                             result.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
                         }
+                        if(screenConfig.VisualConfig.BackgroundBrush != null)
+                        {
+                            result.BackgroundBrush = screenConfig.VisualConfig.BackgroundBrush.ToBrush();
+                        }
                         result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
                     }
-
+                    
 
                     await result.Initialize();
                 }
@@ -540,7 +568,8 @@ namespace Stencil.Forms.Screens
                     SelectedTextColor = AppColors.MenuSelectedText,
                     UnselectedTextColor = AppColors.MenuUnselectedText,
                     ActiveBackgroundColor = AppColors.MenuActiveBackground,
-                    ActiveTextColor = AppColors.MenuActiveText
+                    ActiveTextColor = AppColors.MenuActiveText,
+                    UISuppressed = viewConfig.ui_suppressed
                 };
 
                 return result;

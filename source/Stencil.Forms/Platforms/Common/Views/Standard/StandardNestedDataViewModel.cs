@@ -30,6 +30,7 @@ namespace Stencil.Forms.Views.Standard
             this.Filters = new List<IDataViewFilter>();
             this.StateEmitters = new List<IStateEmitter>();
             this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
+            this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelectorCreator(this.CommandScope);
         }
@@ -41,6 +42,7 @@ namespace Stencil.Forms.Views.Standard
             this.Filters = new List<IDataViewFilter>();
             this.StateEmitters = new List<IStateEmitter>();
             this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
+            this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelector;
         }
@@ -114,11 +116,19 @@ namespace Stencil.Forms.Views.Standard
             set { SetProperty(ref _showFooter, value); }
         }
 
+        private Brush _backgroundBrush;
+        public virtual Brush BackgroundBrush
+        {
+            get { return _backgroundBrush; }
+            set { SetProperty(ref _backgroundBrush, value); }
+        }
+
         public virtual List<IDataViewFilter> Filters { get; set; }
         public virtual List<IDataViewAdjuster> Adjusters { get; set; }
         public virtual Dictionary<string, List<IStateResponder>> StateResponders { get; set; }
         public virtual List<IStateEmitter> StateEmitters { get; set; }
 
+        public virtual HashSet<string> Claims { get; set; }
 
         public virtual Task Initialize()
         {
