@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Placeholder.Common\Placeholder.Common.csproj" />
+    <ProjectReference Include="..\Placeholder.SDK.Client\Placeholder.SDK.Client.csproj" />
+    <ProjectReference Include="..\Placeholder.Domain\Placeholder.Domain.csproj" />
+    <ProjectReference Include="..\Placeholder.Primary\Placeholder.Primary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
+    <PackageReference Include="Zero.Foundation" Version="1.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" NoWarn="NU1608" />
+  </ItemGroup>
+
+</Project>

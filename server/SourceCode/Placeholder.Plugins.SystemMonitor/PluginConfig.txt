@@ -1,0 +1,7 @@
+AssemblyFileName: Placeholder.Plugins.SystemMonitor.dll
+SystemName: SystemMonitor
+FriendlyName: Placeholder - SystemMonitor
+Description: Provides Monitoring Support
+Version: 1.0 
+Author: wmansfield@foundationzero.com
+Feature: Unknown

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="/Content/system-monitor.css" rel="stylesheet" type="text/css" />
+    @RenderSection("Head", required: false)
+</head>
+<body>
+    @RenderBody()
+
+    @RenderSection("Foot", required: false)
+</body>
+</html>

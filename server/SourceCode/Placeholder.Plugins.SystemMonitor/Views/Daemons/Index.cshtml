@@ -1,0 +1,66 @@
+@model List<Zero.Foundation.Daemons.DaemonExecutionEstimate>
+@{
+    ViewBag.Title = "Daemons";
+    Layout = "~/Views/Shared/_SystemMonitorLayout.cshtml";
+}
+<h2>Daemons</h2>
+<div class="message">&nbsp; @ViewBag.Message</div>
+
+<form action="/Daemons" method="post">
+    <input type="submit" value="Refresh" />
+</form>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Is Running</th>
+        <th>Is Scheduled</th>
+        <th>Last Ran</th>
+        <th>Duration</th>
+        <th>Next Start</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td class="@(item.IsRunning?"green-block":"")">@item.IsRunning</td>
+            <td >@item.IsScheduled</td>
+            <td>
+                @if (item.LastExecutedEnd.HasValue)
+                { <span>@((DateTime.Now - item.LastExecutedEnd.Value).TotalSeconds.ToString("N0")) Secs Ago</span> }
+                else
+                {<span>--</span>}
+            </td>
+            <td>
+                @if (item.LastExecutedEnd.HasValue)
+                { <span>@((item.LastExecutedEnd.Value - item.LastExecutedStart.Value).TotalSeconds.ToString("N0")) Secs</span> }
+                else
+                {<span>--</span>}
+            </td>
+            <td>
+                @if (item.IsScheduled && item.NextScheduledStart.HasValue)
+                { <span>@((item.NextScheduledStart.Value - DateTime.Now).TotalSeconds.ToString("N0")) Secs</span> }
+                else
+                {<span>--</span>}
+            </td>
+            <td>
+                <form action="/Daemons" method="post">
+                    <input type="hidden" name="name" value="@item.Name" />
+                    <input type="hidden" name="op" value="stop" />
+                    <input type="submit" value="Stop" />
+                </form>
+            </td>
+            <td>
+                <form action="/Daemons" method="post">
+                    <input type="hidden" name="name" value="@item.Name" />
+                    <input type="hidden" name="op" value="start" />
+                    <input type="submit" value="Start" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+
+<form action="/Daemons" method="post">
+    <input type="hidden" name="op" value="removeall" />
+    <input type="submit" value="RemoveAll" />
+</form>

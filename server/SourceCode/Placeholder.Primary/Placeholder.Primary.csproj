@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>NY1608</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="DataViews\**" />
+    <EmbeddedResource Remove="DataViews\**" />
+    <None Remove="DataViews\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\wmans\.nuget\packages\microsoft.azure.cosmos\3.23.0\contentFiles\any\netstandard2.0\ThirdPartyNotice.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Placeholder.Common\Placeholder.Common.csproj" />
+    <ProjectReference Include="..\Placeholder.SDK.Client\Placeholder.SDK.Client.csproj" />
+    <ProjectReference Include="..\Placeholder.Data.Sql\Placeholder.Data.Sql.csproj" />
+    <ProjectReference Include="..\Placeholder.Domain\Placeholder.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.8" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.23.0" />
+    <PackageReference Include="Nest" Version="5.6.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" NoWarn="NU1608" />
+    <PackageReference Include="PdfSharpCore" Version="1.2.17" />
+    <PackageReference Include="Scryber.Core" Version="5.0.7" />
+    <PackageReference Include="Zero.Foundation" Version="1.0.9" />
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="5.2.4" />
+  </ItemGroup>
+</Project>

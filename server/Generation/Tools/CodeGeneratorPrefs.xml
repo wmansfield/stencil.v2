@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Options xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OutputFolder>C:\Projects\foundationzero\stencil.v2\server\SourceCode</OutputFolder>
+  <DataFile>C:\Projects\foundationzero\stencil.v2\server\Generation\XML\Placeholder-Entities.xml</DataFile>
+  <SelectedFiles>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\Business.xsl</string>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\Domain.xsl</string>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\SDK.xsl</string>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\SQLHelper.xsl</string>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\UIHelper-Angular.xsl</string>
+  </SelectedFiles>
+  <UnSelectedFiles>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\Security.xsl</string>
+  </UnSelectedFiles>
+</Options>

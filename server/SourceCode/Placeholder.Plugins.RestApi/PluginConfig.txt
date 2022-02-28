@@ -1,0 +1,6 @@
+AssemblyFileName: Placeholder.Plugins.RestAPI.dll
+SystemName: RestAPI
+FriendlyName: Placeholder - RestAPI
+Description: Provides a RestAPI
+Version: 1.0 
+Author: wmansfield@foundationzero.com

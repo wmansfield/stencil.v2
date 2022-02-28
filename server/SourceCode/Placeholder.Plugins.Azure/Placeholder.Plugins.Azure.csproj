@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Placeholder.Data.Sql\Placeholder.Data.Sql.csproj" />
+		<ProjectReference Include="..\Placeholder.Primary\Placeholder.Primary.csproj" />
+		<ProjectReference Include="..\Placeholder.Domain\Placeholder.Domain.csproj" />
+		<ProjectReference Include="..\Placeholder.Common\Placeholder.Common.csproj" />
+		<ProjectReference Include="..\Placeholder.Web\Placeholder.Web.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
+		<PackageReference Include="RestSharp" Version="106.15.0" />
+		<PackageReference Include="Zero.Foundation" Version="1.0.9" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" NoWarn="NU1608" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Delete Files="$(ProjectDir)..\Placeholder.Website\Plugins\Azure\$(TargetFileName)" ContinueOnError="true" />
+		<Copy SourceFiles="$(TargetPath)" DestinationFiles="$(ProjectDir)..\Placeholder.Website\Plugins\Azure\$(TargetFileName)" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
+	</Target>
+
+</Project>

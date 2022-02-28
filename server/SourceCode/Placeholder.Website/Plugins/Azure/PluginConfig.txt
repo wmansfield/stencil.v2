@@ -1,0 +1,6 @@
+AssemblyFileName: Placeholder.Plugins.Azure.dll
+SystemName: Azure
+FriendlyName: Placeholder - Azure
+Description: Provides Azure integration
+Version: 1.0 
+Author: wmansfield@foundationzero.com
