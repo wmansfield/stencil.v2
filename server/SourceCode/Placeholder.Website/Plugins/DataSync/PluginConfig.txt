@@ -1,0 +1,6 @@
+AssemblyFileName: Placeholder.Plugins.DataSync.dll
+SystemName: DataSync
+FriendlyName: Placeholder - DataSync
+Description: Provides Data Synchronization
+Version: 1.0 
+Author: wmansfield@foundationzero.com

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.GroupBegin">
+    <DataTemplate x:Key="groupBegin" x:DataType="local:GroupBeginContext">
+        <!--<ViewCell>-->
+            <AbsoluteLayout HeightRequest="20" HorizontalOptions="Fill" Padding="0" Margin="0" IsClippedToBounds="True">
+                <!--<Negative Values because collection view has ios computation problem>-->
+                <Frame AbsoluteLayout.LayoutBounds="-1, 12, 1, 20" 
+                       AbsoluteLayout.LayoutFlags="WidthProportional"
+                       BackgroundColor="{Binding InnerColor}"
+                       HorizontalOptions="Fill"
+                       HasShadow="False"
+                       CornerRadius="0"
+                       Margin="0"
+                       Padding="0">
+                </Frame>
+                <!--<Negative Values because collection view has ios computation problem>-->
+                <Frame AbsoluteLayout.LayoutBounds="-1, 0, 1, 20" 
+                       AbsoluteLayout.LayoutFlags="WidthProportional"
+                       BackgroundColor="{Binding InnerColor}"
+                       HorizontalOptions="Fill"
+                       HasShadow="False"
+                       CornerRadius="10"
+                       Margin="0"
+                       Padding="0">
+                </Frame>
+            </AbsoluteLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

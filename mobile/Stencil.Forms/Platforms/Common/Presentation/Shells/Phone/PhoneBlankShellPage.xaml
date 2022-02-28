@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Forms.Base"
+             x:Class="Stencil.Forms.Presentation.Shells.Phone.PhoneBlankShellPage"
+             BackgroundColor="{StaticResource PageBackground}">
+    <ContentPage.Content>
+        <ContentView x:Name="vwContent"/>
+    </ContentPage.Content>
+</base:BaseContentPage>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stencil.Forms", "Stencil.Forms\Stencil.Forms.csproj", "{A2D88DF6-7D2F-41C4-93DE-1371586D8AC7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stencil.Common", "Stencil.Common\Stencil.Common.csproj", "{DBA96817-7763-4726-B8A1-8226B791ECB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2D88DF6-7D2F-41C4-93DE-1371586D8AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2D88DF6-7D2F-41C4-93DE-1371586D8AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2D88DF6-7D2F-41C4-93DE-1371586D8AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2D88DF6-7D2F-41C4-93DE-1371586D8AC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBA96817-7763-4726-B8A1-8226B791ECB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBA96817-7763-4726-B8A1-8226B791ECB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBA96817-7763-4726-B8A1-8226B791ECB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBA96817-7763-4726-B8A1-8226B791ECB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7577A421-2E40-4F0B-99C8-6E723F6FDFF7}
+	EndGlobalSection
+EndGlobal

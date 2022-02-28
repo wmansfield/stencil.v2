@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Forms.Base"
+             xmlns:menus="clr-namespace:Stencil.Forms.Presentation.Menus"
+             x:Class="Stencil.Forms.Presentation.Shells.Phone.PhoneMenuBarView"
+             x:DataType="menus:IMenuViewModel"
+             BackgroundColor="{StaticResource PageBackground}">
+    <ContentView.Content>
+        <FlexLayout Direction="Row"
+                    JustifyContent="SpaceEvenly"
+                    Margin="0"
+                    Padding="0"
+                    BindableLayout.ItemsSource="{Binding MenuEntries}"
+                    BackgroundColor="{x:StaticResource MenuBarBackground}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Grid BackgroundColor="Transparent"
+                          Padding="0" Margin="0"
+                          RowSpacing="0">
+                        <FlexLayout Grid.Row="0" 
+                                    VerticalOptions="Fill" 
+                                    HorizontalOptions="Fill" 
+                                    Direction="Column" 
+                                    JustifyContent="Center"
+                                    BackgroundColor="{Binding UIBackgroundColor}">
+                            <Label IsVisible="{Binding IsIcon}" 
+                                   Text="{Binding IconCharacter}"
+                                   FlexLayout.AlignSelf="Center"
+                                   HorizontalTextAlignment="Center"
+                                   FontFamily="{StaticResource FontAwesome}"
+                                   TextColor="{Binding UITextColor}"
+                                   FontSize="{StaticResource FontSizeMenuIcon}"
+                                   Margin="4,2,4,6"
+                                   Padding="0"/>
+                            <Label FlexLayout.AlignSelf="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Label}"
+                                   TextColor="{Binding UITextColor}"
+                                   FontFamily="{StaticResource SansRegular}"
+                                   FontSize="{StaticResource FontSizeMenuText}"
+                                   Margin="0"
+                                   Padding="0"/>
+                            <FlexLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                            </FlexLayout.GestureRecognizers>
+                        </FlexLayout>
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>
+    </ContentView.Content>
+</base:BaseContentView>

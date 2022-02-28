@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.Image">
+    <DataTemplate x:Key="image" x:DataType="local:ImageContext">
+        <!--<ViewCell>-->
+            <StackLayout Orientation="Vertical" 
+                         HorizontalOptions="Fill" 
+                         Margin="0" 
+                         Padding="{Binding Padding}"
+                         BackgroundColor="{Binding BackgroundColor}">
+                <Image Source="{Binding Source}"
+                   MinimumHeightRequest="{Binding MinimumHeight}"
+                   HeightRequest="{Binding Height}"
+                   MinimumWidthRequest="{Binding MinimumWidth}"
+                   WidthRequest="{Binding Width}"
+                   Aspect="AspectFit"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Center"/>
+            </StackLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

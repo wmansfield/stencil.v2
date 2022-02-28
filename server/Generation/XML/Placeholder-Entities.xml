@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items schema="dbo" projectName="Placeholder" foundation="Zero" foundationCommon="" foundationCore="" securityRoute="shop_id" computeDirect="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <item name="GlobalSetting" friendlyName="Global Setting" tenant="Shared" uiDisplayField="name" uiDefaultSort="name" indexForSearchable="true" uiGenerate="false" uiPath="..\..\..\..\SourceCode\Placeholder.Website\angular_admin\src\app\views\admin\">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" friendlyName="GlobalSetting">global_setting_id</field>
+    <field type="string" dbType="nvarchar(100)" isNullable="false" ukGroup="singleglobal" searchable="true" friendlyName="Name">name</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true" html="true" friendlyName="Plain Text Value">value</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true" html="true" friendlyName="Encrypted Value">value_encrypted</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Is Encrypted">encrypted</field>
+  </item>
+  <item name="Tenant" friendlyName="Tenant" tenant="Shared" trackUpdates="true" >
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" friendlyName="Tenant">tenant_id</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="false" searchable="true" friendlyName="Name">tenant_name</field>
+    <field type="string" dbType="nvarchar(10)" isNullable="false" searchable="true" ukGroup="tenant_code" friendlyName="Code">tenant_code</field>
+  </item>
+  <item name="Asset" friendlyName="Asset" tenant="Shared" uiDisplayField="asset_id" trackUpdates="true">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" friendlyName="Asset ID">asset_id</field>
+    <field type="AssetKind" dbType="int" isNullable="false" isEnum="true" friendlyName="Asset Kind">asset_kind</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Available">available</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Should Resize">resize_required</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Should Encode">encode_required</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Is Resizing">resize_processing</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Is Encoding">encode_processing</field>
+    <field type="string" dbType="nvarchar(10)" isNullable="true" friendlyName="Thumb Small Dimensions">thumb_small_dimensions</field>
+    <field type="string" dbType="nvarchar(10)" isNullable="true" friendlyName="Thumb Medium Dimensions">thumb_medium_dimensions</field>
+    <field type="string" dbType="nvarchar(10)" isNullable="true" friendlyName="Thumb Large Dimensions">thumb_large_dimensions</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="true" friendlyName="Resize Status">resize_status</field>
+    <field type="int" dbType="int" isNullable="false" friendlyName="Resize Attempts">resize_attempts</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="true" friendlyName="Resize Attempt">resize_attempt_utc</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="true" friendlyName="Encode Identifier">encode_identifier</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="true" friendlyName="Encode Status">encode_status</field>
+    <field type="string" dbType="nvarchar(512)" isNullable="true" friendlyName="Relative Path">relative_path</field>
+    <field type="string" dbType="nvarchar(512)" isNullable="true" friendlyName="Raw Url">raw_url</field>
+    <field type="string" dbType="nvarchar(512)" isNullable="true" searchable="true" friendlyName="Public Url">public_url</field>
+    <field type="string" dbType="nvarchar(512)" isNullable="true" friendlyName="Thumb Url Small">thumb_small_url</field>
+    <field type="string" dbType="nvarchar(512)" isNullable="true" friendlyName="Thumb Url Medium">thumb_medium_url</field>
+    <field type="string" dbType="nvarchar(512)" isNullable="true" friendlyName="Thumb Url Large">thumb_large_url</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true" friendlyName="Encode Log">encode_log</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true" friendlyName="Resize Log">resize_log</field>
+    <field type="Dependency" dbType="int" isEnum="true" isNullable="false" friendlyName="Dependencies">dependencies</field>
+    <field type="int" dbType="int" isNullable="false" friendlyName="Encode Attempts">encode_attempts</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="true" friendlyName="Encode Attempt">encode_attempt_utc</field>
+    <field type="string" dbType="nvarchar(20)" isNullable="true" friendlyName="Resize Mode">resize_mode</field>
+  </item>
+  <item name="Account" friendlyName="Account" tenant="Shared" uiDisplayField="first_name" useStore="true" indexPriority="10" uiGenerate="false" uiPath="..\..\..\..\SourceCode\Placeholder.Website\angular_admin\src\app\views\admin\">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" storePartitionKey="SplitID" friendlyName="Account">account_id</field>
+    <field type="Guid" dbType="uniqueidentifier" isNullable="true" foreignKey="Asset" noGet="true" uiEditHidden="true" uiCreateHidden="true" uiListHidden="true" foreignKeyField="asset_id" derivedProperty="avatar" friendlyName="Avatar">asset_id_avatar</field>
+    <field type="string" dbType="nvarchar(250)" isNullable="false" validate="email" ukGroup="account_email" searchable="true" sortable="true" friendlyName="E-mail">email</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="false" validate="length" searchable="true" sortable="true" friendlyName="First Name">first_name</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="false" validate="length" searchable="true" sortable="true" friendlyName="Last Name">last_name</field>
+    <field type="string" dbType="nvarchar(150)" isNullable="true" searchable="true" uiListHidden="true" sortable="true" friendlyName="Display Name">account_display</field>
+    <field type="string" dbType="nvarchar(250)" isNullable="false" uiListHidden="true" uiEditHidden="true" friendlyName="Password">password</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="false" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Password Salt">password_salt</field>
+    <field type="AccountStatus" dbType="int" isNullable="false" isEnum="true" friendlyName="Status">account_status</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="false" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" ukGroup="account_key" sensitive="true" friendlyName="API Key">api_key</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="false" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" sensitive="true" friendlyName="API Secret">api_secret</field>
+    <field type="string" dbType="nvarchar(128)" isNullable="true" foreignKey="Timezone" uiDisplay="name" sdkManualGet="true" noGet="true" fakeForeignKey="true" friendlyName="TimeZone">timezone</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="false" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Email Verify Token">email_verify_token</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="true" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Email Verify Date">email_verify_utc</field>
+    <field type="string" dbType="nvarchar(250)" isNullable="true" uiListHidden="true" friendlyName="Entitlements">entitlements</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="true" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Password Change Date">password_changed_utc</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="true" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Password Reset Token">password_reset_token</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="true" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Password Reset Date">password_reset_utc</field>
+    <field type="string" dbType="nvarchar(50)" isNullable="true" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Single Login Token">single_login_token</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="true" uiListHidden="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Single Login Expire">single_login_token_expire_utc</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Last Login">last_login_utc</field>
+    <field type="string" dbType="nvarchar(250)" isNullable="true" sortable="true" uiEditHidden="true" uiCreateHidden="true" friendlyName="Last Login Platform">last_login_platform</field>
+    <indexfield type="AssetInfo" friendlyName="Avatar">avatar</indexfield>
+  </item>
+  <item name="Shop" friendlyName="Shop" tenant="Route" useStore="true" indexPriority="20" uiGenerate="false" uiDetail="true" uiPath="..\..\..\..\SourceCode\Placeholder.Website\angular_admin\src\app\views\admin\">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" storePartitionKey="SplitID" friendlyName="Shop">shop_id</field>
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" foreignKey="Tenant" foreignKeyField="tenant_id" friendlyName="Tenant">tenant_id</field>
+    <field type="string" dbType="nvarchar(150)" isNullable="false" searchable="true" uiDetail="true" friendlyName="Shop Name">shop_name</field>
+    <field type="string" dbType="nvarchar(150)" isNullable="false" searchable="true" uiDetail="true" html="true" friendlyName="Private Domain">private_domain</field>
+    <field type="string" dbType="nvarchar(150)" isNullable="false" searchable="true" uiDetail="true" html="true" friendlyName="Public Domain">public_domain</field>
+  </item>
+  <item name="ShopIsolated" friendlyName="ShopIsolated" tenant="Isolated" useStore="true" indexPriority="20" uiGenerate="false" uiDetail="true" uiPath="..\..\..\..\SourceCode\Placeholder.Website\angular_admin\src\app\views\admin\">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" storePartitionKey="Global" tenant="true" isolated="true" noGet="true" foreignKey="Shop" foreignKeyField="shop_id" uiParent="true" friendlyName="ShopIsolated">shop_id</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Webhook Enabled">webhoooks_enabled</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Fulfillment Enabled">fulfillment_enabled</field>
+  </item>
+  <item name="ShopAccount" friendlyName="Shop Account" tenant="Shared" useStore="true" indexPriority="30" uiGenerate="false" uiParent="Shop" uiPath="..\..\..\..\SourceCode\Placeholder.Website\angular_admin\src\app\views\admin\">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" friendlyName="ShopAccount">shop_account_id</field>
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" storePartitionKey="true" foreignKey="Shop" foreignKeyField="shop_id" uiParent="true" friendlyName="Shop">shop_id</field>
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" foreignKey="Account" foreignKeyField="account_id" iInvalidateforeignKey="true" friendlyName="Account">account_id</field>
+    <field type="ShopRole" dbType="int" isNullable="false" isEnum="true" friendlyName="Role">shop_role</field>
+    <field type="bool" dbType="bit" isNullable="false" searchToggle="true" friendlyName="Enabled">enabled</field>
+    <indexfield type="string" isNullable="true" sortable="true" searchable="true" computedFrom="Shop" computedReferenceField="shop_id" computedBy="Extra" friendlyName="Shop Name">shop_name</indexfield>
+  </item>
+  <item name="ShopSetting" friendlyName="ShopSetting" tenant="Isolated" uiDisplayField="name" uiDefaultSort="name" useStore="true" uiGenerate="manual" uiParent="Shop" indexPriority="30" indexForSearchable="true" uiPath="..\..\..\..\SourceCode\Placeholder.Website\angular_admin\src\app\views\admin\">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" friendlyName="ShopSetting">shop_setting_id</field>
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" tenant="true" storePartitionKey="true" ukGroup="shop_setting" foreignKey="Shop" foreignKeyField="shop_id" iInvalidateforeignKey="true" uiParent="true" friendlyName="Shop">shop_id</field>
+    <field type="string" dbType="nvarchar(255)" isNullable="false" ukGroup="shop_setting" searchable="true" sortable="true" indexExact="true" friendlyName="Name">name</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true" friendlyName="Description">description</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true" searchable="true" html="true" friendlyName="Value">value</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true" uiListHidden="true" html="true" friendlyName="Encrypted Value">value_encrypted</field>
+    <field type="bool" dbType="bit" isNullable="false" friendlyName="Encrypted">encrypted</field>
+  </item>
+  <item name="Company" friendlyName="Company" tenant="Isolated" useStore="true" indexPriority="30" indexForSearchable="true" uiPath="..\..\..\..\SourceCode\Placeholder.Website\angular_admin\src\app\views\admin\">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" friendlyName="Company ID">company_id</field>
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" tenant="true" storePartitionKey="true" foreignKey="Shop" foreignKeyField="shop_id" friendlyName="Shop">shop_id</field>
+    <field type="string" dbType="nvarchar(150)" isNullable="true" sortable="true" searchable="true" friendlyName="Name">company_name</field>
+    <field type="bool" dbType="bit" isNullable="false" searchToggle="null" friendlyName="Is Disabled">disabled</field>
+  </item>
+  <enum name="AccountStatus">
+    <field value="0" friendlyName="Enabled">enabled</field>
+    <field value="1" friendlyName="Pending">pending</field>
+    <field value="2" friendlyName="Disabled">disabled</field>
+    <field value="3" friendlyName="Denied">denied</field>
+  </enum>
+  <enum name="AssetKind">
+    <field value="0">image</field>
+    <field value="1">video</field>
+  </enum>
+  <enum name="Dependency">
+    <field value="0">none</field>
+    <field value="1">account</field>
+    <field value="2">shop</field>
+  </enum>
+  <enum name="EmailTemplateKind">
+    <field value="0">generic</field>
+    <field value="1">password_reset_started</field>
+    <field value="2">password_reset_completed</field>
+    <field value="2">email_changed</field>
+    <field value="2">email_verify_started</field> 
+  </enum>
+  <enum name="ShopRole">
+    <field value="0">Reader</field>
+    <field value="1">Manager</field>
+    <field value="2">Admin</field>
+  </enum>
+</items>

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Placeholder.SDK.WebGen": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "D:\\Projects\\placeholder\\api\\SourceCode\\Placeholder.SDK.WebGen\\bin\\Debug\\net5.0\\Placeholder.SDK.WebGen.dll",
+      "workingDirectory": "D:\\Projects\\placeholder\\api\\SourceCode\\Placeholder.SDK.WebGen"
+    }
+  }
+}

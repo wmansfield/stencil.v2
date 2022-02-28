@@ -1,0 +1,35 @@
+@model Placeholder.Plugins.SystemMonitor.Models.PluginInfo
+@{
+    ViewBag.Title = "Plugins";
+    Layout = "~/Views/Shared/_SystemMonitorLayout.cshtml";
+}
+<h2>Foundation Plugins</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Version</th>
+    </tr>
+
+    @foreach (var item in Model.FoundationPlugins)
+    {
+        <tr>
+            <td>@item.DisplayName</td>
+            <td>@item.DisplayVersion</td>
+        </tr>
+    }
+</table>
+
+<h2>Web Plugins</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Version</th>
+    </tr>
+    @foreach (var item in Model.WebPlugins)
+    {
+        <tr>
+            <td>@item.DisplayName</td>
+            <td>@item.DisplayVersion</td>
+        </tr>
+    }
+</table>

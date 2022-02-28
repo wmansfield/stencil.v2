@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items schema="dbo" projectName="Placeholder" securityRoute="shop_id" securityEntity="Shop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <item name="Account" >
+      <create trimmed="true" self="false" super="true" />
+      <retrieve trimmed="true" self="true" super="true" />
+      <update trimmed="true" self="false" super="true" />
+      <delete trimmed="true" self="false" super="true" />
+      <search trimmed="true" self="false" super="true" />
+      <list trimmed="true" self="false" super="true" />
+   </item>
+   <item name="Asset" >
+      <create trimmed="true" />
+      <retrieve trimmed="true" />
+      <update trimmed="true" />
+      <delete trimmed="true" />
+      <search trimmed="true" />
+      <list trimmed="true" />
+   </item>
+   <item name="Company" routeField="shop_id" >
+      <create trimmed="true" super="true"/>
+      <retrieve trimmed="true" super="true"/>
+      <update trimmed="true" super="true"/>
+      <delete trimmed="true" super="true"/>
+      <search trimmed="true" super="true"/>
+      <list trimmed="true" super="true"/>
+   </item>
+   <item name="GlobalSetting" >
+      <create trimmed="true" super="true"/>
+      <retrieve trimmed="true" super="true"/>
+      <update trimmed="true" super="true"/>
+      <delete trimmed="true" super="true"/>
+      <search trimmed="true" super="true"/>
+      <list trimmed="true" super="true"/>
+   </item>
+   <item name="Shop" routeField="shop_id" >
+      <create trimmed="true" super="true"/>
+      <retrieve trimmed="true" super="true"  />
+      <update trimmed="true" super="true" />
+      <delete trimmed="true" super="true"  />
+      <search trimmed="true" super="true"  />
+      <list trimmed="true" super="true"  />
+   </item>
+   <item name="ShopAccount" >
+      <create trimmed="true" super="true"/>
+      <retrieve trimmed="true" super="true"/>
+      <update trimmed="true" super="true"/>
+      <delete trimmed="true" super="true"/>
+      <search trimmed="true" super="true"/>
+      <list trimmed="true" super="true"/>
+   </item>
+   <item name="ShopIsolated" routeField="shop_id" >
+      <create trimmed="true" super="true"/>
+      <retrieve trimmed="true" super="true"  />
+      <update trimmed="true" super="true" />
+      <delete trimmed="true" super="true"  />
+      <search trimmed="true" super="true"  />
+      <list trimmed="true" super="true"  />
+   </item>
+   <item name="ShopSetting" routeField="shop_id" >
+      <create trimmed="true" super="true"/>
+      <retrieve trimmed="true" super="true"/>
+      <update trimmed="true" super="true"/>
+      <delete trimmed="true" super="true"/>
+      <search trimmed="true" super="true"/>
+      <list trimmed="true" super="true"/>
+   </item>
+   <item name="Tenant" >
+      <create trimmed="true" super="true"/>
+      <retrieve trimmed="true" super="true"/>
+      <update trimmed="true" super="true"/>
+      <delete trimmed="true" super="true"/>
+      <search trimmed="true" super="true"/>
+      <list trimmed="true" super="true"/>
+   </item>
+</items>

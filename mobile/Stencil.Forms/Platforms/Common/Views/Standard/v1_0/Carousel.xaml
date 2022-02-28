@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:standard="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    xmlns:views="clr-namespace:Stencil.Forms.Views"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.Carousel">
+    <DataTemplate x:Key="carousel" x:DataType="standard:CarouselContext">
+        <CarouselView BackgroundColor="{Binding BackgroundColor}"
+                    HeightRequest="{Binding HeightRequest}"
+                    VerticalOptions="Fill"
+                    Margin="{Binding Margin}"
+                    Loop="{Binding Loop}"
+                    IsBounceEnabled="{Binding BounceEnabled}"
+                    Position="{Binding Position}"
+                    PositionChanged="CarouselView_PositionChanged"
+                    ItemsSource="{Binding Cells}">
+            <CarouselView.ItemTemplate>
+                <DataTemplate x:DataType="views:INestedDataViewModel">
+                    <CollectionView
+                        VerticalOptions="Fill"
+                        HorizontalOptions="Fill"
+                        ItemSizingStrategy="MeasureAllItems"
+                        SelectionMode="None"
+                        ItemsSource="{Binding MainItemsFiltered}"
+                        ItemTemplate="{Binding DataTemplateSelector}" />
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+    </DataTemplate>
+</ResourceDictionary>

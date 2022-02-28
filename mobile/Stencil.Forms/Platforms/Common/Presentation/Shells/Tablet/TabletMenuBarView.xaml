@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Forms.Base"
+             x:Class="Stencil.Forms.Presentation.Shells.Tablet.TabletMenuBarView">
+  <ContentView.Content>
+        <FlexLayout Direction="Column"
+                    JustifyContent="SpaceEvenly"
+                    BindableLayout.ItemsSource="{Binding MenuEntries}"
+                    BackgroundColor="{x:StaticResource MenuBarBackground}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="Transparent"
+                           CornerRadius="0"
+                           HasShadow="False"
+                           Padding="0"
+                           BorderColor="Transparent">
+                        <FlexLayout Direction="Column"
+                                    JustifyContent="Center">
+                            <Label IsVisible="{Binding IsIcon}" 
+                                   Text="{Binding IconCharacter}"
+                                   FlexLayout.AlignSelf="Center"
+                                   HorizontalTextAlignment="Center"
+                                   FontFamily="{StaticResource FontAwesome}"
+                                   TextColor="{x:StaticResource Primary900}"
+                                   FontSize="32"
+                                   Margin="4"
+                                   Padding="0"/>
+                            <Label FlexLayout.AlignSelf="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding Label}"
+                                   TextColor="{x:StaticResource Primary900}"
+                                   FontSize="Small"
+                                   Margin="0"
+                                   Padding="0"/>
+                        </FlexLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Command}"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>
+    </ContentView.Content>
+</base:BaseContentView>

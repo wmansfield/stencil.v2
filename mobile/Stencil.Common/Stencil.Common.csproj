@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Stencil.Common</PackageId>
+	<Owners>William Mansfield</Owners>
+    <Authors>William Mansfield</Authors>
+    <Company>Foundation Zero</Company>
+    <Product>Stencil</Product>
+    <Description>Stencil</Description>
+    <Copyright />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/wmansfield/stencil.v2</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wmansfield/stencil.v2</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>https://raw.githubusercontent.com/wmansfield/stencil.v2/main/ChangeLog.md</PackageReleaseNotes>
+    <PackageTags>Stencil</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Version>2.0.8</Version>
+    <AssemblyVersion>2.0.8.0</AssemblyVersion>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+</Project>

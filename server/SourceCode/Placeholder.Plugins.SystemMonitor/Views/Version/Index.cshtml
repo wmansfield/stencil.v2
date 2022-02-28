@@ -1,0 +1,12 @@
+@model Placeholder.Plugins.SystemMonitor.Models.VersionInfo
+@{
+    ViewBag.Title = "Version";
+    Layout = "~/Views/Shared/_SystemMonitorLayout.cshtml";
+}
+<h2>Version Info</h2>
+<div>
+    <span>Version: </span> <span>@Model.UIVersion</span>
+</div>
+<div>
+    <span>Build Date (EST): </span> <span>@Model.BuildDate</span>
+</div>
