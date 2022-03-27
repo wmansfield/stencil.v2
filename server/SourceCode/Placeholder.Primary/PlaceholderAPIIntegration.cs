@@ -3,6 +3,7 @@ using Placeholder.Common.Configuration;
 using Placeholder.Common.Synchronization;
 using Placeholder.Primary.Business.Integration;
 using Placeholder.Primary.Integration;
+using Placeholder.Primary.Markdown;
 using Placeholder.Primary.Security;
 using Zero.Foundation;
 
@@ -42,6 +43,10 @@ namespace Placeholder.Primary
         public IUploadFiles UploadFiles
         {
             get { return this.IFoundation.Resolve<IUploadFiles>(); }
+        }
+        public IMarkdownProcessor Markdown
+        {
+            get { return this.IFoundation.Resolve<IMarkdownProcessor>(); }
         }
     }
 }

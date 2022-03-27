@@ -6,14 +6,14 @@
     <DataTemplate x:Key="headerTitleBar" x:DataType="local:HeaderTitleBarContext">
         <!--<ViewCell>-->
         <Grid HorizontalOptions="Fill"
-              ColumnDefinitions="48,*"
+              ColumnDefinitions="48,*,48"
               Padding="0" Margin="0"
               HeightRequest="55"
               RowSpacing="0"
               ColumnSpacing="0"
               BackgroundColor="{Binding BackgroundColor}">
             <Label Grid.Column="0"
-                   Text="{Binding BackIcon}"
+                   Text="{Binding LeftIcon}"
                    Margin="0,0"
                    Padding="4,0"
                    HorizontalOptions="Fill"
@@ -23,7 +23,7 @@
                    TextColor="{Binding TextColor}"
                    HorizontalTextAlignment="Center">
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    <TapGestureRecognizer Tapped="Left_Tapped" />
                 </Label.GestureRecognizers>
             </Label>
             <Label Grid.Column="1"
@@ -36,6 +36,20 @@
                    FontFamily="{StaticResource SansRegular}"
                    TextColor="{Binding TextColor}"
                    HorizontalTextAlignment="Center" />
+            <Label Grid.Column="2"
+                   Text="{Binding RightIcon}"
+                   Margin="0,0"
+                   Padding="4,0"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Center"
+                   FontSize="{Binding IconFontSize}"
+                   FontFamily="{StaticResource FontAwesome}"
+                   TextColor="{Binding TextColor}"
+                   HorizontalTextAlignment="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Right_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
         </Grid>
         <!--</ViewCell>-->
     </DataTemplate>

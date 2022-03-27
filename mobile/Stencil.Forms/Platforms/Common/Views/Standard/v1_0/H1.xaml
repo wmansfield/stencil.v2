@@ -7,13 +7,14 @@
         <!--<ViewCell>-->
         <StackLayout Orientation="Vertical" HorizontalOptions="Fill" Padding="0" Margin="0" Spacing="0" BackgroundColor="{Binding BackgroundColor}">
             <Label Text="{Binding Text}"
-                       HorizontalOptions="Fill"
-                       VerticalOptions="Start"
-                       FontSize="{StaticResource FontSizeH1}"
-                       FontFamily="{StaticResource SansBold}"
-                       TextColor="{Binding TextColor}"
-                       HorizontalTextAlignment="Center"
-                       Margin="0,8" />
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Start"
+                   Padding="{Binding Padding}"
+                   FontSize="{StaticResource FontSizeH1}"
+                   FontFamily="{StaticResource SansBold}"
+                   TextColor="{Binding TextColor}"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,8" />
         </StackLayout>
         <!--</ViewCell>-->
     </DataTemplate>

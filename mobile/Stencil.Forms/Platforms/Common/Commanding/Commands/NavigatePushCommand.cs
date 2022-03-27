@@ -50,6 +50,8 @@ namespace Stencil.Forms.Commanding.Commands
                 }
                 else
                 {
+                    dataViewModel.NavigationData = navigationData; // force it
+
                     IRouterView dataView = this.GenerateView(dataViewModel);
                     await this.API.Router.PushViewAsync(dataView, commandScope.TargetMenuEntry);
                     return true;

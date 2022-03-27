@@ -5,20 +5,16 @@
                     x:Class="Stencil.Forms.Views.Standard.v1_0.Image">
     <DataTemplate x:Key="image" x:DataType="local:ImageContext">
         <!--<ViewCell>-->
-            <StackLayout Orientation="Vertical" 
-                         HorizontalOptions="Fill" 
-                         Margin="0" 
-                         Padding="{Binding Padding}"
-                         BackgroundColor="{Binding BackgroundColor}">
-                <Image Source="{Binding Source}"
-                   MinimumHeightRequest="{Binding MinimumHeight}"
-                   HeightRequest="{Binding Height}"
-                   MinimumWidthRequest="{Binding MinimumWidth}"
-                   WidthRequest="{Binding Width}"
-                   Aspect="AspectFit"
-                   HorizontalOptions="Fill"
-                   VerticalOptions="Center"/>
-            </StackLayout>
+        <StackLayout Padding="{Binding Padding}"
+                     BackgroundColor="{Binding BackgroundColor}"
+                     HorizontalOptions="Fill"
+                     PropertyChanged="StackLayout_PropertyChanged">
+            <Image Source="{Binding UISource}"
+                    HeightRequest="{Binding Height}"
+                    WidthRequest="{Binding Width}"
+                    Margin="0"
+                    Aspect="AspectFit"/>
+        </StackLayout>
         <!--</ViewCell>-->
     </DataTemplate>
 </ResourceDictionary>

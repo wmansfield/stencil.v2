@@ -24,21 +24,32 @@ namespace Quantum.Native.Droid.Stencil.Platform
         {
             CoreUtility.ExecuteMethod(nameof(TryHideKeyboard), delegate ()
             {
-                Context context = Android.App.Application.Context;
-                Activity activity = context as Activity;
-                if(context != null && activity != null)
+                try
                 {
-                    InputMethodManager inputMethodManager = context.GetSystemService(Context.InputMethodService) as InputMethodManager;
-                    if (inputMethodManager != null)
+                    Context context = Android.App.Application.Context;
+                    Activity activity = Xamarin.Essentials.Platform.CurrentActivity;
+                    if (context != null && activity != null)
                     {
-                        IBinder token = activity.CurrentFocus?.WindowToken;
-                        if (token != null)
+                        InputMethodManager inputMethodManager = context.GetSystemService(Context.InputMethodService) as InputMethodManager;
+                        if (inputMethodManager != null)
                         {
+                            Android.Views.View focusView = activity.CurrentFocus;
+                            if (focusView == null)
+                            {
+                                focusView = new Android.Views.View(activity);
+                            }
+                            focusView?.ClearFocus();
+                            IBinder token = focusView.WindowToken;
                             inputMethodManager.HideSoftInputFromWindow(token, HideSoftInputFlags.None);
                             activity.Window.DecorView.ClearFocus();
                         }
                     }
                 }
+                catch 
+                {
+                    //gup
+                }
+                
                 
             });
             

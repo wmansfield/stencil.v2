@@ -83,5 +83,33 @@ namespace Stencil.Forms
             }
         }
         #endregion
+
+        /// <summary>
+        /// Assigns the value at the specified index, expands the array if needed
+        /// </summary>
+        public static T[] InjectAt<T>(this T[] array, int index, T entity)
+        {
+            if (array != null && index < array.Length)
+            {
+                array[index] = entity;
+                return array;
+            }
+            else
+            {
+                if (array == null)
+                {
+                    array = new T[index + 1];
+                    array[index] = entity;
+                    return array;
+                }
+                else
+                {
+                    T[] result = new T[index + 1];
+                    array.CopyTo(result, 0);
+                    array[index] = entity;
+                    return result;
+                }
+            }
+        }
     }
 }

@@ -25,41 +25,41 @@ namespace Stencil.Forms
 
         }
 
-        public string Localize(string token, string defaultText, params object[] arguments)
+        public virtual string Localize(string token, string defaultText, params object[] arguments)
         {
             //TODO:SHOULD: Localize by token
             return string.Format(defaultText, arguments);
         }
 
-        public IAppAnalytics Analytics
+        public virtual IAppAnalytics Analytics
         {
             get
             {
                 return NativeApplication.Analytics;
             }
         }
-        public IRouter Router
+        public virtual IRouter Router
         {
             get
             {
                 return NativeApplication.Router;
             }
         }
-        public ICommandProcessor CommandProcessor
+        public virtual ICommandProcessor CommandProcessor
         {
             get
             {
                 return NativeApplication.CommandProcessor;
             }
         }
-        public IScreenManager StencilScreens
+        public virtual IScreenManager StencilScreens
         {
             get
             {
                 return NativeApplication.ScreenManager;
             }
         }
-        public ITrackedDataManager StencilTrackedData
+        public virtual ITrackedDataManager StencilTrackedData
         {
             get
             {
@@ -67,14 +67,14 @@ namespace Stencil.Forms
             }
         }
 
-        public ILogger Logger
+        public virtual ILogger Logger
         {
             get
             {
                 return NativeApplication.Logger;
             }
         }
-        public IAlerts Alerts
+        public virtual IAlerts Alerts
         {
             get
             {
@@ -82,7 +82,7 @@ namespace Stencil.Forms
             }
         }
 
-        public IStencilDatabaseConnector StencilDatabase
+        public virtual IStencilDatabaseConnector StencilDatabase
         {
             get
             {

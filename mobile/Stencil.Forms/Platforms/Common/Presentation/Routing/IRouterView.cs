@@ -12,7 +12,7 @@ namespace Stencil.Forms.Presentation.Routing
         ObservableCollection<IMenuEntry> MenuEntries { get; }
 
         View GetSelf();
-        Task OnNavigatingToAsync();
+        Task OnNavigatingToAsync(bool reload);
         Task OnNavigatedToAsync();
         ICommand NavigateBackCommand { get; }
     }

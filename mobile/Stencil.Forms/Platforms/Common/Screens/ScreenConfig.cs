@@ -56,7 +56,5 @@ namespace Stencil.Forms.Screens
         public List<IMenuConfig> MenuConfigs { get; set; }
 
         public List<string> Claims { get; set; }
-
-
     }
 }

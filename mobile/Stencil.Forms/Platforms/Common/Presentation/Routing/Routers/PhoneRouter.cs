@@ -1,4 +1,5 @@
 ﻿using Stencil.Forms.Commanding;
+using Stencil.Forms.Platform;
 using Stencil.Forms.Presentation.Menus;
 using Stencil.Forms.Presentation.Shells;
 using Stencil.Forms.Presentation.Shells.Phone;
@@ -73,12 +74,15 @@ namespace Stencil.Forms.Presentation.Routing.Routers
                 this.CurrentPage = page;
                 this.CurrentShellModel = shellModel;
 
-                Task navigatingToTask = view.OnNavigatingToAsync();
+                Task navigatingToTask = view.OnNavigatingToAsync(false);
 
                 Application.Current.MainPage = new NavigationPage(page);
 
                 await navigatingToTask;
                 await view.OnNavigatedToAsync();
+
+                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
             });
 
         }
@@ -87,6 +91,7 @@ namespace Stencil.Forms.Presentation.Routing.Routers
         {
             return base.ExecuteMethodAsync(nameof(PushViewAsync), async delegate ()
             {
+
                 try
                 {
                     IShellView menuShellPage = this.CurrentPage as IShellView;
@@ -113,7 +118,7 @@ namespace Stencil.Forms.Presentation.Routing.Routers
 
                         this.CurrentShellModel = newShellModel;
 
-                        Task onNavigatingTask = view.OnNavigatingToAsync();
+                        Task onNavigatingTask = view.OnNavigatingToAsync(false);
 
                         menuShellPage.ViewContent = view.GetSelf();
 
@@ -160,7 +165,7 @@ namespace Stencil.Forms.Presentation.Routing.Routers
 
                         this.CurrentShellModel = newShellModel;
 
-                        Task onNavigatingTask = view.OnNavigatingToAsync();
+                        Task onNavigatingTask = view.OnNavigatingToAsync(false);
 
                         await this.CurrentPage.Navigation.PushAsync(nextPage);
                         await onNavigatingTask;
@@ -174,16 +179,19 @@ namespace Stencil.Forms.Presentation.Routing.Routers
                     this.API.Alerts.Toast("Error loading data. Reason: " + ex.FirstNonAggregateException().Message, TimeSpan.FromSeconds(3));
                 }
 
+                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
             });
 
         }
-        public virtual Task PopViewAsync()
+        public virtual Task PopViewAsync(bool reloadPrevious)
         {
             return base.ExecuteMethodAsync(nameof(PopViewAsync), async delegate ()
             {
+
                 this.CurrentShellModel = this.CurrentShellModel?.Parent;
 
-                Task onNavigatingTask = this.CurrentShellModel?.View?.OnNavigatingToAsync();
+                Task onNavigatingTask = this.CurrentShellModel?.View?.OnNavigatingToAsync(reloadPrevious);
 
                 await this.CurrentPage.Navigation.PopAsync(true);
 
@@ -198,6 +206,8 @@ namespace Stencil.Forms.Presentation.Routing.Routers
                 {
                     await onNavigatedTask;
                 }
+                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
             });
         }
 

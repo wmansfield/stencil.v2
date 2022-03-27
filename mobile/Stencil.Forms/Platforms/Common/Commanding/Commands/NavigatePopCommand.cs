@@ -34,7 +34,13 @@ namespace Stencil.Forms.Commanding.Commands
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate ()
             {
-                await this.API.Router.PopViewAsync();
+                bool reload = false;
+                if (commandParameter != null)
+                {
+                    bool.TryParse(commandParameter.ToString(), out reload);
+                }
+
+                await this.API.Router.PopViewAsync(reload);
                 return true;
             });
         }

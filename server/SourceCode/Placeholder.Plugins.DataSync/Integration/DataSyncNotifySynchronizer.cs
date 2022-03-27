@@ -42,40 +42,11 @@ namespace Placeholder.Plugins.DataSync.Integration
             }
         }
 
-        public void OnSyncFailed(string tenant, string argument)
-        {
-            base.ExecuteMethod("OnSyncFailed", delegate ()
-            {
-                try
-                {
-                    ISettingsResolver settingsResolver = this.IFoundation.Resolve<ISettingsResolver>();
-                    bool isBackPlane = settingsResolver.IsBackPane();
-                    if (isBackPlane)
-                    {
-                        WebHookProcessor.ProcessSyncWebHook(this.IFoundation, "codeable", "failed", tenant);
-                    }
-                    else
-                    {
-                        Task.Run(delegate ()
-                        {
-                            string url = string.Format("{0}/api/datasync/failed", this.DaemonUrl.Trim('/'));
-                            string content = string.Format("key=codeable&tenant={0}&arg={1}", tenant, argument);
-                            SendPostInNewThread(url, content);
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.IFoundation.LogError(ex, "OnSyncFailed");
-                }
-            });
-        }
-
 
 
         public void AgitateSyncDaemon(Guid? shop_id)
         {
-            this.AgitateDaemon(DataSynchronizeDaemon.DAEMON_NAME_TENANT_FORMAT);
+            this.AgitateDaemon(shop_id, DataSynchronizeDaemon.DAEMON_NAME_TENANT_FORMAT);
         }
         public void AgitateDaemon(Guid? shop_id, string nameFormat)
         {

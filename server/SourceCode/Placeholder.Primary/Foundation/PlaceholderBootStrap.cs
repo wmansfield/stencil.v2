@@ -16,6 +16,7 @@ using Placeholder.Primary.Health.Daemons;
 using Placeholder.Primary.Health.Exceptions;
 using Placeholder.Primary.I18n;
 using Placeholder.Primary.Integration;
+using Placeholder.Primary.Markdown;
 using Placeholder.Primary.Security;
 using Unity;
 using Unity.Lifetime;
@@ -59,6 +60,8 @@ namespace Placeholder.Primary.Foundation
             foundation.Container.RegisterType<ISecurityEnforcer, SecurityEnforcer>(new ContainerControlledLifetimeManager());
 
             foundation.Container.RegisterType<ILocalizer, TransientLocalizer>(new ContainerControlledLifetimeManager());
+
+            foundation.Container.RegisterType<IMarkdownProcessor, MarkdownProcessor>(new ContainerControlledLifetimeManager());
 
 
             this.RegisterDataElements(foundation);

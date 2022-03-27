@@ -56,7 +56,7 @@ namespace Stencil.Forms.Base
         {
             return base.ExecuteFunction(nameof(NavigateBackAsync), delegate ()
             {
-                return this.API.Router.PopViewAsync();
+                return this.API.Router.PopViewAsync(false);
             });
         }
 
@@ -64,7 +64,7 @@ namespace Stencil.Forms.Base
 
         #region Lifecycle Methods
 
-        public virtual Task OnNavigatingToAsync()
+        public virtual Task OnNavigatingToAsync(bool reload = false)
         {
             return Task.CompletedTask;
         }

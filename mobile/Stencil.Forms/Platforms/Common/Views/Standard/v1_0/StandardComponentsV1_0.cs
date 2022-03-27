@@ -29,6 +29,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             _dataViewComponents[Indicator.COMPONENT_NAME] = new Indicator();
             _dataViewComponents[DualColumnView.COMPONENT_NAME] = new DualColumnView();
             _dataViewComponents[TriColumnView.COMPONENT_NAME] = new TriColumnView();
+            _dataViewComponents[DropDown.COMPONENT_NAME] = new DropDown();
 
             foreach (string key in _dataViewComponents.Keys.ToList())
             {

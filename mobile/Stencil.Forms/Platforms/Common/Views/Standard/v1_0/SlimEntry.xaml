@@ -35,7 +35,7 @@
                    HasShadow="False"
                    Padding="10"
                    Margin="0,0,10,0"
-                   BackgroundColor="{Binding InputBackgroundColor}"
+                   BackgroundColor="Transparent"
                    HorizontalOptions="End"
                    VerticalOptions="Center">
                 <Label Padding="0"

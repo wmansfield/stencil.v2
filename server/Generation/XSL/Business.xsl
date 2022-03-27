@@ -812,30 +812,27 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
         {
             base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQL<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>Context(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="text()"/></xsl:for-each>))
                 {
-                    using (var db = base.CreateSQL<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>Context(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="text()"/></xsl:for-each>))
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         <xsl:if test="@tenant='Route'">
@@ -843,30 +840,27 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
         {
             base.ExecuteMethod("SynchronizationHydrateUpdateIsolated", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQLIsolatedContext(<xsl:value-of select="field[1]"/>))
                 {
-                    using (var db = base.CreateSQLIsolatedContext(<xsl:value-of select="field[1]"/>))
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         </xsl:if>

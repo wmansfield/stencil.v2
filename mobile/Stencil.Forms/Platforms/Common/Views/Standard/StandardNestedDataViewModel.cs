@@ -26,11 +26,8 @@ namespace Stencil.Forms.Views.Standard
         public StandardNestedDataViewModel(string trackPrefix, ICommandProcessor commandProcessor, Func<ICommandScope, DataTemplateSelector> dataTemplateSelectorCreator)
             : base(trackPrefix)
         {
-            this.Adjusters = new List<IDataViewAdjuster>();
-            this.Filters = new List<IDataViewFilter>();
-            this.StateEmitters = new List<IStateEmitter>();
-            this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
-            this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.ResetState();
+
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelectorCreator(this.CommandScope);
         }
@@ -38,11 +35,8 @@ namespace Stencil.Forms.Views.Standard
         public StandardNestedDataViewModel(string trackPrefix, ICommandProcessor commandProcessor, DataTemplateSelector dataTemplateSelector)
             : base(trackPrefix)
         {
-            this.Adjusters = new List<IDataViewAdjuster>();
-            this.Filters = new List<IDataViewFilter>();
-            this.StateEmitters = new List<IStateEmitter>();
-            this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
-            this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.ResetState();
+
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelector;
         }
@@ -356,6 +350,18 @@ namespace Stencil.Forms.Views.Standard
                 }
             });
             
+        }
+
+        public virtual void ResetState()
+        {
+            base.ExecuteMethod(nameof(ResetState), delegate ()
+            {
+                this.Adjusters = new List<IDataViewAdjuster>();
+                this.Filters = new List<IDataViewFilter>();
+                this.StateEmitters = new List<IStateEmitter>();
+                this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
+                this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            });
         }
     }
 }

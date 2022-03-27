@@ -25,5 +25,6 @@ namespace Stencil.Forms.Resourcing
         public const string fa_ellipsis_v = "";//[&#xf142]
         public const string fa_bars = "";//[&#xf0c9]
         public const string fa_cog = "";//[&#xf013;]
+        public const string fa_caret_down = "";//[&#xf0d7;]
     }
 }

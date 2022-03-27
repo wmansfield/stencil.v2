@@ -112,6 +112,38 @@ namespace Stencil.Forms.Data.Sync
             });
         }
 
+        public virtual bool ShouldDownload(Lifetime lifeTime, DateTimeOffset? lastDownloadUTC, DateTimeOffset? expireUTC, DateTimeOffset? cacheUntilUTC, DateTimeOffset? invalidatedUTC)
+        {
+            return base.ExecuteFunction(nameof(ShouldDownload), delegate ()
+            {
+                switch (lifeTime)
+                {
+                    case Lifetime.until_invalidated:
+                        if (invalidatedUTC.HasValue)
+                        {
+                            return invalidatedUTC.Value < DateTimeOffset.UtcNow;
+                        }
+                        return false;
+                    case Lifetime.until_expired:
+                        bool isExpired = false;
+                        if (expireUTC.HasValue)
+                        {
+                            isExpired = expireUTC.Value < DateTimeOffset.UtcNow;
+                        }
+
+                        bool cacheInValid = false;
+                        if (cacheUntilUTC.HasValue)
+                        {
+                            cacheInValid = cacheUntilUTC.Value > DateTimeOffset.UtcNow;
+                        }
+
+                        return isExpired || cacheInValid;
+                    default:
+                        return true;
+                }
+            });
+        }
+
         #endregion
 
         #region Protected Methods
@@ -361,37 +393,7 @@ namespace Stencil.Forms.Data.Sync
             });
         }
 
-        protected virtual bool ShouldDownload(Lifetime lifeTime, DateTimeOffset? lastDownloadUTC, DateTimeOffset? expireUTC, DateTimeOffset? cacheUntilUTC, DateTimeOffset? invalidatedUTC)
-        {
-            return base.ExecuteFunction(nameof(ShouldDownload), delegate ()
-            {
-                switch (lifeTime)
-                {
-                    case Lifetime.until_invalidated:
-                        if (invalidatedUTC.HasValue)
-                        {
-                            return invalidatedUTC.Value < DateTimeOffset.UtcNow;
-                        }
-                        return false;
-                    case Lifetime.until_expired:
-                        bool isExpired = false;
-                        if(expireUTC.HasValue)
-                        {
-                            isExpired = expireUTC.Value < DateTimeOffset.UtcNow;
-                        }
-
-                        bool cacheInValid = false;
-                        if (cacheUntilUTC.HasValue)
-                        {
-                            cacheInValid = cacheUntilUTC.Value > DateTimeOffset.UtcNow;
-                        }
-
-                        return isExpired || cacheInValid;
-                    default:
-                        return true;
-                }
-            });
-        }
+        
 
         protected virtual Task EnsureJobsAsync()
         {

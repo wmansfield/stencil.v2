@@ -5,11 +5,6 @@ namespace Placeholder.Common.Synchronization
     public interface INotifySynchronizer
     {
         /// <summary>
-        /// When an inline sync fails
-        /// </summary>
-        void OnSyncFailed(string type, string argument);
-
-        /// <summary>
         /// Agitates specific daemon
         /// </summary>
         void AgitateDaemon(Guid? shop_id, string nameFormat);

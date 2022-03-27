@@ -1,4 +1,5 @@
-﻿using Stencil.Forms.Base;
+﻿using Stencil.Common.Screens;
+using Stencil.Forms.Base;
 using Stencil.Forms.Presentation.Menus;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,5 +14,6 @@ namespace Stencil.Forms.Views
         ICommand NavigateBackCommand { get; }
         bool IsMenuSupported { get; }
         ObservableCollection<IMenuEntry> MenuEntries { get; }
+        NavigationData NavigationData { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Stencil.Forms.Presentation.Shells.Tablet;
 using Stencil.Forms.Presentation.Routing;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Stencil.Forms.Platform;
 
 namespace Stencil.Forms.Presentation.Routing.Routers
 {
@@ -25,6 +26,8 @@ namespace Stencil.Forms.Presentation.Routing.Routers
         {
             return base.ExecuteMethodAsync(nameof(SetInitialViewAsync), async delegate ()
             {
+                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
                 TMainMenuView menuView = new TMainMenuView();
                 menuView.MenuViewModel = new TMenuViewModel();
 
@@ -44,7 +47,7 @@ namespace Stencil.Forms.Presentation.Routing.Routers
                 this.MainShellPage = menuShellPage;
                 this.CurrentShellView = menuShellPage;
 
-                Task navigationTask = view.OnNavigatingToAsync();
+                Task navigationTask = view.OnNavigatingToAsync(false);
                 
                 Xamarin.Forms.Application.Current.MainPage = new NavigationPage(this.MainShellPage);
 
@@ -56,6 +59,8 @@ namespace Stencil.Forms.Presentation.Routing.Routers
         {
             return base.ExecuteFunction(nameof(PushViewAsync), delegate ()
             {
+                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
                 if (this.CurrentShellModel.View.IsMenuSupported)
                 {
                     ShellModel newShellModel = new ShellModel()
@@ -78,7 +83,7 @@ namespace Stencil.Forms.Presentation.Routing.Routers
 
                     this.CurrentShellView = newMenuView;
 
-                    return view.OnNavigatingToAsync();
+                    return view.OnNavigatingToAsync(false);
                 }
                 else
                 {
@@ -98,15 +103,17 @@ namespace Stencil.Forms.Presentation.Routing.Routers
                     this.CurrentShellView.ViewContent = newBlankView;
                     this.CurrentShellView = newBlankView;
 
-                    return view.OnNavigatingToAsync();
+                    return view.OnNavigatingToAsync(false);
                 }
             });
             
         }
-        public Task PopViewAsync()
+        public Task PopViewAsync(bool reloadPrevious)
         {
             return base.ExecuteFunction(nameof(PopViewAsync), delegate ()
             {
+                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
                 if (this.CurrentShellModel.Parent != null)
                 {
                     if (this.CurrentShellModel.Parent.View.IsMenuSupported)
