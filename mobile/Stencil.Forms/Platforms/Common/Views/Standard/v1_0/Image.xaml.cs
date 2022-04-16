@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
+using Stencil.Forms.Platform;
+using Stencil.Forms.Resourcing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,6 +117,27 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 }
             });
         }
+
+        private async void Image_Tapped(object sender, EventArgs e)
+        {
+            await CoreUtility.ExecuteMethodAsync($"{COMPONENT_NAME}.Image_Tapped", async delegate ()
+            {
+                View view = (sender as View);
+                ImageContext context = view?.BindingContext as ImageContext;
+                if (context != null)
+                {
+                    DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
+                    if (!string.IsNullOrWhiteSpace(context.CommandName))
+                    {
+                        if (context.CommandScope?.CommandProcessor != null)
+                        {
+                            await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.CommandName, context.CommandParameter, context?.DataViewItem?.DataViewModel);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     public class ImageContext : PreparedBindingContext
@@ -125,6 +148,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
         }
 
+        public string CommandName { get; set; }
+        public string CommandParameter { get; set; }
 
         private bool _fullBleedHorizontal;
         public bool FullBleedHorizontal
@@ -184,7 +209,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _backgroundColor, value); }
         }
 
-        
+
         private ImageSource _uiSource;
         public ImageSource UISource
         {

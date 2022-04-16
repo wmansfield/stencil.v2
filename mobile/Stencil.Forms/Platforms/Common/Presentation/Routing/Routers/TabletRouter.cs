@@ -108,10 +108,11 @@ namespace Stencil.Forms.Presentation.Routing.Routers
             });
             
         }
-        public Task PopViewAsync(bool reloadPrevious)
+        public Task PopViewAsync(bool reloadPrevious, int iterations = 1)
         {
             return base.ExecuteFunction(nameof(PopViewAsync), delegate ()
             {
+                //TODO:MUST:Support PopViewAsync(iterations) for tablet view
                 DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
 
                 if (this.CurrentShellModel.Parent != null)

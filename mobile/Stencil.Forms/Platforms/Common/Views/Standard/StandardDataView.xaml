@@ -9,7 +9,7 @@
         <Grid x:Name="grdContainer"
               BackgroundColor="{Binding BackgroundColor}"
               Background="{Binding BackgroundBrush}"
-              VerticalOptions="Fill" 
+              VerticalOptions="FillAndExpand" 
               HorizontalOptions="Fill"
               RowSpacing="0"
               ColumnSpacing="0">
@@ -18,17 +18,16 @@
                    VerticalOptions="Fill" 
                    HorizontalOptions="Fill" 
                    Aspect="AspectFill" />
-            <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="Fill" Spacing="0" Margin="0">
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" Spacing="0" Margin="0">
                 <StackLayout HorizontalOptions="Fill"
                       IsVisible="{Binding ShowHeader}"
                       BindableLayout.ItemsSource="{Binding HeaderItems}"
                       BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
                 </StackLayout>
                 
-                <!--- ListView.Margin as Padding is Not a mistake -->
-                <CollectionView Margin="{Binding Padding}" 
+                <CollectionView 
                       BackgroundColor="{Binding BackgroundColor}"
-                      VerticalOptions="Fill"
+                      VerticalOptions="FillAndExpand"
                       HorizontalOptions="Fill"
                       ItemSizingStrategy="MeasureAllItems"
                       SelectionMode="None"

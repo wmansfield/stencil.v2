@@ -1,4 +1,7 @@
 ﻿
+using System;
+using Xamarin.Forms;
+
 namespace Stencil.Forms.Views
 {
     public interface IDataViewItem
@@ -46,6 +49,7 @@ namespace Stencil.Forms.Views
         /// </summary>
         IDataViewFilter ViewFilter { get; }
 
+        WeakReference<DataTemplate> UIDataTemplate { get; set; }
 
     }
 }

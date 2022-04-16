@@ -95,6 +95,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _padding, value); }
         }
 
+
         protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
         {
             base.ExecuteMethod(nameof(ApplyStateValue), delegate ()

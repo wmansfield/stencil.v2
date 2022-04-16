@@ -184,18 +184,39 @@ namespace Stencil.Forms.Presentation.Routing.Routers
             });
 
         }
-        public virtual Task PopViewAsync(bool reloadPrevious)
+        public virtual Task PopViewAsync(bool reloadPrevious, int iterations = 1)
         {
             return base.ExecuteMethodAsync(nameof(PopViewAsync), async delegate ()
             {
-
-                this.CurrentShellModel = this.CurrentShellModel?.Parent;
+                int popCount = 0;
+                if(iterations < 1)
+                {
+                    iterations = 1;
+                }
+                ShellModel newModel = this.CurrentShellModel;
+                for (int i = 0; i < iterations; i++)
+                {
+                    ShellModel model = newModel?.Parent;
+                    if(model == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        popCount++;
+                        newModel = model;
+                    }
+                }
+                this.CurrentShellModel = newModel;
 
                 Task onNavigatingTask = this.CurrentShellModel?.View?.OnNavigatingToAsync(reloadPrevious);
 
-                await this.CurrentPage.Navigation.PopAsync(true);
+                for (int i = 0; i < popCount; i++)
+                {
+                    await this.CurrentPage.Navigation.PopAsync(i == popCount - 1); // only animate last
+                }
 
-                if(onNavigatingTask != null)
+                if (onNavigatingTask != null)
                 {
                     await onNavigatingTask;
                 }

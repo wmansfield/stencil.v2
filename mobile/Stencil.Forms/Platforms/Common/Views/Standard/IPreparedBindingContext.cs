@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Stencil.Forms.Views.Standard
+{
+    public interface IPreparedBindingContext
+    {
+        void PrepareInteractions(bool force = false);
+
+        /// <summary>
+        /// Only enforced by stencil native controls. Ex. (TrackedStackLayout)
+        /// Other controls are urged to follow the pattern, but may not.
+        /// See ITrackBindingContext
+        /// </summary>
+        void OnViewDetachedFromContext();
+    }
+}

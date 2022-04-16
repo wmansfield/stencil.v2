@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Stencil.Forms
@@ -15,14 +16,19 @@ namespace Stencil.Forms
             try
             {
 #if DEBUG
-                DateTime start = DateTime.UtcNow;
+                Stopwatch stopWatch = null;
+                if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
+                {
+                    stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                }
 #endif
                 method();
 #if DEBUG
-                DateTime end = DateTime.UtcNow;
                 if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
                 {
-                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}", name, (int)(DateTime.UtcNow - start).TotalMilliseconds));
+                    stopWatch.Stop();
+                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}", name, (int)stopWatch.ElapsedMilliseconds));
                 }
 #endif
             }
@@ -44,14 +50,19 @@ namespace Stencil.Forms
             try
             {
 #if DEBUG
-                DateTime start = DateTime.UtcNow;
+                Stopwatch stopWatch = null;
+                if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
+                {
+                    stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                }
 #endif
                 await method();
 #if DEBUG
-                DateTime end = DateTime.UtcNow;
                 if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
                 {
-                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}", name, (int)(DateTime.UtcNow - start).TotalMilliseconds));
+                    stopWatch.Stop();
+                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}", name, (int)stopWatch.ElapsedMilliseconds));
                 }
 #endif
             }
@@ -73,14 +84,19 @@ namespace Stencil.Forms
             try
             {
 #if DEBUG
-                DateTime start = DateTime.UtcNow;
+                Stopwatch stopWatch = null;
+                if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
+                {
+                    stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                }
 #endif
                 T result = method();
 #if DEBUG
-                DateTime end = DateTime.UtcNow;
                 if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
                 {
-                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}", name, (int)(DateTime.UtcNow - start).TotalMilliseconds));
+                    stopWatch.Stop();
+                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}|", name, (int)stopWatch.ElapsedMilliseconds));
                 }
 #endif
                 return result;
@@ -104,14 +120,19 @@ namespace Stencil.Forms
             try
             {
 #if DEBUG
-                DateTime start = DateTime.UtcNow;
+                Stopwatch stopWatch = null;
+                if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
+                {
+                    stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                }
 #endif
                 T result = await method();
 #if DEBUG
-                DateTime end = DateTime.UtcNow;
                 if (CoreAssumptions.LOG_METHOD_INVOCATIONS)
                 {
-                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}", name, (int)(DateTime.UtcNow - start).TotalMilliseconds));
+                    stopWatch.Stop();
+                    CoreUtility.Logger.LogDebug(string.Format("{1} - {0}", name, (int)stopWatch.ElapsedMilliseconds));
                 }
 #endif
                 return result;

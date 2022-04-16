@@ -92,7 +92,7 @@ namespace Stencil.Forms.Screens
                             IDataViewItem dataViewItem = this.GenerateViewItem(viewModel, viewConfig);
                             if (dataViewItem != null)
                             {
-                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
                                 headerItems.Add(dataViewItem.PreparedContext);
                             }
                         }
@@ -106,7 +106,7 @@ namespace Stencil.Forms.Screens
                             IDataViewItem dataViewItem = this.GenerateViewItem(viewModel, viewConfig);
                             if (dataViewItem != null)
                             {
-                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
                                 footerItems.Add(dataViewItem.PreparedContext);
                             }
                         }
@@ -313,7 +313,7 @@ namespace Stencil.Forms.Screens
             });
         }
 
-        public Task<IScreenConfig> LoadScreenConfigAsync(ICommandProcessor commandProcessor, INavigationData navigationData)
+        public virtual Task<IScreenConfig> LoadScreenConfigAsync(ICommandProcessor commandProcessor, INavigationData navigationData)
         {
             return base.ExecuteFunctionAsync(nameof(LoadScreenConfigAsync), async delegate ()
             {

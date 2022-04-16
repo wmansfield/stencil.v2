@@ -9,6 +9,6 @@ namespace Stencil.Forms.Presentation.Routing
         ShellModel CurrentShellModel { get; set; }
         Task SetInitialViewAsync(IRouterView view);
         Task PushViewAsync(IRouterView view, IMenuEntry knownMainMenuEntry = null);
-        Task PopViewAsync(bool reloadPrevious);
+        Task PopViewAsync(bool reloadPrevious, int iterations = 1);
     }
 }

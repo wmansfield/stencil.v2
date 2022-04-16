@@ -67,7 +67,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
                     {
                         IDataViewItem nestedViewItem = dataViewItem.EncapsulatedItems[i];
 
-                        IDataViewComponent dataViewComponent = await resolvableSelector.ResolveTemplateAndPrepareDataAsync(nestedViewItem);
+                        IDataViewComponent dataViewComponent = resolvableSelector.ResolveTemplateAndPrepareData(nestedViewItem);
 
                         await dataViewModel.ExtractAndPrepareExtensionsAsync(nestedViewItem);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Stencil.Forms
 {
@@ -110,6 +111,12 @@ namespace Stencil.Forms
                     return result;
                 }
             }
+        }
+
+        [Obsolete("Are you sure you want to wait synchronously?", false)]
+        public static TResult SyncResult<TResult>(this Task<TResult> task)
+        {
+            return task.GetAwaiter().GetResult();
         }
     }
 }

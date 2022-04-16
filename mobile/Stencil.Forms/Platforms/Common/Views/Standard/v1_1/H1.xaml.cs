@@ -17,6 +17,8 @@ namespace Stencil.Forms.Views.Standard.v1_1
         }
 
         public const string COMPONENT_NAME = "h1";
+        public const string INTERACTION_KEY_TEXT = "text";
+        public const string INTERACTION_KEY_VISIBLE = "visible";
 
         private const string TEMPLATE_KEY = "h1";
 
@@ -24,7 +26,7 @@ namespace Stencil.Forms.Views.Standard.v1_1
         {
             get
             {
-                return false;
+                return true;
             }
         }
         public DataTemplate GetDataTemplate()
@@ -48,15 +50,18 @@ namespace Stencil.Forms.Views.Standard.v1_1
                 {
                     result = new H1Context();
                 }
+
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
+
+                result.PrepareInteractions();
 
                 return Task.FromResult<IDataViewItemReference>(result);
             });
         }
     }
 
-    public class H1Context : PreparedBindingContext
+    public class H1Context : PreparedBindingContext, IStateResponder
     {
         public H1Context()
             : base(nameof(H1Context))
@@ -64,9 +69,14 @@ namespace Stencil.Forms.Views.Standard.v1_1
 
         }
 
-        public string Text { get; set; }
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set { SetProperty(ref _text, value); }
+        }
 
-        private string _textColor = AppColors.TextOverBackground;
+        private string _textColor;
         public string TextColor
         {
             get { return _textColor; }
@@ -78,6 +88,28 @@ namespace Stencil.Forms.Views.Standard.v1_1
         {
             get { return _backgroundColor; }
             set { SetProperty(ref _backgroundColor, value); }
+        }
+
+        private Thickness _padding;
+        public Thickness Padding
+        {
+            get { return _padding; }
+            set { SetProperty(ref _padding, value); }
+        }
+
+
+        protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
+        {
+            base.ExecuteMethod(nameof(ApplyStateValue), delegate ()
+            {
+                switch (value_key)
+                {
+                    case H1.INTERACTION_KEY_TEXT:
+                    default:
+                        this.Text = value;
+                        break;
+                }
+            });
         }
     }
 }

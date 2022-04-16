@@ -17,6 +17,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "namedValue";
 
+        private DataTemplate _dataTemplate;
+
         public bool BindingContextCacheEnabled
         {
             get
@@ -29,7 +31,11 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
-                return this[TEMPLATE_KEY] as DataTemplate;
+                if (_dataTemplate == null)
+                {
+                    _dataTemplate = this[TEMPLATE_KEY] as DataTemplate;
+                }
+                return _dataTemplate;
             });
         }
         public Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
@@ -49,6 +55,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     result.FontSize = 16;
                 }
+
+                result.UIHeightRequest = result.FontSize + 5;
 
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
@@ -73,7 +81,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _nameText, value); }
         }
 
-        private string _nameTextColor;
+        private string _nameTextColor = AppColors.PrimaryBlack;
         public string NameTextColor
         {
             get { return _nameTextColor; }
@@ -87,14 +95,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _valueText, value); }
         }
 
-        private string _valueTextColor;
+        private string _valueTextColor = AppColors.PrimaryBlack;
         public string ValueTextColor
         {
             get { return _valueTextColor; }
             set { SetProperty(ref _valueTextColor, value); }
         }
 
-        private string _backgroundColor;
+        private string _backgroundColor = AppColors.Transparent;
         public string BackgroundColor
         {
             get { return _backgroundColor; }
@@ -114,5 +122,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
         }
+
+        public int UIHeightRequest { get; set; }
     }
 }

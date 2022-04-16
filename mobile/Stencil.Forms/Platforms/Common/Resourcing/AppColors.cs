@@ -56,5 +56,7 @@ namespace Stencil.Forms.Resourcing
         public static string MenuActiveBackground = "#ffffff";
         public static string MenuActiveText = "#000000";
 
+        public static string Transparent = "#00000000";
+
     }
 }

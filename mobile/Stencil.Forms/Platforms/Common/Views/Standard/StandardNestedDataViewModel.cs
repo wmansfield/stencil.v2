@@ -330,7 +330,7 @@ namespace Stencil.Forms.Views.Standard
                     return;
                 }
 
-                IDataViewComponent viewComponent = await selector.ResolveTemplateAndPrepareDataAsync(item);
+                IDataViewComponent viewComponent = selector.ResolveTemplateAndPrepareData(item);
 
                 if (item.PreparedContext is IDataViewFilter dataViewFilter)
                 {
@@ -348,6 +348,7 @@ namespace Stencil.Forms.Views.Standard
                 {
                     this.StateEmitters.Add(stateEmitter);
                 }
+
             });
             
         }

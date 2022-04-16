@@ -2,20 +2,39 @@
 using Stencil.Forms.Commanding;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard
 {
-    public abstract class PreparedBindingContext : TrackedClass, IDataViewItemReference
+    [Browsable(false)]
+    public abstract class PreparedBindingContext : PreparedBindingContext<StencilAPI>
     {
         public PreparedBindingContext(string trackPrefix)
-            : base(trackPrefix)
+            : base(StencilAPI.Instance, trackPrefix)
+        {
+
+        }
+    }
+    public abstract class PreparedBindingContext<TAPI> : TrackedClass<TAPI>, IDataViewItemReference, IPreparedBindingContext
+        where TAPI : StencilAPI
+    {
+        public PreparedBindingContext(TAPI api, string trackPrefix)
+            : base(api, trackPrefix)
         {
 
         }
 
+        public string TypeName
+        {
+            get
+            {
+                return this.GetType().Name;
+            }
+        }
+        
         public List<InteractionStateGroup> InteractionStateGroups { get; set; }
 
 
@@ -77,7 +96,9 @@ namespace Stencil.Forms.Views.Standard
                 this.InteractionLookup = lookup;
             });
         }
-
+        public virtual void OnViewDetachedFromContext()
+        {
+        }
         public virtual void OnInteractionStateChanged(string group, string key, string state)
         {
             base.ExecuteMethod(nameof(OnInteractionStateChanged), delegate ()
@@ -167,6 +188,6 @@ namespace Stencil.Forms.Views.Standard
             // designed for override
         }
 
-
+        
     }
 }

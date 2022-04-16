@@ -7,6 +7,6 @@ namespace Stencil.Forms.Views
 {
     public interface IResolvableTemplateSelector
     {
-        Task<IDataViewComponent> ResolveTemplateAndPrepareDataAsync(IDataViewItem dataViewItem);
+        IDataViewComponent ResolveTemplateAndPrepareData(IDataViewItem dataViewItem);
     }
 }
