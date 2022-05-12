@@ -56,7 +56,10 @@ namespace Stencil.Forms.Views.Standard.v1_0
                     result.FontSize = 16;
                 }
 
-                result.UIHeightRequest = result.FontSize + 5;
+                if (result.HeightRequest <= 0)
+                {
+                    result.HeightRequest = result.FontSize + 5;
+                }
 
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
@@ -71,7 +74,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
         public NamedValueContext()
             : base(nameof(NamedValueContext))
         {
-
+            this.HeightRequest = -1;
         }
 
         private string _nameText;
@@ -123,6 +126,6 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _padding, value); }
         }
 
-        public int UIHeightRequest { get; set; }
+        public int HeightRequest { get; set; }
     }
 }

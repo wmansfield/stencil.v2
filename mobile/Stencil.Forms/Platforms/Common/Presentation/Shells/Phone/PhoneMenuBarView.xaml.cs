@@ -2,7 +2,7 @@
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Presentation.Menus;
 using System;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Stencil.Forms.Presentation.Shells.Phone
@@ -49,12 +49,19 @@ namespace Stencil.Forms.Presentation.Shells.Phone
                         try
                         {
                             entry.UIActive = true;
-
+                            _ = Task.Delay(500).ContinueWith(x =>
+                            {
+                                if(entry.UIActive)
+                                {
+                                    entry.UIActiveSlow = true;
+                                }
+                            });
                             await menuViewModel.CommandProcessor.ExecuteCommandAsync(commandScope, entry.CommandName, entry.CommandParameter, null);
                         }
                         finally
                         {
                             entry.UIActive = false;
+                            entry.UIActiveSlow = false;
                         }
                     }
                 }

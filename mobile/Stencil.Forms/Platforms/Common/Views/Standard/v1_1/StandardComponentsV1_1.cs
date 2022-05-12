@@ -10,7 +10,6 @@ namespace Stencil.Forms.Views.Standard.v1_1
         public StandardComponentsV1_1()
         {
             _dataViewComponents = new Dictionary<string, IDataViewComponent>(StringComparer.OrdinalIgnoreCase);
-            _dataViewComponents[H1.COMPONENT_NAME] = new H1();
 
             foreach (string key in _dataViewComponents.Keys.ToList())
             {

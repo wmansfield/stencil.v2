@@ -6,8 +6,10 @@
     <DataTemplate x:Key="namedValue" x:DataType="local:NamedValueContext">
         <!--<ViewCell>-->
         <Grid HorizontalOptions="Fill" 
-              HeightRequest="{Binding UIHeightRequest}"
-              Padding="{Binding Padding}" Margin="0" 
+              RowSpacing="0" ColumnSpacing="0"
+              HeightRequest="{Binding HeightRequest}"
+              Padding="{Binding Padding}" 
+              Margin="0" 
               ColumnDefinitions="*,2*"
               BackgroundColor="{Binding BackgroundColor}">
             <Label Grid.Column="0"

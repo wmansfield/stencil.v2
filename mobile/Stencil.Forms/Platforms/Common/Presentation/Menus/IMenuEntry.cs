@@ -26,7 +26,8 @@ namespace Stencil.Forms.Presentation.Menus
         string UITextColor { get; }
         bool UISelected { get; set; }
         bool UIActive { get; set; }
+        bool UIActiveSlow { get; set; }
         bool UISuppressed { get; set; }
-
+        bool UIShowIcon { get; set; }
     }
 }

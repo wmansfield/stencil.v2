@@ -8,8 +8,8 @@
     <PackageId>Stencil.Forms</PackageId>
     
     <Product>Stencil</Product>
-    <AssemblyVersion>2.0.12.0</AssemblyVersion>
-    <Version>2.0.12</Version>
+    <AssemblyVersion>2.0.14.0</AssemblyVersion>
+    <Version>2.0.14</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>
@@ -89,8 +89,6 @@
 	  
 	  <Compile Include="Platforms\ios\**\*.cs" />
   </ItemGroup>
-
-
 
   <ItemGroup>
     <ProjectReference Include="..\Stencil.Common\Stencil.Common.csproj" />

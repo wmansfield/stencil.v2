@@ -5,7 +5,12 @@
                     x:Class="Stencil.Forms.Views.Standard.v1_0.HeaderWithIcon">
     <DataTemplate x:Key="headerWithIcon" x:DataType="local:HeaderWithIconContext">
         <!--<ViewCell>-->
-        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Padding="{Binding Padding}" Margin="0" Spacing="0" BackgroundColor="{Binding BackgroundColor}">
+        <StackLayout Orientation="Horizontal" 
+                     HorizontalOptions="Fill" 
+                     Padding="{Binding Padding}" 
+                     Margin="0" 
+                     Spacing="0" 
+                     BackgroundColor="{Binding BackgroundColor}">
             <Label Grid.Column="0"
                        IsVisible="{Binding ShowIcon}"
                        Text="{Binding Icon}"

@@ -128,6 +128,7 @@ namespace Stencil.Forms.Screens
 
 
                     // assign mapped element
+                    viewModel.EnableCellReuse = !screenConfig.DisableCellReuse;
                     viewModel.IsMenuSupported = screenConfig.IsMenuSupported;
                     viewModel.MainItemsUnFiltered = mainItems;
                     viewModel.HeaderItems = headerItems;

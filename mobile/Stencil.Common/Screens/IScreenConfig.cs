@@ -17,6 +17,7 @@ namespace Stencil.Common.Screens
         DateTimeOffset? InvalidatedUTC { get; }
         bool AutomaticDownload { get; }
         bool IsMenuSupported { get; }
+        bool DisableCellReuse { get; set;  }
         IVisualConfig VisualConfig { get; }
         List<IViewConfig> HeaderConfigs { get; }
         List<IViewConfig> FooterConfigs { get; }

@@ -109,6 +109,13 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct
         </xsl:for-each>
         void Delete(<xsl:for-each select="field[@tenant='true' and not(@isolated='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>);
         
+        <xsl:if test="(@useIndex='true' or @useStore='true') and @tenant='Route'">
+        void SynchronizationUpdateIsolated(<xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>, bool success, DateTime sync_date_utc, string sync_log);
+        List&lt;IdentityInfo&gt; SynchronizationGetInvalidIsolated(<xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>, int retryPriorityThreshold, string sync_agent);
+        void SynchronizationHydrateUpdateIsolated(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each>Guid <xsl:value-of select="field[1]"/>, bool success, DateTime sync_date_utc, string sync_log);
+        List&lt;IdentityInfo&gt; SynchronizationHydrateGetInvalidIsolated(<xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>, int retryPriorityThreshold, string sync_agent);
+        </xsl:if>
+
         <xsl:if test="@useIndex='true' or @useStore='true'">void SynchronizationUpdate(<xsl:for-each select="field[@tenant='true' and not(@isolated='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each>Guid <xsl:value-of select="field[1]"/>, bool success, DateTime sync_date_utc, string sync_log);
         List&lt;IdentityInfo&gt; SynchronizationGetInvalid(<xsl:for-each select="field[@tenant='true']">string tenant_code, </xsl:for-each>int retryPriorityThreshold, string sync_agent);
         void SynchronizationHydrateUpdate(<xsl:for-each select="field[@tenant='true' and not(@isolated='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each>Guid <xsl:value-of select="field[1]"/>, bool success, DateTime sync_date_utc, string sync_log);
@@ -230,11 +237,16 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                                 where n.<xsl:value-of select="field[1]"/> == dbModel.<xsl:value-of select="field[1]"/>
                                 select n).FirstOrDefault();
 
-                        if (match != null)
+                        if (match == null)
+                        {
+                            match = insert<xsl:value-of select="@name"/>.ToDbModel();
+                            dbIsolated.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>.Add(match);
+                        }
+                        else
                         {
                             match = insert<xsl:value-of select="@name"/>.ToDbModel(match);
-                            dbIsolated.SaveChanges();
                         }
+                        dbIsolated.SaveChanges();
                     }
                     </xsl:if>
 

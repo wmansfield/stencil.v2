@@ -14,7 +14,7 @@
                     BindableLayout.ItemsSource="{Binding MenuEntries}"
                     BackgroundColor="{x:StaticResource MenuBarBackground}">
             <BindableLayout.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="menus:IMenuEntry">
                     <Grid BackgroundColor="Transparent"
                           Padding="0" Margin="0"
                           RowSpacing="0">
@@ -24,7 +24,7 @@
                                     Direction="Column" 
                                     JustifyContent="Center"
                                     BackgroundColor="{Binding UIBackgroundColor}">
-                            <Label IsVisible="{Binding IsIcon}" 
+                            <Label IsVisible="{Binding UIShowIcon}" 
                                    Text="{Binding IconCharacter}"
                                    FlexLayout.AlignSelf="Center"
                                    HorizontalTextAlignment="Center"
@@ -33,6 +33,11 @@
                                    FontSize="{StaticResource FontSizeMenuIcon}"
                                    Margin="4,2,4,6"
                                    Padding="0"/>
+                            <ActivityIndicator IsVisible="{Binding UIActiveSlow}" 
+                                               IsRunning="True"
+                                               HeightRequest="{StaticResource FontSizeMenuIcon}"
+                                               Margin="4,2,4,6"
+                                               />
                             <Label FlexLayout.AlignSelf="Center"
                                    HorizontalTextAlignment="Center"
                                    Text="{Binding Label}"

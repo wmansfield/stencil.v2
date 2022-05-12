@@ -61,6 +61,13 @@ namespace Stencil.Forms.Views.Standard
         }
 
 
+        private bool _enableCellReuse;
+        public virtual bool EnableCellReuse
+        {
+            get { return _enableCellReuse; }
+            set { SetProperty(ref _enableCellReuse, value); }
+        }
+
         private Thickness _padding;
         public virtual Thickness Padding
         {
@@ -316,18 +323,18 @@ namespace Stencil.Forms.Views.Standard
 
         public virtual Task ExtractAndPrepareExtensionsAsync(IDataViewItem item)
         {
-            return base.ExecuteMethodAsync(nameof(ExtractAndPrepareExtensionsAsync), async delegate ()
+            return base.ExecuteFunction(nameof(ExtractAndPrepareExtensionsAsync), delegate ()
             {
                 if (item == null)
                 {
-                    return;
+                    return Task.CompletedTask;
                 }
 
                 IResolvableTemplateSelector selector = this.DataTemplateSelector as IResolvableTemplateSelector;
                 if (selector == null)
                 {
                     this.LogError(new Exception("Unable to cast dataTemplateSelector to IResolvableTemplateSelector"), "ExtractAndPrepareExtensionsAsync");
-                    return;
+                    return Task.CompletedTask;
                 }
 
                 IDataViewComponent viewComponent = selector.ResolveTemplateAndPrepareData(item);
@@ -349,6 +356,7 @@ namespace Stencil.Forms.Views.Standard
                     this.StateEmitters.Add(stateEmitter);
                 }
 
+                return Task.CompletedTask;
             });
             
         }
