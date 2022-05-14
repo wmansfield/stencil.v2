@@ -21,6 +21,7 @@
                        FontFamily="{StaticResource SansRegular}"
                        FontSize="{StaticResource FontSizeStandard}"
                        Text="{Binding Input}"
+                       IsReadOnly="{Binding IsReadOnly}"
                        IsPassword="{Binding UIAsPassword}"
                        Placeholder="{Binding Placeholder}"
                        IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"

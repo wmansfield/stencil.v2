@@ -121,6 +121,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _borderless, value); }
         }
 
+        private bool _isReadOnly;
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+            set { SetProperty(ref _isReadOnly, value); }
+        }
+        
+
         private string _backgroundColor;
         public string BackgroundColor
         {
