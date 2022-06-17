@@ -36,6 +36,7 @@
                       ItemSizingStrategy="MeasureAllItems"
                       SelectionMode="None"
                       EnableDynamicCellReuse="{Binding EnableCellReuse}"
+                      EnableDynamicCellSizeCaching="{Binding EnableCellSizeCaching}"
                       ItemsSource="{Binding MainItemsFiltered}"
                       ItemTemplate="{Binding DataTemplateSelector}">
                 </controls:StencilCollectionView>

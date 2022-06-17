@@ -18,6 +18,7 @@ namespace Stencil.Common.Screens
         bool AutomaticDownload { get; }
         bool IsMenuSupported { get; }
         bool DisableCellReuse { get; set;  }
+        bool DisableCellSizeCaching { get; set; }
         IVisualConfig VisualConfig { get; }
         List<IViewConfig> HeaderConfigs { get; }
         List<IViewConfig> FooterConfigs { get; }

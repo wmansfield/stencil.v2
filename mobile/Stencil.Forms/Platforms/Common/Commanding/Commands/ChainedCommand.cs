@@ -36,7 +36,7 @@ namespace Stencil.Forms.Commanding.Commands
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate ()
             {
-                if(commandParameter != null && dataViewModel != null)
+                if(commandParameter != null)
                 {
                     ChainInfo chainInfo = commandParameter as ChainInfo;
                     if(chainInfo == null)

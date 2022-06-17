@@ -9,12 +9,13 @@
                 BackgroundColor="{Binding BackgroundColor}"
                 HorizontalOptions="Fill"
                 VerticalOptions="Start"
+                LineBreakMode="WordWrap"
                 FontSize="{Binding FontSize}"
                 FontFamily="{StaticResource SansRegular}"
                 TextColor="{Binding TextColor}"
                 Padding="{Binding Padding}"
-                HorizontalTextAlignment="{Binding UITextAlignment}"
-                    />
+                Margin="{Binding Margin}"
+                HorizontalTextAlignment="{Binding UITextAlignment}"/>
         <!--</ViewCell>-->
     </DataTemplate>
 </ResourceDictionary>

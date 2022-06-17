@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Stencil.Forms.Data.Models
 {
-    public class TrackedDownloadInfo : RealmObject, IDatabaseModel
+    public class TrackedDownloadInfo : RealmObject, IPersistedModel
     {
         public TrackedDownloadInfo()
         {

@@ -16,6 +16,8 @@ namespace Stencil.Forms.Data.Sync
         Task OnSessionStartAsync();
         Task OnSessionEndAsync();
 
+        void AgitateJob(string jobName, TimeSpan? minimumDurationSinceLastStart = null);
+
         bool ShouldDownload(Lifetime lifeTime, DateTimeOffset? lastDownloadUTC, DateTimeOffset? expireUTC, DateTimeOffset? cacheUntilUTC, DateTimeOffset? invalidatedUTC);
     }
 }

@@ -107,6 +107,12 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
         }
+        private Thickness _margin;
+        public Thickness Margin
+        {
+            get { return _margin; }
+            set { SetProperty(ref _margin, value); }
+        }
 
         private bool _center;
         public bool Center

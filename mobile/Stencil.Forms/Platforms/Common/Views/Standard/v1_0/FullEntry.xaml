@@ -27,6 +27,7 @@
                 <Entry Text="{Binding Input}"
                        FontFamily="{StaticResource SansRegular}"
                        FontSize="{StaticResource FontSizeStandard}"
+                       IsReadOnly="{Binding IsReadOnly}"
                        IsPassword="{Binding UIAsPassword}"
                        Placeholder="{Binding Placeholder}"
                        IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"

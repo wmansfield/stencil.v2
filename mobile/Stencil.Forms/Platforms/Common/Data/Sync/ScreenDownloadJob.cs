@@ -10,7 +10,7 @@ namespace Stencil.Forms.Data.Sync
     /// Represents a download job that is persisted into Screen Manager.
     /// Jobs that do not fit this data model, should use DataDownloadJob or TrackedDownloadJob and persist separately
     /// </summary>
-    public class ScreenDownloadJob : DataDownloadJob
+    public class ScreenDownloadJob : DataSyncJob
     {
         public string ScreenName { get; set; }
         public string ScreenParameter { get; set; }

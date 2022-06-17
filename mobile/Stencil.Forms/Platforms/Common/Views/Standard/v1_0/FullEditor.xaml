@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Forms"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.FullEditor">
+    <DataTemplate x:Key="fullEditor" x:DataType="local:FullEditorContext">
+        <!--<ViewCell>-->
+        <Grid RowDefinitions="20,48,20"
+              RowSpacing="4" ColumnSpacing="0"
+              Margin="0" Padding="1"
+              BackgroundColor="{Binding BackgroundColor}">
+            <Label Grid.Row="0"
+                   Text="{Binding Label}"
+                   TextColor="{StaticResource TextOverBackground}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontSize="{StaticResource FontSizeStandard}"
+                   IsVisible="{Binding Label, Converter={StaticResource isValidStringConverter}}"
+                   Padding="0,0,0,0"/>
+            <Frame IsVisible="{Binding IsMultiLine, Converter={StaticResource negateBoolConverter}}"
+                   Grid.Row="1"
+                   HeightRequest="48"
+                   HasShadow="False"
+                   CornerRadius="4"
+                   Margin="0"
+                   Padding="0,0,0,0">
+                <Editor Text="{Binding Input}"
+                        IsReadOnly="{Binding IsReadOnly}"
+                        FontFamily="{StaticResource SansRegular}"
+                        FontSize="{StaticResource FontSizeStandard}"
+                        Placeholder="{Binding Placeholder}"
+                        IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                        PlaceholderColor="{Binding PlaceholderColor}"
+                        TextColor="{Binding TextColor}"
+                        BackgroundColor="{Binding InputBackgroundColor}">
+                </Editor>
+            </Frame>
+            <Label Grid.Row="2"
+                   IsVisible="false"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontSize="{StaticResource FontSizeStandard}"
+                   TextColor="{x:StaticResource Warning}"
+                   Padding="8,0,8,0"/>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

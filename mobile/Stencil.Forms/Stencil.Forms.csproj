@@ -8,8 +8,8 @@
     <PackageId>Stencil.Forms</PackageId>
     
     <Product>Stencil</Product>
-    <AssemblyVersion>2.0.14.0</AssemblyVersion>
-    <Version>2.0.14</Version>
+    <AssemblyVersion>2.0.16.0</AssemblyVersion>
+    <Version>2.0.16</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>
@@ -88,6 +88,23 @@
 	  <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
 	  
 	  <Compile Include="Platforms\ios\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Platforms\Common\Views\Standard\v1_0\SlimEntry - Copy.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Platforms\Common\Views\Standard\v1_0\FullEditor.xaml.cs">
+      <DependentUpon>FullEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Platforms\Common\Views\Standard\v1_0\SlimEditor.xaml.cs">
+      <DependentUpon>SlimEditor.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Platforms\Common\Views\Standard\v1_0\FullEntry - Copy.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,6 +17,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
             _dataViewComponents[HeaderWithIcon.COMPONENT_NAME] = new HeaderWithIcon();
             _dataViewComponents[NamedValue.COMPONENT_NAME] = new NamedValue();
             _dataViewComponents[PrimaryButton.COMPONENT_NAME] = new PrimaryButton();
+            _dataViewComponents[SlimEditor.COMPONENT_NAME] = new SlimEditor();
+            _dataViewComponents[FullEditor.COMPONENT_NAME] = new FullEditor();
             _dataViewComponents[SlimEntry.COMPONENT_NAME] = new SlimEntry();
             _dataViewComponents[FullEntry.COMPONENT_NAME] = new FullEntry();
             _dataViewComponents[Carousel.COMPONENT_NAME] = new Carousel();

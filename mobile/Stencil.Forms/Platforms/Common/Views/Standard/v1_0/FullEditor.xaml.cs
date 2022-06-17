@@ -7,10 +7,11 @@ using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard.v1_0
 {
-    public partial class SlimEntry : ResourceDictionary, IDataViewComponent
+    public partial class FullEditor : ResourceDictionary, IDataViewComponent
     {
         #region Constructor
-        public SlimEntry()
+        
+        public FullEditor()
         {
             InitializeComponent();
         }
@@ -19,13 +20,12 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
         #region Constants
 
-        public const string COMPONENT_NAME = "slimEntry";
-        private const string TEMPLATE_KEY = "slimEntry";
+        public const string COMPONENT_NAME = "fullEditor";
+        private const string TEMPLATE_KEY = "fullEditor";
 
         #endregion
 
         #region DataViewComponent
-
 
         public bool BindingContextCacheEnabled
         {
@@ -34,7 +34,6 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 return true;
             }
         }
-
 
         public DataTemplate GetDataTemplate()
         {
@@ -47,17 +46,15 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
-                SlimEntryContext result = null;
+                FullEditorContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<SlimEntryContext>(configuration_json);
+                    result = JsonConvert.DeserializeObject<FullEditorContext>(configuration_json);
                 }
                 if (result == null)
                 {
-                    result = new SlimEntryContext();
+                    result = new FullEditorContext();
                 }
-
-                result.UIAsPassword = result.IsPassword; // reset password flag
 
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
@@ -70,15 +67,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
         #endregion
     }
-
-    public class SlimEntryContext : PreparedBindingContext, ICommandField
+    
+    public class FullEditorContext : PreparedBindingContext, ICommandField
     {
         #region Constructor
 
-        public SlimEntryContext()
-            : base(nameof(SlimEntryContext))
+        public FullEditorContext()
+            : base(nameof(FullEditorContext))
         {
-            this.ApplyPasswordVisibility();
         }
 
         #endregion
@@ -107,27 +103,12 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _placeholder, value); }
         }
 
-        private bool _isPassword;
-        public bool IsPassword
+        private string _label;
+        public string Label
         {
-            get { return _isPassword; }
-            set { SetProperty(ref _isPassword, value); }
+            get { return _label; }
+            set { SetProperty(ref _label, value); }
         }
-
-        private bool _borderless;
-        public bool Borderless
-        {
-            get { return _borderless; }
-            set { SetProperty(ref _borderless, value); }
-        }
-
-        private bool _isReadOnly;
-        public bool IsReadOnly
-        {
-            get { return _isReadOnly; }
-            set { SetProperty(ref _isReadOnly, value); }
-        }
-        
 
         private string _backgroundColor;
         public string BackgroundColor
@@ -142,6 +123,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _inputBackgroundColor; }
             set { SetProperty(ref _inputBackgroundColor, value); }
         }
+
         private string _textColor = AppColors.TextOverBackground;
         public string TextColor
         {
@@ -162,14 +144,13 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
         }
-
         private Thickness _margin = new Thickness();
         public Thickness Margin
         {
             get { return _margin; }
             set { SetProperty(ref _margin, value); }
         }
-        
+
         #endregion
 
         #region Binding Properties
@@ -181,60 +162,6 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _uiEntryFocused, value); }
         }
 
-
-        private bool _uiAsPassword;
-        public bool UIAsPassword
-        {
-            get { return _uiAsPassword; }
-            set { SetProperty(ref _uiAsPassword, value); }
-        }
-
-        private bool _uiPasswordVisible;
-        public bool UIPasswordVisible
-        {
-            get { return _uiPasswordVisible; }
-            set { SetProperty(ref _uiPasswordVisible, value); }
-        }
-
-        private string _uiPasswordIcon;
-        public string UIPasswordIcon
-        {
-            get { return _uiPasswordIcon; }
-            set { SetProperty(ref _uiPasswordIcon, value); }
-        }
-
-        public Command _UITogglePasswordVisibilityCommand;
-        public Command UITogglePasswordVisibilityCommand
-        {
-            get
-            {
-                return _UITogglePasswordVisibilityCommand ?? (_UITogglePasswordVisibilityCommand = new Command(UITogglePasswordVisibility));
-            }
-        }
-        protected void UITogglePasswordVisibility()
-        {
-            base.ExecuteMethod(nameof(UITogglePasswordVisibility), delegate ()
-            {
-                this.UIPasswordVisible = !this.UIPasswordVisible;
-                this.ApplyPasswordVisibility();
-            });
-        }
-        protected void ApplyPasswordVisibility()
-        {
-            base.ExecuteMethod(nameof(ApplyPasswordVisibility), delegate ()
-            {
-                if (this.UIPasswordVisible)
-                {
-                    this.UIPasswordIcon = FontAwesome.fa_eye_open;
-                    this.UIAsPassword = false;
-                }
-                else
-                {
-                    this.UIPasswordIcon = FontAwesome.fa_eye_slashed;
-                    this.UIAsPassword = true;
-                }
-            });
-        }
 
         #endregion
 

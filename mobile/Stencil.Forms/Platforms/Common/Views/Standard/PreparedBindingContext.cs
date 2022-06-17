@@ -3,6 +3,7 @@ using Stencil.Forms.Commanding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
@@ -10,7 +11,7 @@ using Xamarin.Forms;
 namespace Stencil.Forms.Views.Standard
 {
     [Browsable(false)]
-    public abstract class PreparedBindingContext : PreparedBindingContext<StencilAPI>
+    public abstract partial class PreparedBindingContext : PreparedBindingContext<StencilAPI>
     {
         public PreparedBindingContext(string trackPrefix)
             : base(StencilAPI.Instance, trackPrefix)
@@ -18,7 +19,7 @@ namespace Stencil.Forms.Views.Standard
 
         }
     }
-    public abstract class PreparedBindingContext<TAPI> : TrackedClass<TAPI>, IDataViewItemReference, IPreparedBindingContext
+    public abstract partial class PreparedBindingContext<TAPI> : TrackedClass<TAPI>, IDataViewItemReference, IPreparedBindingContext
         where TAPI : StencilAPI
     {
         public PreparedBindingContext(TAPI api, string trackPrefix)

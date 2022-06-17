@@ -7,10 +7,10 @@ using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard.v1_0
 {
-    public partial class SlimEntry : ResourceDictionary, IDataViewComponent
+    public partial class SlimEditor : ResourceDictionary, IDataViewComponent
     {
         #region Constructor
-        public SlimEntry()
+        public SlimEditor()
         {
             InitializeComponent();
         }
@@ -19,8 +19,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
         #region Constants
 
-        public const string COMPONENT_NAME = "slimEntry";
-        private const string TEMPLATE_KEY = "slimEntry";
+        public const string COMPONENT_NAME = "slimEditor";
+        private const string TEMPLATE_KEY = "slimEditor";
 
         #endregion
 
@@ -47,17 +47,15 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
-                SlimEntryContext result = null;
+                SlimEditorContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<SlimEntryContext>(configuration_json);
+                    result = JsonConvert.DeserializeObject<SlimEditorContext>(configuration_json);
                 }
                 if (result == null)
                 {
-                    result = new SlimEntryContext();
+                    result = new SlimEditorContext();
                 }
-
-                result.UIAsPassword = result.IsPassword; // reset password flag
 
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
@@ -71,14 +69,13 @@ namespace Stencil.Forms.Views.Standard.v1_0
         #endregion
     }
 
-    public class SlimEntryContext : PreparedBindingContext, ICommandField
+    public class SlimEditorContext : PreparedBindingContext, ICommandField
     {
         #region Constructor
 
-        public SlimEntryContext()
-            : base(nameof(SlimEntryContext))
+        public SlimEditorContext()
+            : base(nameof(SlimEditorContext))
         {
-            this.ApplyPasswordVisibility();
         }
 
         #endregion
@@ -105,20 +102,6 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             get { return _placeholder; }
             set { SetProperty(ref _placeholder, value); }
-        }
-
-        private bool _isPassword;
-        public bool IsPassword
-        {
-            get { return _isPassword; }
-            set { SetProperty(ref _isPassword, value); }
-        }
-
-        private bool _borderless;
-        public bool Borderless
-        {
-            get { return _borderless; }
-            set { SetProperty(ref _borderless, value); }
         }
 
         private bool _isReadOnly;
@@ -162,14 +145,12 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
         }
-
         private Thickness _margin = new Thickness();
         public Thickness Margin
         {
             get { return _margin; }
             set { SetProperty(ref _margin, value); }
         }
-        
         #endregion
 
         #region Binding Properties
@@ -179,61 +160,6 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             get { return _uiEntryFocused; }
             set { SetProperty(ref _uiEntryFocused, value); }
-        }
-
-
-        private bool _uiAsPassword;
-        public bool UIAsPassword
-        {
-            get { return _uiAsPassword; }
-            set { SetProperty(ref _uiAsPassword, value); }
-        }
-
-        private bool _uiPasswordVisible;
-        public bool UIPasswordVisible
-        {
-            get { return _uiPasswordVisible; }
-            set { SetProperty(ref _uiPasswordVisible, value); }
-        }
-
-        private string _uiPasswordIcon;
-        public string UIPasswordIcon
-        {
-            get { return _uiPasswordIcon; }
-            set { SetProperty(ref _uiPasswordIcon, value); }
-        }
-
-        public Command _UITogglePasswordVisibilityCommand;
-        public Command UITogglePasswordVisibilityCommand
-        {
-            get
-            {
-                return _UITogglePasswordVisibilityCommand ?? (_UITogglePasswordVisibilityCommand = new Command(UITogglePasswordVisibility));
-            }
-        }
-        protected void UITogglePasswordVisibility()
-        {
-            base.ExecuteMethod(nameof(UITogglePasswordVisibility), delegate ()
-            {
-                this.UIPasswordVisible = !this.UIPasswordVisible;
-                this.ApplyPasswordVisibility();
-            });
-        }
-        protected void ApplyPasswordVisibility()
-        {
-            base.ExecuteMethod(nameof(ApplyPasswordVisibility), delegate ()
-            {
-                if (this.UIPasswordVisible)
-                {
-                    this.UIPasswordIcon = FontAwesome.fa_eye_open;
-                    this.UIAsPassword = false;
-                }
-                else
-                {
-                    this.UIPasswordIcon = FontAwesome.fa_eye_slashed;
-                    this.UIAsPassword = true;
-                }
-            });
         }
 
         #endregion

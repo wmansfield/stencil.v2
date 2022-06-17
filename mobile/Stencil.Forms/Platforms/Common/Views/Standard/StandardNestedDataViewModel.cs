@@ -68,6 +68,13 @@ namespace Stencil.Forms.Views.Standard
             set { SetProperty(ref _enableCellReuse, value); }
         }
 
+        private bool _enableCellSizeCaching;
+        public virtual bool EnableCellSizeCaching
+        {
+            get { return _enableCellSizeCaching; }
+            set { SetProperty(ref _enableCellSizeCaching, value); }
+        }
+
         private Thickness _padding;
         public virtual Thickness Padding
         {

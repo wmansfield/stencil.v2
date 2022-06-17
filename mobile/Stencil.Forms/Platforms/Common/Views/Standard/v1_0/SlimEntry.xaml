@@ -8,7 +8,7 @@
         <!--<ViewCell>-->
         <Grid RowDefinitions="48,20"
               RowSpacing="4" ColumnSpacing="0"
-              Margin="0"
+              Margin="{Binding Margin}"
               Padding="{Binding Padding}"
               BackgroundColor="{Binding BackgroundColor}">
             <Frame Grid.Row="0"

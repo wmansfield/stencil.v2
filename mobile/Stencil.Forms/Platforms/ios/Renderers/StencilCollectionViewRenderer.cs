@@ -14,16 +14,18 @@ namespace Stencil.Forms.ios.Renderers
     public class StencilCollectionViewRenderer : GroupableItemsViewRenderer<GroupableItemsView, StencilGroupableItemsViewController<GroupableItemsView>>
     {
         public StencilCollectionViewRenderer()
-        { 
+        {
         }
         protected override StencilGroupableItemsViewController<GroupableItemsView> CreateController(GroupableItemsView itemsView, ItemsViewLayout layout)
         {
             bool enableDynamicCellReuse = false;
-            if(this.Element is StencilCollectionView stencilCollectionView)
+            bool enableDynamicCellSizeCaching = false;
+            if (this.Element is StencilCollectionView stencilCollectionView)
             {
                 enableDynamicCellReuse = stencilCollectionView.EnableDynamicCellReuse;
+                enableDynamicCellSizeCaching = stencilCollectionView.EnableDynamicCellSizeCaching;
             }
-            return new StencilGroupableItemsViewController<GroupableItemsView>(itemsView, layout, enableDynamicCellReuse);
+            return new StencilGroupableItemsViewController<GroupableItemsView>(itemsView, layout, enableDynamicCellReuse, enableDynamicCellSizeCaching);
         }
        
     }

@@ -15,7 +15,6 @@ namespace Stencil.Forms.Controls
 
         public static readonly BindableProperty EnableDynamicCellReuseProperty = BindableProperty.Create(nameof(EnableDynamicCellReuse), typeof(bool), typeof(StencilCollectionView), false);
 
-
         public bool EnableDynamicCellReuse
         {
             get
@@ -25,6 +24,20 @@ namespace Stencil.Forms.Controls
             set
             {
                 SetValue(EnableDynamicCellReuseProperty, value);
+            }
+        }
+
+        public static readonly BindableProperty EnableDynamicCellSizeCachingProperty = BindableProperty.Create(nameof(EnableDynamicCellSizeCaching), typeof(bool), typeof(StencilCollectionView), false);
+
+        public bool EnableDynamicCellSizeCaching
+        {
+            get
+            {
+                return (bool)GetValue(EnableDynamicCellSizeCachingProperty);
+            }
+            set
+            {
+                SetValue(EnableDynamicCellSizeCachingProperty, value);
             }
         }
     }

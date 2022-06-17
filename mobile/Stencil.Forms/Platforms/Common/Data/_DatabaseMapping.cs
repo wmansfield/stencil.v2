@@ -17,7 +17,7 @@ namespace Stencil.Forms.Data
         #region Generic Mapping
 
         public static TDestination ToDbModel<TSource, TDestination>(this TSource source, TDestination destination = null)
-            where TDestination : class, IDatabaseModel, new()
+            where TDestination : class, IPersistedModel, new()
             where TSource : class, IUIModel
         {
             if (source == null) { return null; }
@@ -30,7 +30,7 @@ namespace Stencil.Forms.Data
         }
 
         public static TDestination ToUIModel<TSource, TDestination>(this TSource source)
-            where TSource : class, IDatabaseModel
+            where TSource : class, IPersistedModel
             where TDestination : class, IUIModel, new()
         {
             if (source == null) { return null; }
@@ -39,7 +39,7 @@ namespace Stencil.Forms.Data
         }
 
         public static List<TDestination> ToUIModel<TSource, TDestination>(this IEnumerable<TSource> items)
-            where TSource : class, IDatabaseModel
+            where TSource : class, IPersistedModel
             where TDestination : class, IUIModel, new()
         {
             List<TDestination> result = new List<TDestination>();

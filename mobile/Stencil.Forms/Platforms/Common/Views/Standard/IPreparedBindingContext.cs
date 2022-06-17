@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard
 {
-    public interface IPreparedBindingContext
+    public partial interface IPreparedBindingContext
     {
         void PrepareInteractions(bool force = false);
 

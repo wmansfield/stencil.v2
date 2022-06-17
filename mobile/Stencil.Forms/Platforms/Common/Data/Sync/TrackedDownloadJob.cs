@@ -11,7 +11,7 @@ namespace Stencil.Forms.Data.Sync
     /// Persistance of data is presumed to handled by the command itself.
     /// WARNING: The command that is coupled with this should return a TrackedDownloadInfo (signature is object)
     /// </summary>
-    public class TrackedDownloadJob : DataDownloadJob
+    public class TrackedDownloadJob : DataSyncJob
     {
         public string EntityName { get; set; }
         public string EntityIdentifier { get; set; }
