@@ -13,7 +13,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         [Obsolete("Use caution, this is expensive", false)]
         public Task<List<ShopAccount>> GetForAccountAsync(Guid account_id, bool? enabled = true)
         {
-            return base.ExecuteFunction(nameof(GetForAccountAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetForAccountAsync), async delegate ()
             {
                 IQueryable<ShopAccount> query = this.QuerySharedWithoutPartitionKey();
                 query = query.Where(x => x.account_id == account_id);

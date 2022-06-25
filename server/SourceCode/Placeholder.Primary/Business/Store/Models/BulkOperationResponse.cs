@@ -4,11 +4,11 @@ using System.Collections.Generic;
 namespace Placeholder.Primary.Business.Store
 {
     public class BulkOperationResponse<T>
-{
-    public TimeSpan TotalTimeTaken { get; set; }
-    public int SuccessfulDocuments { get; set; } = 0;
-    public double TotalRequestUnitsConsumed { get; set; } = 0;
+    {
+        public TimeSpan TotalTimeTaken { get; set; }
+        public int SuccessfulDocuments { get; set; } = 0;
+        public double TotalRequestUnitsConsumed { get; set; } = 0;
 
-    public IReadOnlyList<(T, Exception)> Failures { get; set; }
-}
+        public IReadOnlyList<(T, Exception)> Failures { get; set; }
+    }
 }

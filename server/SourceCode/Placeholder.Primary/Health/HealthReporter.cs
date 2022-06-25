@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using Placeholder.Common;
+using Placeholder.Common.Configuration;
 using Zero.Foundation;
 using Zero.Foundation.Aspect;
 using Zero.Foundation.Unity;
@@ -60,15 +61,26 @@ namespace Placeholder.Primary.Health
         }
 
 
-        public static bool TRACK_HOST_NAMES = false;
+        public static bool TRACK_HOST_NAMES = true;
         public static string DEFAULT_HOST_NAME = "server";
 
         private static string _hostName;
-        public static string GetHostName()
+        public string GetHostName()
         {
             if (!TRACK_HOST_NAMES)
             {
                 return DEFAULT_HOST_NAME;
+            }
+            if (string.IsNullOrEmpty(_hostName))
+            {
+                try
+                {
+                    _hostName = this.IFoundation.SafeResolve<ISettingsResolver>().GetSetting(CommonAssumptions.APP_KEY_HEALTH_PREFIX);
+                }
+                catch
+                {
+                    //GULP
+                }
             }
             if (string.IsNullOrEmpty(_hostName))
             {

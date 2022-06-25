@@ -24,6 +24,11 @@ namespace Placeholder.Primary.Business.Direct
         
         void Delete(Guid shop_id);
         
+        
+        void SynchronizationUpdateIsolated(Guid shop_id, bool success, DateTime sync_date_utc, string sync_log);
+        List<IdentityInfo> SynchronizationGetInvalidIsolated(Guid shop_id, int retryPriorityThreshold, string sync_agent);
+        void SynchronizationHydrateUpdateIsolated(Guid shop_id, bool success, DateTime sync_date_utc, string sync_log);
+        List<IdentityInfo> SynchronizationHydrateGetInvalidIsolated(Guid shop_id, int retryPriorityThreshold, string sync_agent);
         void SynchronizationUpdate(Guid shop_id, bool success, DateTime sync_date_utc, string sync_log);
         List<IdentityInfo> SynchronizationGetInvalid(int retryPriorityThreshold, string sync_agent);
         void SynchronizationHydrateUpdate(Guid shop_id, bool success, DateTime sync_date_utc, string sync_log);

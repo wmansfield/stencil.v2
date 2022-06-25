@@ -18,7 +18,7 @@ public class ScaffoldingDesignTimeServices : IDesignTimeServices
         });
 
         services.AddHandlebarsTransformers(
-            entityNameTransformer: this.transformEntityName,
+            entityTypeNameTransformer: this.transformEntityName,
             constructorTransformer: this.transformConstructor,
             navPropertyTransformer: this.transformNavigationProperty);
     }

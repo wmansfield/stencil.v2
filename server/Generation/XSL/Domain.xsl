@@ -81,7 +81,8 @@ namespace <xsl:value-of select="../@projectName"/>.Domain
 
 '''[STARTFILE:<xsl:value-of select="../@projectName"/>.SDK.Shared\Models\<xsl:value-of select="@name"/>.cs]using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text;<xsl:if test="@hasMarkdown='true'">
+using Stencil.Common.Markdown;</xsl:if>
 
 namespace <xsl:value-of select="../@projectName"/>.SDK.Models
 {

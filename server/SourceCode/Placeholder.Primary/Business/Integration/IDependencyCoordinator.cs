@@ -18,6 +18,7 @@ namespace Placeholder.Primary.Business.Integration
         void ShopAccountInvalidated(Dependency affectedDependencies, Guid shop_account_id);
         void ShopSettingInvalidated(Dependency affectedDependencies, Guid shop_setting_id, Guid shop_id);
         void CompanyInvalidated(Dependency affectedDependencies, Guid company_id, Guid shop_id);
+        void WidgetInvalidated(Dependency affectedDependencies, Guid widget_id, Guid shop_id);
         
     }
 }

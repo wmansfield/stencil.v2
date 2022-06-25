@@ -320,6 +320,39 @@ namespace Placeholder.Primary
         
         
         
+        public static db.Widget ToDbModel(this dm.Widget entity, db.Widget destination = null)
+        {
+            if (entity != null)
+            {
+                if (destination == null) { destination = new db.Widget(); }
+                return Mapper.Map<dm.Widget, db.Widget>(entity, destination);
+            }
+            return null;
+        }
+        public static dm.Widget ToDomainModel(this db.Widget entity, dm.Widget destination = null)
+        {
+            if (entity != null)
+            {
+                if (destination == null) { destination = new dm.Widget(); }
+                return Mapper.Map<db.Widget, dm.Widget>(entity, destination);
+            }
+            return null;
+        }
+        public static List<dm.Widget> ToDomainModel(this IEnumerable<db.Widget> entities)
+        {
+            List<dm.Widget> result = new List<dm.Widget>();
+            if (entities != null)
+            {
+                foreach (var item in entities)
+                {
+                    result.Add(item.ToDomainModel());
+                }
+            }
+            return result;
+        }
+        
+        
+        
     }
 }
 

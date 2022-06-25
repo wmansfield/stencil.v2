@@ -83,11 +83,16 @@ namespace Placeholder.Primary.Business.Direct.Implementation
                                 where n.shop_id == dbModel.shop_id
                                 select n).FirstOrDefault();
 
-                        if (match != null)
+                        if (match == null)
+                        {
+                            match = insertShop.ToDbModel();
+                            dbIsolated.Shops.Add(match);
+                        }
+                        else
                         {
                             match = insertShop.ToDbModel(match);
-                            dbIsolated.SaveChanges();
                         }
+                        dbIsolated.SaveChanges();
                     }
                     
                     
@@ -332,30 +337,27 @@ namespace Placeholder.Primary.Business.Direct.Implementation
         {
             base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQLSharedContext())
                 {
-                    using (var db = base.CreateSQLSharedContext())
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.Shops
-                                .Where(x => x.shop_id == shop_id)
-                                .Update(x => new db.Shop()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.Shops
-                                .Where(x => x.shop_id == shop_id)
-                                .Update(x => new db.Shop()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.Shops
+                            .Where(x => x.shop_id == shop_id)
+                            .Update(x => new db.Shop()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.Shops
+                            .Where(x => x.shop_id == shop_id)
+                            .Update(x => new db.Shop()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         
@@ -363,30 +365,27 @@ namespace Placeholder.Primary.Business.Direct.Implementation
         {
             base.ExecuteMethod("SynchronizationHydrateUpdateIsolated", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQLIsolatedContext(shop_id))
                 {
-                    using (var db = base.CreateSQLIsolatedContext(shop_id))
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.Shops
-                                .Where(x => x.shop_id == shop_id)
-                                .Update(x => new db.Shop()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.Shops
-                                .Where(x => x.shop_id == shop_id)
-                                .Update(x => new db.Shop()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.Shops
+                            .Where(x => x.shop_id == shop_id)
+                            .Update(x => new db.Shop()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.Shops
+                            .Where(x => x.shop_id == shop_id)
+                            .Update(x => new db.Shop()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         

@@ -67,7 +67,7 @@ namespace Placeholder.Common
             }
             return sBuilder.ToString();
         }
-        public static string HashAsString(this SHA256Managed sha256, string content)
+        public static string HashAsString(this SHA256 sha256, string content)
         {
             StringBuilder sBuilder = new StringBuilder();
             if (sha256 != null)

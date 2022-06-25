@@ -48,5 +48,6 @@ namespace Placeholder.Primary
         {
             get { return this.IFoundation.Resolve<IMarkdownProcessor>(); }
         }
+        
     }
 }

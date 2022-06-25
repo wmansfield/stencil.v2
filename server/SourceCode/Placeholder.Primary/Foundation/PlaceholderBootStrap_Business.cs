@@ -22,6 +22,7 @@ namespace Placeholder.Primary.Foundation
             foundation.Container.RegisterType<IShopAccountBusiness, ShopAccountBusiness>(TypeLifetime.Scoped);
             foundation.Container.RegisterType<IShopSettingBusiness, ShopSettingBusiness>(TypeLifetime.Scoped);
             foundation.Container.RegisterType<ICompanyBusiness, CompanyBusiness>(TypeLifetime.Scoped);
+            foundation.Container.RegisterType<IWidgetBusiness, WidgetBusiness>(TypeLifetime.Scoped);
             
             
             //Indexes
@@ -34,6 +35,7 @@ namespace Placeholder.Primary.Foundation
             foundation.Container.RegisterType<IShopAccountStore, ShopAccountStore>(TypeLifetime.Scoped);
             foundation.Container.RegisterType<IShopSettingStore, ShopSettingStore>(TypeLifetime.Scoped);
             foundation.Container.RegisterType<ICompanyStore, CompanyStore>(TypeLifetime.Scoped);
+            foundation.Container.RegisterType<IWidgetStore, WidgetStore>(TypeLifetime.Scoped);
             
             
             //Synchronizers
@@ -43,6 +45,7 @@ namespace Placeholder.Primary.Foundation
             foundation.Container.RegisterType<IShopAccountSynchronizer, ShopAccountSynchronizer>(TypeLifetime.Scoped);
             foundation.Container.RegisterType<IShopSettingSynchronizer, ShopSettingSynchronizer>(TypeLifetime.Scoped);
             foundation.Container.RegisterType<ICompanySynchronizer, CompanySynchronizer>(TypeLifetime.Scoped);
+            foundation.Container.RegisterType<IWidgetSynchronizer, WidgetSynchronizer>(TypeLifetime.Scoped);
             
         }
     }

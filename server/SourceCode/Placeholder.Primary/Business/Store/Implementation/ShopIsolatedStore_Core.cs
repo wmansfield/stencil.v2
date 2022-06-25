@@ -122,7 +122,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<ShopIsolated> GetDocumentAsync(Guid shop_id)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 
                 string partitionKey = new ShopIsolated(){ shop_id = shop_id}.partition_key;
@@ -137,7 +137,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
 
         public Task<bool> CreateDocumentAsync(ShopIsolated model)
         {
-            return base.ExecuteFunction(nameof(CreateDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(CreateDocumentAsync), async delegate ()
             {
                 ItemResponse<ShopIsolated> result = await base.UpsertIsolatedAsync(model.shop_id, model);
                 return result.StatusCode.IsSuccess();
@@ -155,7 +155,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<ListResult<ShopIsolated>> FindAsync(Guid shop_id, int skip, int take, string order_by = "", bool descending = false)
         {
-            return base.ExecuteFunction(nameof(FindAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(FindAsync), async delegate ()
             {
                 
                 IQueryable<ShopIsolated> query = base.QueryByPartitionIsolated(shop_id, ShopIsolated.GLOBAL_PARTITION);

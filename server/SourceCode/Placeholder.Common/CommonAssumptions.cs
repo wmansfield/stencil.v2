@@ -12,6 +12,7 @@ namespace Placeholder.Common
         public static readonly string APP_KEY_HEALTH_APIKEY = "Health-ApiKey";
         public static readonly string APP_KEY_HEALTH_HOST = "Health-Host";
         public static readonly string APP_KEY_HEALTH_SERVER_ALIAS = "Health-Alias";
+        public static readonly string APP_KEY_HEALTH_PREFIX = "Health-Prefix";
 
         public static readonly string APP_KEY_IS_BACKING = "Placeholder-IsBacking";
         public static readonly string APP_KEY_IS_HYDRATE = "Placeholder-IsHydrate";

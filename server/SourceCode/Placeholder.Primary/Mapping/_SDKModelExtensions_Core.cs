@@ -341,6 +341,41 @@ namespace Placeholder.Primary
         
         
         
+        public static Widget ToDomainModel(this SDK.Models.Widget entity, Widget destination = null)
+        {
+            if (entity != null)
+            {
+                if (destination == null) { destination = new Domain.Widget(); }
+                Widget result = Mapper.Map<SDK.Models.Widget, Widget>(entity, destination);
+                return result;
+            }
+            return null;
+        }
+        public static SDK.Models.Widget ToSDKModel(this Widget entity, SDK.Models.Widget destination = null)
+        {
+            if (entity != null)
+            {
+                if (destination == null) { destination = new SDK.Models.Widget(); }
+                SDK.Models.Widget result = Mapper.Map<Widget, SDK.Models.Widget>(entity, destination);
+                return result;
+            }
+            return null;
+        }
+        public static List<SDK.Models.Widget> ToSDKModel(this IEnumerable<Widget> entities)
+        {
+            List<SDK.Models.Widget> result = new List<SDK.Models.Widget>();
+            if (entities != null)
+            {
+                foreach (var item in entities)
+                {
+                    result.Add(item.ToSDKModel());
+                }
+            }
+            return result;
+        }
+        
+        
+        
     }
 }
 

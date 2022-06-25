@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Placeholder.Primary.Health.Daemons
@@ -51,8 +52,9 @@ namespace Placeholder.Primary.Health.Daemons
                 }
                 string metricPayload = "[" + string.Join(",", metrics) + "]";
 
-                /*
-                HttpContent content = new StringContent(metricPayload, Encoding.UTF8, "application/json");
+                
+                // Verify this works for your grafana service, some nuance there.
+                HttpContent content = new StringContent(metricPayload, Encoding.UTF8);
 
                 HttpRequestMessage request = new HttpRequestMessage()
                 {
@@ -63,15 +65,14 @@ namespace Placeholder.Primary.Health.Daemons
                 request.Headers.Add("Authorization", string.Format("Bearer {0}", this.ApiKey));
                 request.Headers.TryAddWithoutValidation("Content-Type", "application/json");
                 HttpResponseMessage responseMessage = HttpClient.SendAsync(request).Result;
-                 */
 
+                /*
                 WebClient webClient = new WebClient();
                 webClient.Headers.Add(HttpRequestHeader.Authorization, string.Format("Bearer {0}", this.ApiKey));
                 webClient.Headers.Add(HttpRequestHeader.ContentType, "application/json");
 
                 string response = webClient.UploadString(this.ApiUrl, metricPayload);
-
-               
+                */
             }
             catch
             {

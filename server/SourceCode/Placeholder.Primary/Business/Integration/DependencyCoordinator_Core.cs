@@ -158,6 +158,20 @@ namespace Placeholder.Primary.Business.Integration
                 
             });
         }
+        public virtual void WidgetInvalidated(Dependency affectedDependencies, Guid widget_id, Guid shop_id)
+        {
+            base.ExecuteMethod("WidgetInvalidated", delegate ()
+            {
+                DependencyWorker<Widget>.EnqueueRequest(this.IFoundation, affectedDependencies, widget_id, shop_id, this.ProcessWidgetInvalidation);
+            });
+        }
+        protected virtual void ProcessWidgetInvalidation(Dependency dependencies, Guid shop_id, Guid widget_id)
+        {
+            base.ExecuteMethod("ProcessWidgetInvalidation", delegate ()
+            {
+                
+            });
+        }
         
     }
 }

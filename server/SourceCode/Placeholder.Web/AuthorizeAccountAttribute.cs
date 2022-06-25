@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Placeholder.Web.Security;
 using System;
 using System.Collections.Generic;

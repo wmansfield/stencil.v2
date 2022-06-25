@@ -17,6 +17,7 @@ namespace Placeholder.SDK.Client
         public ShopAccountEndpoint ShopAccount;
         public ShopSettingEndpoint ShopSetting;
         public CompanyEndpoint Company;
+        public WidgetEndpoint Widget;
         
 
         protected virtual void ConstructCoreEndpoints()
@@ -30,6 +31,7 @@ namespace Placeholder.SDK.Client
             this.ShopAccount = new ShopAccountEndpoint(this);
             this.ShopSetting = new ShopSettingEndpoint(this);
             this.Company = new CompanyEndpoint(this);
+            this.Widget = new WidgetEndpoint(this);
             
         }   
     }

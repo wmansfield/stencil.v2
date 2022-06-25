@@ -1,4 +1,4 @@
-﻿using Placeholder.SDK.Models;
+using Placeholder.SDK.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +10,6 @@ namespace Placeholder.Primary.Integration
     public interface IUploadFiles
     {
         UploadedFile UploadFile(Guid shop_id, byte[] bytes, string filePathAndName);
+        UploadedFile GeneratePreSignedUploadUrl(Guid shop_id, string filePathAndName);
     }
 }

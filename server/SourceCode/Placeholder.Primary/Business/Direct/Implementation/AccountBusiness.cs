@@ -8,6 +8,7 @@ using Placeholder.Data.Sql;
 using Placeholder.Primary.Business.Synchronization;
 using Zero.Foundation;
 using Placeholder.Primary.Emailing;
+using System.Security.Cryptography;
 
 namespace Placeholder.Primary.Business.Direct.Implementation
 {
@@ -274,7 +275,7 @@ namespace Placeholder.Primary.Business.Direct.Implementation
         {
             return base.ExecuteFunction("GeneratePasswordHash", delegate ()
             {
-                return new System.Security.Cryptography.SHA256Managed().HashAsString(salt + password);
+                return SHA256.Create().HashAsString(salt + password);
             });
         }
 

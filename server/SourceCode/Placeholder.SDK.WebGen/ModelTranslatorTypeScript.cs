@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -114,13 +114,17 @@ namespace Placeholder.SDK.WebGen
                 }
 
 
-                if (line.StartsWith("#if !WEB") && text[i + 1].Contains("namespace")) // ignored code
+                if (line.StartsWith("#if !WEB") && (text[i + 1].Contains("namespace") || text[i + 1].Contains("using "))) // ignored code
                 {
                     return new List<string>();
                 }
                 if (!includeInternal && line.StartsWith("#if SDK_PRIVATE") && text[i + 1].Contains("namespace")) // ignored code
                 {
                     return new List<string>();
+                }
+                if(line.StartsWith("[Obsolete"))
+                {
+                    continue;
                 }
                 if (line.StartsWith("public enum"))
                 {

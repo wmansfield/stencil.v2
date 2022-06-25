@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
@@ -13,21 +13,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Zero.Foundation" Version="1.0.9" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.6" />
+    <PackageReference Include="Zero.Foundation" Version="1.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" NoWarn="NU1608" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.7" />
   </ItemGroup>
   
   <ItemGroup>
     <EmbeddedResource Include="**/*.cshtml" />
     <EmbeddedResource Include="**/*.css" />
+	<EmbeddedResource Include="**/*.xlsx" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Delete Files="$(ProjectDir)..\Placeholder.Website\Plugins\SystemMonitor\$(TargetFileName)" ContinueOnError="true" />
-    <Delete Files="$(ProjectDir)..\Placeholder.Website\Plugins\SystemMonitor\$(TargetName).Views.dll" ContinueOnError="true" />
     <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(ProjectDir)..\Placeholder.Website\Plugins\SystemMonitor\$(TargetFileName)" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).Views.dll" DestinationFiles="$(ProjectDir)..\Placeholder.Website\Plugins\SystemMonitor\$(TargetName).Views.dll" SkipUnchangedFiles="false" OverwriteReadOnlyFiles="true" />
   </Target>
 
 </Project>

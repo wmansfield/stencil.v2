@@ -123,7 +123,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         [Obsolete("Use caution, this is expensive for multi-partition tables", false)]
         public Task<ShopAccount> GetDocumentAsync(Guid shop_account_id)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 ShopAccount foundShopAccount = await base.RetrieveByIdSharedWithoutPartitionKeyAsync(shop_account_id.ToString());
 
@@ -134,7 +134,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<ShopAccount> GetDocumentAsync(Guid shop_id, Guid shop_account_id)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 ShopAccount found = await this.RetrieveByIdSharedAsync(shop_id.ToString(), shop_account_id.ToString());
                 
@@ -147,7 +147,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
 
         public Task<bool> CreateDocumentAsync(ShopAccount model)
         {
-            return base.ExecuteFunction(nameof(CreateDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(CreateDocumentAsync), async delegate ()
             {
                 ItemResponse<ShopAccount> result = await base.UpsertSharedAsync(model);
                 return result.StatusCode.IsSuccess();
@@ -165,7 +165,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<ListResult<ShopAccount>> FindForShopAsync(Guid shop_id, int skip, int take, string order_by = "", bool descending = false, string keyword = "", bool? enabled = true)
         {
-            return base.ExecuteFunction(nameof(FindForShopAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(FindForShopAsync), async delegate ()
             {
                 IQueryable<ShopAccount> query = this.QueryByPartitionShared(shop_id.ToString());
                 
@@ -193,11 +193,11 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task DeleteForShopAsync(Guid shop_id)
         {
-            return base.ExecuteFunction(nameof(DeleteForShopAsync), async delegate ()
+            return base.ExecuteMethodAsync(nameof(DeleteForShopAsync), async delegate ()
             {
                 List<ShopAccount> deleteItems = await base.RetrieveByPartitionSharedAsync(shop_id.ToString());
 
-                return base.BulkRemoveSharedAsync(deleteItems);
+                await base.BulkRemoveSharedAsync(deleteItems);
             });
         }
         

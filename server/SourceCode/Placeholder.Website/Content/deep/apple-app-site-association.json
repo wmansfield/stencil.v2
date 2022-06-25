@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "XXXXXX.your.app.identifier",
+        "paths": [
+          "/app/*",
+          "/view/*"
+        ]
+      }
+    ]
+  }
+}

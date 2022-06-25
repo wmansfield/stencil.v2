@@ -10,6 +10,7 @@ namespace Placeholder.Data.Sql.Models
             Companies = new HashSet<Company>();
             ShopAccounts = new HashSet<ShopAccount>();
             ShopSettings = new HashSet<ShopSetting>();
+            Widgets = new HashSet<Widget>();
         }
 
         public Guid shop_id { get; set; }
@@ -32,5 +33,6 @@ namespace Placeholder.Data.Sql.Models
         public virtual ICollection<Company> Companies { get; set; }
         public virtual ICollection<ShopAccount> ShopAccounts { get; set; }
         public virtual ICollection<ShopSetting> ShopSettings { get; set; }
+        public virtual ICollection<Widget> Widgets { get; set; }
     }
 }

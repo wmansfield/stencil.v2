@@ -1,0 +1,13 @@
+
+  GlobalSetting
+  Tenant
+  Asset
+  Account
+  Shop
+  ShopIsolated
+  ShopAccount
+  ShopSetting
+  Company
+  Widget
+  
+

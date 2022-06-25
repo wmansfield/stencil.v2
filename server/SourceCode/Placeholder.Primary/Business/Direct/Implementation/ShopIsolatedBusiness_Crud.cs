@@ -229,30 +229,27 @@ namespace Placeholder.Primary.Business.Direct.Implementation
         {
             base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQLIsolatedContext(shop_id))
                 {
-                    using (var db = base.CreateSQLIsolatedContext(shop_id))
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.ShopIsolateds
-                                .Where(x => x.shop_id == shop_id)
-                                .Update(x => new db.ShopIsolated()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.ShopIsolateds
-                                .Where(x => x.shop_id == shop_id)
-                                .Update(x => new db.ShopIsolated()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.ShopIsolateds
+                            .Where(x => x.shop_id == shop_id)
+                            .Update(x => new db.ShopIsolated()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.ShopIsolateds
+                            .Where(x => x.shop_id == shop_id)
+                            .Update(x => new db.ShopIsolated()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         

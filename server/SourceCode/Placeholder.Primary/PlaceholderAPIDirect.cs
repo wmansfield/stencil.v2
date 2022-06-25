@@ -49,6 +49,10 @@ namespace Placeholder.Primary
         {
             get { return this.IFoundation.Resolve<ICompanyBusiness>(); }
         }
+        public IWidgetBusiness Widgets
+        {
+            get { return this.IFoundation.Resolve<IWidgetBusiness>(); }
+        }
         
     }
 }

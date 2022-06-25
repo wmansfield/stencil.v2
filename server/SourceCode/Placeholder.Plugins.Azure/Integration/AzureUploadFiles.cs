@@ -1,4 +1,6 @@
-﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.Sas;
 using Placeholder.Common;
 using Placeholder.Primary;
 using Placeholder.Primary.Integration;
@@ -6,6 +8,10 @@ using Placeholder.SDK.Models;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Zero.Foundation;
 using Zero.Foundation.Aspect;
 using Zero.Foundation.Unity;
@@ -29,6 +35,21 @@ namespace Placeholder.Plugins.Azure.Integration
 
         public AspectCache Cache15 { get; set; }
 
+        protected string DaemonUrl
+        {
+            get
+            {
+                return this.Cache15.PerLifetime("DaemonUrl", delegate ()
+                {
+                    if (this.API.Integration.Settings.IsLocalHost())
+                    {
+                        return "http://localhost:4337/";
+                    }
+                    return this.API.Direct.GlobalSettings.GetValueOrDefault(CommonAssumptions.APP_KEY_BACKING_URL, "https://placeholder-backing.foundationzero.com");
+                });
+            }
+        }
+
         public ConcurrentDictionary<string, bool> ContainersEnsured { get; set; }
         public ConcurrentDictionary<string, BlobContainerClient> Clients { get; set; }
 
@@ -39,7 +60,6 @@ namespace Placeholder.Plugins.Azure.Integration
                 UploadedFile result = new UploadedFile();
 
                 BlobContainerClient container = this.GenerateContainerClient(shop_id);
-
                 BlobClient blob = container.GetBlobClient(filePathAndName);
 
                 using(MemoryStream stream = new MemoryStream(bytes))
@@ -52,6 +72,32 @@ namespace Placeholder.Plugins.Azure.Integration
                 return result;
             });
             
+        }
+        public UploadedFile GeneratePreSignedUploadUrl(Guid shop_id, string filePathAndName)
+        {
+            return base.ExecuteFunction(nameof(GeneratePreSignedUploadUrl), delegate ()
+            {
+                BlobContainerClient container = this.GenerateContainerClient(shop_id);
+                BlobClient blobClient = container.GetBlobClient(filePathAndName);
+
+                // Create a SAS token that's valid for one hour.
+                BlobSasBuilder builder = new BlobSasBuilder()
+                {
+                    BlobContainerName = blobClient.GetParentBlobContainerClient().Name,
+                    BlobName = blobClient.Name,
+                    Resource = "b"
+                };
+
+                builder.ExpiresOn = DateTimeOffset.UtcNow.AddHours(1);
+                builder.SetPermissions(BlobSasPermissions.Read | BlobSasPermissions.Write);
+
+                Uri uri = blobClient.GenerateSasUri(builder);
+                return new UploadedFile()
+                {
+                    raw_url = uri.ToString(),
+                    public_url = blobClient.Uri.ToString(),
+                };
+            });
         }
 
         protected BlobContainerClient GenerateContainerClient(Guid shop_id)
@@ -114,5 +160,28 @@ namespace Placeholder.Plugins.Azure.Integration
             });
         }
 
+        protected void SendPostInNewThread(string url, string content)
+        {
+            Task.Run(async delegate ()
+            {
+                try
+                {
+                    byte[] requestBytes = new ASCIIEncoding().GetBytes(content);
+
+                    HttpRequestMessage request = new HttpRequestMessage()
+                    {
+                        RequestUri = new Uri(url),
+                        Method = HttpMethod.Post,
+                        Content = new StringContent(content, Encoding.UTF8),
+                    };
+                    request.Headers.TryAddWithoutValidation("Content-Type", @"application/x-www-form-urlencoded");
+                    _ = await PrimaryUtility.HttpClient.SendAsync(request);
+                }
+                catch
+                {
+                    // gulp
+                }
+            });
+        }
     }
 }

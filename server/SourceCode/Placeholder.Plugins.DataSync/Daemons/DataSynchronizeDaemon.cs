@@ -23,14 +23,11 @@ namespace Placeholder.Plugins.DataSync.Daemons
         {
             this.TenantCode = tenantCode;
             this.AgentName = agentName;
-            this.Cache = new AspectCache("DataSynchronizeDaemon", iFoundation, new ExpireStaticLifetimeManager("DataSynchronizeDaemon.Life15", System.TimeSpan.FromMinutes(15), false));
         }
 
         #endregion
 
         #region Public Properties
-
-        public AspectCache Cache { get; set; }
 
         /// <summary>
         /// 0: tenant
@@ -42,7 +39,7 @@ namespace Placeholder.Plugins.DataSync.Daemons
 
         #region Properties
 
-        protected static bool _executing;
+        protected bool _executing;
         public string TenantCode { get; set; }
         public string AgentName { get; set; }
 
@@ -140,10 +137,7 @@ namespace Placeholder.Plugins.DataSync.Daemons
 #pragma warning disable 612, 618
                                     int count = synchronizer.PerformSynchronization(this.AgentName, this.TenantCode);
 #pragma warning restore 612, 618
-                                    if (count > 0)
-                                    {
-                                        HealthReporter.Current.UpdateMetric(HealthTrackType.Count, string.Format(HealthReporter.INDEXER_QUEUE_SIZE_FORMAT, synchronizer.EntityName), 0, count);
-                                    }
+                                    HealthReporter.Current.UpdateMetric(HealthTrackType.Count, string.Format(HealthReporter.INDEXER_QUEUE_SIZE_FORMAT, synchronizer.EntityName), 0, count);
                                 }
 
                                 base.IFoundation.LogWarning(string.Format("DataSynchronizeDaemon.{0} Complete", synchronizer.ToString()));

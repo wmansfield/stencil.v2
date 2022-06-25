@@ -35,6 +35,5 @@ namespace Placeholder.Primary.Business.Direct
                 return protectedData;
             }
         }
-
     }
 }

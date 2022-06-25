@@ -229,30 +229,27 @@ namespace Placeholder.Primary.Business.Direct.Implementation
         {
             base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQLSharedContext())
                 {
-                    using (var db = base.CreateSQLSharedContext())
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.Accounts
-                                .Where(x => x.account_id == account_id)
-                                .Update(x => new db.Account()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.Accounts
-                                .Where(x => x.account_id == account_id)
-                                .Update(x => new db.Account()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.Accounts
+                            .Where(x => x.account_id == account_id)
+                            .Update(x => new db.Account()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.Accounts
+                            .Where(x => x.account_id == account_id)
+                            .Update(x => new db.Account()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         
