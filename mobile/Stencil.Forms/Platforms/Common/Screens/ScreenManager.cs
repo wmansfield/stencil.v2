@@ -35,124 +35,12 @@ namespace Stencil.Forms.Screens
         {
             return base.ExecuteFunctionAsync<IDataViewModel>(nameof(GenerateViewModelAsync), async delegate ()
             {
-                StandardDataViewModel result = null;
+                IDataViewModel result = null;
 
                 if (!string.IsNullOrWhiteSpace(navigationData?.screen_name))
                 {
                     IScreenConfig screenConfig = await this.LoadScreenConfigAsync(commandProcessor, navigationData);
-                    if (screenConfig != null)
-                    {
-                        result = new StandardDataViewModel(commandProcessor, this.CreateDataTemplateSelector);
-
-                        IResolvableTemplateSelector resolvableTemplateSelector = result.DataTemplateSelector as IResolvableTemplateSelector;
-                        //TODO:MUST: Null IResolvableTemplateSelector
-
-
-                        // map to view elements
-                        ObservableCollection<IDataViewItem> mainItems = new ObservableCollection<IDataViewItem>();
-                        if (screenConfig.ViewConfigs != null)
-                        {
-                            foreach (IViewConfig viewConfig in screenConfig.ViewConfigs)
-                            {
-                                IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
-                                if (dataViewItem != null)
-                                {
-                                    mainItems.Add(dataViewItem);
-                                }
-                            }
-                        }
-
-                        ObservableCollection<object> headerItems = new ObservableCollection<object>();
-                        if (screenConfig.HeaderConfigs != null)
-                        {
-                            foreach (IViewConfig viewConfig in screenConfig.HeaderConfigs)
-                            {
-                                IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
-                                if (dataViewItem != null)
-                                {
-                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
-                                    headerItems.Add(dataViewItem.PreparedContext);
-                                }
-                            }
-                        }
-
-                        ObservableCollection<object> footerItems = new ObservableCollection<object>();
-                        if (screenConfig.FooterConfigs != null)
-                        {
-                            foreach (IViewConfig viewConfig in screenConfig.FooterConfigs)
-                            {
-                                IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
-                                if (dataViewItem != null)
-                                {
-                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
-                                    footerItems.Add(dataViewItem.PreparedContext);
-                                }
-                            }
-                        }
-
-                        ObservableCollection<IMenuEntry> menuEntries = null;
-                        if (screenConfig.MenuConfigs != null)
-                        {
-                            menuEntries = new ObservableCollection<IMenuEntry>();
-                            foreach (IMenuConfig menuConfig in screenConfig.MenuConfigs)
-                            {
-                                IMenuEntry entry = this.GenerateMenuItem(menuConfig);
-                                if (entry != null)
-                                {
-                                    menuEntries.Add(entry);
-                                }
-                            }
-                        }
-
-
-                        // assign mapped element
-                        result.IsMenuSupported = screenConfig.IsMenuSupported;
-                        result.MainItemsUnFiltered = mainItems;
-                        result.HeaderItems = headerItems;
-                        result.ShowHeader = headerItems.Count > 0;
-                        result.FooterItems = footerItems;
-                        result.ShowFooter = footerItems.Count > 0;
-                        result.MenuEntries = menuEntries;
-                        result.BeforeShowCommands = screenConfig.BeforeShowCommands;
-                        result.AfterShowCommands = screenConfig.AfterShowCommands;
-
-                        if (screenConfig.Claims != null)
-                        {
-                            foreach (string item in screenConfig.Claims)
-                            {
-                                result.Claims.Add(item);
-                            }
-                        }
-
-                        // extract filters or augmentations
-
-                        if (resolvableTemplateSelector != null)
-                        {
-                            await result.ExtractAndPrepareExtensionsAsync();
-                        }
-
-
-                        
-
-                        // apply page visuals
-                        if (screenConfig.VisualConfig != null)
-                        {
-                            result.BackgroundImage = screenConfig.VisualConfig.BackgroundImage;
-
-                            if (!string.IsNullOrWhiteSpace(screenConfig.VisualConfig.BackgroundColor))
-                            {
-                                result.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
-                            }
-                            if (screenConfig.VisualConfig.BackgroundBrush != null)
-                            {
-                                result.BackgroundBrush = screenConfig.VisualConfig.BackgroundBrush.ToBrush();
-                            }
-                            result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
-                        }
-
-
-                        await result.Initialize();
-                    }
+                    result = await this.GenerateViewModelAsync(commandProcessor, screenConfig);
                 }
 
                 return result;
@@ -167,8 +55,19 @@ namespace Stencil.Forms.Screens
                 if (screenConfig != null)
                 {
                     result = new StandardDataViewModel(commandProcessor, this.CreateDataTemplateSelector);
+                    await this.PrepareViewModelAsync(commandProcessor, screenConfig, result);
+                }
 
-                    IResolvableTemplateSelector resolvableTemplateSelector = result.DataTemplateSelector as IResolvableTemplateSelector;
+                return result;
+            });
+        }
+        public virtual Task PrepareViewModelAsync(ICommandProcessor commandProcessor, IScreenConfig screenConfig, StandardDataViewModel viewModel)
+        {
+            return base.ExecuteFunctionAsync<IDataViewModel>(nameof(PrepareViewModelAsync), async delegate ()
+            {
+                if (screenConfig != null)
+                {
+                    IResolvableTemplateSelector resolvableTemplateSelector = viewModel.DataTemplateSelector as IResolvableTemplateSelector;
                     //TODO:MUST: Null IResolvableTemplateSelector [not really supported, should we harden the requirement?]
 
                     // map to view elements
@@ -177,7 +76,7 @@ namespace Stencil.Forms.Screens
                     {
                         foreach (IViewConfig viewConfig in screenConfig.ViewConfigs)
                         {
-                            IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
+                            IDataViewItem dataViewItem = this.GenerateViewItem(viewModel, viewConfig);
                             if (dataViewItem != null)
                             {
                                 mainItems.Add(dataViewItem);
@@ -190,10 +89,10 @@ namespace Stencil.Forms.Screens
                     {
                         foreach (IViewConfig viewConfig in screenConfig.HeaderConfigs)
                         {
-                            IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
+                            IDataViewItem dataViewItem = this.GenerateViewItem(viewModel, viewConfig);
                             if (dataViewItem != null)
                             {
-                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
                                 headerItems.Add(dataViewItem.PreparedContext);
                             }
                         }
@@ -204,10 +103,10 @@ namespace Stencil.Forms.Screens
                     {
                         foreach (IViewConfig viewConfig in screenConfig.FooterConfigs)
                         {
-                            IDataViewItem dataViewItem = this.GenerateViewItem(result, viewConfig);
+                            IDataViewItem dataViewItem = this.GenerateViewItem(viewModel, viewConfig);
                             if (dataViewItem != null)
                             {
-                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
+                                IDataViewComponent viewComponent = resolvableTemplateSelector.ResolveTemplateAndPrepareData(dataViewItem);
                                 footerItems.Add(dataViewItem.PreparedContext);
                             }
                         }
@@ -229,21 +128,24 @@ namespace Stencil.Forms.Screens
 
 
                     // assign mapped element
-                    result.IsMenuSupported = screenConfig.IsMenuSupported;
-                    result.MainItemsUnFiltered = mainItems;
-                    result.HeaderItems = headerItems;
-                    result.ShowHeader = headerItems.Count > 0;
-                    result.FooterItems = footerItems;
-                    result.ShowFooter = footerItems.Count > 0;
-                    result.MenuEntries = menuEntries;
-                    result.BeforeShowCommands = screenConfig.BeforeShowCommands;
-                    result.AfterShowCommands = screenConfig.AfterShowCommands;
+                    viewModel.EnableCellSizeCaching = !screenConfig.DisableCellSizeCaching;
+                    viewModel.EnableCellReuse = !screenConfig.DisableCellReuse;
+                    viewModel.IsMenuSupported = screenConfig.IsMenuSupported;
+                    viewModel.MainItemsUnFiltered = mainItems;
+                    viewModel.HeaderItems = headerItems;
+                    viewModel.ShowHeader = headerItems.Count > 0;
+                    viewModel.FooterItems = footerItems;
+                    viewModel.ShowFooter = footerItems.Count > 0;
+                    viewModel.MenuEntries = menuEntries;
+                    viewModel.BeforeShowCommands = screenConfig.BeforeShowCommands;
+                    viewModel.AfterShowCommands = screenConfig.AfterShowCommands;
+
 
                     if (screenConfig.Claims != null)
                     {
                         foreach (string item in screenConfig.Claims)
                         {
-                            result.Claims.Add(item);
+                            viewModel.Claims.Add(item);
                         }
                     }
 
@@ -252,126 +154,30 @@ namespace Stencil.Forms.Screens
 
                     if (resolvableTemplateSelector != null)
                     {
-                        if (result.MainItemsUnFiltered != null)
-                        {
-                            foreach (IDataViewItem item in result.MainItemsUnFiltered)
-                            {
-                                IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(item);
-                                if (item.PreparedContext is IDataViewFilter dataViewFilter)
-                                {
-                                    result.Filters.Add(dataViewFilter);
-                                }
-                                if (item.PreparedContext is IDataViewAdjuster dataViewAdjuster)
-                                {
-                                    result.Adjusters.Add(dataViewAdjuster);
-                                }
-                                if (item.PreparedContext is IStateResponder stateResponder)
-                                {
-                                    result.AddStateResponder(stateResponder);
-                                }
-                                if (item.PreparedContext is IStateEmitter stateEmitter)
-                                {
-                                    result.StateEmitters.Add(stateEmitter);
-                                }
-                            }
-                        }
-                        if (result.HeaderItems != null)
-                        {
-                            foreach (object headerItem in result.HeaderItems)
-                            {
-                                IDataViewItem dataViewItem = headerItem as IDataViewItem;
-                                if (dataViewItem == null)
-                                {
-                                    IDataViewItemReference dataViewItemReference = headerItem as IDataViewItemReference;
-                                    if (dataViewItemReference != null)
-                                    {
-                                        dataViewItem = dataViewItemReference.DataViewItem;
-                                    }
-                                }
-                                if (dataViewItem != null)
-                                {
-                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
-                                    this.LogTrace($"{viewComponent.GetType()} -> {dataViewItem.PreparedContext.GetType()}");
-
-                                    if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
-                                    {
-                                        result.Filters.Add(dataViewFilter);
-                                    }
-                                    if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
-                                    {
-                                        result.Adjusters.Add(dataViewAdjuster);
-                                    }
-                                    if (dataViewItem.PreparedContext is IStateResponder stateResponder)
-                                    {
-                                        result.AddStateResponder(stateResponder);
-                                    }
-                                    if (dataViewItem.PreparedContext is IStateEmitter stateEmitter)
-                                    {
-                                        result.StateEmitters.Add(stateEmitter);
-                                    }
-                                }
-                            }
-                        }
-                        if (result.FooterItems != null)
-                        {
-                            foreach (object footerItem in result.FooterItems)
-                            {
-                                IDataViewItem dataViewItem = footerItem as IDataViewItem;
-                                if (dataViewItem == null)
-                                {
-                                    IDataViewItemReference dataViewItemReference = footerItem as IDataViewItemReference;
-                                    if (dataViewItemReference != null)
-                                    {
-                                        dataViewItem = dataViewItemReference.DataViewItem;
-                                    }
-                                }
-                                if (dataViewItem != null)
-                                {
-                                    IDataViewComponent viewComponent = await resolvableTemplateSelector.ResolveTemplateAndPrepareDataAsync(dataViewItem);
-                                    if (dataViewItem.PreparedContext is IDataViewFilter dataViewFilter)
-                                    {
-                                        result.Filters.Add(dataViewFilter);
-                                    }
-                                    if (dataViewItem.PreparedContext is IDataViewAdjuster dataViewAdjuster)
-                                    {
-                                        result.Adjusters.Add(dataViewAdjuster);
-                                    }
-                                    if (dataViewItem.PreparedContext is IStateResponder stateResponder)
-                                    {
-                                        result.AddStateResponder(stateResponder);
-                                    }
-                                    if (dataViewItem.PreparedContext is IStateEmitter stateEmitter)
-                                    {
-                                        result.StateEmitters.Add(stateEmitter);
-                                    }
-                                }
-                            }
-                        }
+                        await viewModel.ExtractAndPrepareExtensionsAsync();
                     }
-
-                    
 
                     // apply page visuals
                     if (screenConfig.VisualConfig != null)
                     {
-                        result.BackgroundImage = screenConfig.VisualConfig.BackgroundImage;
+                        viewModel.BackgroundImage = screenConfig.VisualConfig.BackgroundImage;
 
                         if (!string.IsNullOrWhiteSpace(screenConfig.VisualConfig.BackgroundColor))
                         {
-                            result.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
+                            viewModel.BackgroundColor = Color.FromHex(screenConfig.VisualConfig.BackgroundColor);
                         }
-                        if(screenConfig.VisualConfig.BackgroundBrush != null)
+                        if (screenConfig.VisualConfig.BackgroundBrush != null)
                         {
-                            result.BackgroundBrush = screenConfig.VisualConfig.BackgroundBrush.ToBrush();
+                            viewModel.BackgroundBrush = screenConfig.VisualConfig.BackgroundBrush.ToBrush();
                         }
-                        result.Padding = screenConfig.VisualConfig.Padding.ToThickness();
+                        viewModel.Padding = screenConfig.VisualConfig.Padding.ToThickness();
                     }
-                    
 
-                    await result.Initialize();
+
+                    await viewModel.Initialize();
                 }
 
-                return result;
+                return viewModel;
             });
         }
 
@@ -509,7 +315,73 @@ namespace Stencil.Forms.Screens
             });
         }
 
+        public virtual Task<IScreenConfig> LoadScreenConfigAsync(ICommandProcessor commandProcessor, INavigationData navigationData)
+        {
+            return base.ExecuteFunctionAsync(nameof(LoadScreenConfigAsync), async delegate ()
+            {
+                ScreenConfig result = null;
 
+                if (!string.IsNullOrWhiteSpace(navigationData?.screen_name))
+                {
+                    string screenStorageKey = ScreenConfig.FormatStorageKey(navigationData.screen_name, navigationData.screen_parameter);
+
+                    using (IStencilDatabase database = this.API.StencilDatabase.OpenStencilDatabase())
+                    {
+                        result = database.ScreenConfig_Get(screenStorageKey);
+                    }
+                }
+
+                if (result == null)
+                {
+                    // manually build if missing from database
+                    result = await this.GenerateMissingScreenConfigAsync(navigationData);
+
+                    if (result.DownloadCommands?.Count > 0)
+                    {
+                        CommandScope commandScope = new CommandScope(commandProcessor);
+
+                        foreach (ICommandConfig item in result.DownloadCommands)
+                        {
+                            try
+                            {
+                                await this.API.CommandProcessor.ExecuteCommandAsync(commandScope, item.CommandName, item.CommandParameter, null);
+                            }
+                            catch (Exception ex)
+                            {
+                                this.LogError(ex, string.Format("ProcessScreenJob.DownloadCommand:{0}:{1}" + item.CommandName, item.CommandParameter));
+                            }
+                        }
+                    }
+
+                    if (!result.SuppressPersist)
+                    {
+                        // ensure we have an id, in case implementor forgot
+                        if (string.IsNullOrWhiteSpace(result.ScreenStorageKey))
+                        {
+                            result.ScreenStorageKey = ScreenConfig.FormatStorageKey(navigationData.screen_name, navigationData.screen_parameter);
+                        }
+                        if (!result.DownloadedUTC.HasValue)
+                        {
+                            result.DownloadedUTC = DateTimeOffset.UtcNow;
+                        }
+                        if (result.ScreenNavigationData != null)
+                        {
+                            result.ScreenNavigationData.last_retrieved_utc = DateTime.UtcNow;
+                        }
+
+                        await this.SaveScreenConfigAsync(result);
+                    }
+                }
+
+                IScreenConfig screenConfig = result as IScreenConfig;
+                if (screenConfig != null)
+                {
+                    screenConfig = await this.PostProcessScreenConfigAsync(screenConfig);
+                }
+
+                return screenConfig;
+            });
+        }
         public virtual List<IScreenConfig> GetForDownloading()
         {
             return base.ExecuteFunction(nameof(GetForDownloading), delegate ()
@@ -576,76 +448,7 @@ namespace Stencil.Forms.Screens
             });
         }
 
-        protected Task<IScreenConfig> LoadScreenConfigAsync(ICommandProcessor commandProcessor, INavigationData navigationData)
-        {
-            return base.ExecuteFunctionAsync(nameof(LoadScreenConfigAsync), async delegate ()
-            {
-                ScreenConfig result = null;
-
-                if (!string.IsNullOrWhiteSpace(navigationData?.screen_name))
-                {
-                    string screenStorageKey = ScreenConfig.FormatStorageKey(navigationData.screen_name, navigationData.screen_parameter);
-
-                    using (IStencilDatabase database = this.API.StencilDatabase.OpenStencilDatabase())
-                    {
-                        result = database.ScreenConfig_Get(screenStorageKey);
-                    }
-                }
-
-                if (result == null)
-                {
-                    // manually build if missing from database
-                    result = await this.GenerateMissingScreenConfigAsync(navigationData);
-                    
-                    if(result != null)
-                    {
-                        if (result.DownloadCommands?.Count > 0)
-                        {
-                            CommandScope commandScope = new CommandScope(commandProcessor);
-
-                            foreach (ICommandConfig item in result.DownloadCommands)
-                            {
-                                try
-                                {
-                                    await this.API.CommandProcessor.ExecuteCommandAsync(commandScope, item.CommandName, item.CommandParameter, null);
-                                }
-                                catch (Exception ex)
-                                {
-                                    this.LogError(ex, string.Format("ProcessScreenJob.DownloadCommand:{0}:{1}" + item.CommandName, item.CommandParameter));
-                                }
-                            }
-                        }
-
-                        if (!result.SuppressPersist)
-                        {
-                            // ensure we have an id, in case implementor forgot
-                            if (string.IsNullOrWhiteSpace(result.ScreenStorageKey))
-                            {
-                                result.ScreenStorageKey = ScreenConfig.FormatStorageKey(navigationData.screen_name, navigationData.screen_parameter);
-                            }
-                            if (!result.DownloadedUTC.HasValue)
-                            {
-                                result.DownloadedUTC = DateTimeOffset.UtcNow;
-                            }
-                            if (result.ScreenNavigationData != null)
-                            {
-                                result.ScreenNavigationData.last_retrieved_utc = DateTime.UtcNow;
-                            }
-
-                            await this.SaveScreenConfigAsync(result);
-                        }
-                    }
-                }
-
-                IScreenConfig screenConfig = result as IScreenConfig;
-                if (screenConfig != null)
-                {
-                    screenConfig = await this.PostProcessScreenConfigAsync(screenConfig);
-                }
-
-                return screenConfig;
-            });
-        }
+        
 
         #endregion
 

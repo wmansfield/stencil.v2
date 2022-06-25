@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
+using Stencil.Forms.Resourcing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
         private const string TEMPLATE_KEY = "groupBegin";
 
+        private DataTemplate _dataTemplate;
+
         public bool BindingContextCacheEnabled
         {
             get
@@ -34,7 +37,11 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(GetDataTemplate)}", delegate ()
             {
-                return this[TEMPLATE_KEY] as DataTemplate;
+                if(_dataTemplate == null)
+                {
+                    _dataTemplate = this[TEMPLATE_KEY] as DataTemplate;
+                }
+                return _dataTemplate;
             });
         }
         public Task<IDataViewItemReference> PrepareBindingContextAsync(ICommandScope commandScope, IDataViewModel dataViewModel, IDataViewItem dataViewItem, DataTemplateSelector selector, string configuration_json)
@@ -68,14 +75,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
         }
 
-        private string _innerColor;
+        private string _innerColor = AppColors.Transparent;
         public string InnerColor
         {
             get { return _innerColor; }
             set { SetProperty(ref _innerColor, value); }
         }
 
-        private string _outerColor;
+        private string _outerColor = AppColors.Transparent;
         public string OuterColor
         {
             get { return _outerColor; }

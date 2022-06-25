@@ -122,7 +122,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<Shop> GetDocumentAsync(Guid shop_id)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 
                 string partitionKey = new Shop(){ shop_id = shop_id}.partition_key;
@@ -137,7 +137,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
 
         public Task<bool> CreateDocumentAsync(Shop model)
         {
-            return base.ExecuteFunction(nameof(CreateDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(CreateDocumentAsync), async delegate ()
             {
                 ItemResponse<Shop> result = await base.UpsertSharedAsync(model);
                 return result.StatusCode.IsSuccess();
@@ -155,7 +155,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         [Obsolete("Use caution, this is expensive for multi-partition tables", false)]
         public Task<ListResult<Shop>> FindAsync(int skip, int take, string order_by = "", bool descending = false, string keyword = "")
         {
-            return base.ExecuteFunction(nameof(FindAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(FindAsync), async delegate ()
             {
                 
                 IQueryable<Shop> query = base.QuerySharedWithoutPartitionKey();

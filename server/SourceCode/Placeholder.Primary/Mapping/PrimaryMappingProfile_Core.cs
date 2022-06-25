@@ -56,6 +56,8 @@ namespace Placeholder.Primary.Mapping
             this.CreateMap<dm.ShopSetting, db.ShopSetting>();
             this.CreateMap<db.Company, dm.Company>();
             this.CreateMap<dm.Company, db.Company>();
+            this.CreateMap<db.Widget, dm.Widget>();
+            this.CreateMap<dm.Widget, db.Widget>();
             
         }
         protected void DomainAndSDKMappings()
@@ -97,6 +99,9 @@ namespace Placeholder.Primary.Mapping
             
             this.CreateMap<Domain.Company, SDK.Models.Company>();
             this.CreateMap<SDK.Models.Company, Domain.Company>();
+            
+            this.CreateMap<Domain.Widget, SDK.Models.Widget>();
+            this.CreateMap<SDK.Models.Widget, Domain.Widget>();
             
         }
     }

@@ -229,30 +229,27 @@ namespace Placeholder.Primary.Business.Direct.Implementation
         {
             base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQLIsolatedContext(shop_id))
                 {
-                    using (var db = base.CreateSQLIsolatedContext(shop_id))
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.Companies
-                                .Where(x => x.company_id == company_id)
-                                .Update(x => new db.Company()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.Companies
-                                .Where(x => x.company_id == company_id)
-                                .Update(x => new db.Company()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.Companies
+                            .Where(x => x.company_id == company_id)
+                            .Update(x => new db.Company()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.Companies
+                            .Where(x => x.company_id == company_id)
+                            .Update(x => new db.Company()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         

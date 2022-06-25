@@ -20,6 +20,7 @@ namespace Stencil.Forms.Commanding.Commands
         {
             return base.ExecuteFunction(nameof(ParseNavigationData), delegate ()
             {
+                // this paradigm is used elsewhere, use caution changing
                 if (commandParameter != null)
                 {
                     TNavigationData existing = commandParameter as TNavigationData;

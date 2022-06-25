@@ -37,6 +37,9 @@ namespace Stencil.Common.Screens
         public bool SuppressPersist { get; set; }
         public bool AutomaticDownload { get; set; }
         public bool IsMenuSupported { get; set; }
+        public bool DisableCellReuse { get; set; }
+        public bool DisableCellSizeCaching { get; set; }
+
 
         public Lifetime Lifetime { get; set; }
         public DateTimeOffset? DownloadedUTC { get; set; }

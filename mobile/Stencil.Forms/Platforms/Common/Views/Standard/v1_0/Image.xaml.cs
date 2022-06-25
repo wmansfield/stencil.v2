@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
+using Stencil.Forms.Platform;
+using Stencil.Forms.Resourcing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,19 +54,108 @@ namespace Stencil.Forms.Views.Standard.v1_0
                     result = new ImageContext();
                 }
                 
+                if(result.FullBleedHorizontal && result.ImageWidth > 0 && result.ImageHeight > 0)
+                {
+                    result.UISource = null;
+                    result.Width = -1; // computed when grid is available
+                    result.Height = -1; // computed when grid is available
+                }
+                else
+                {
+                    result.UISource = result.Source;
+                }
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
                 return Task.FromResult<IDataViewItemReference>(result);
             });
         }
+
+        /// <summary>
+        /// This is not a mistake, images do not always render correct sizing when image cache is enabled. [and we really want image caching]
+        /// </summary>
+        private void AssignImageSize_BugFix(StackLayout layout)
+        {
+            CoreUtility.ExecuteMethod(nameof(AssignImageSize_BugFix), delegate ()
+            {
+                if (layout?.Width > 0)
+                {
+                    ImageContext context = layout.BindingContext as ImageContext;
+                    if (context != null)
+                    {
+                        if (context.FullBleedHorizontal && context.ImageWidth > 0 && context.ImageHeight > 0)
+                        {
+                            context.Width = (int)layout.Width;
+                            context.Height = (int)(layout.Width * (float)context.ImageHeight / (float)context.ImageWidth);// W/H = w/?;
+
+                            context.UISource = context.Source;
+                            layout.ForceLayout();
+                        }
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// This is not a mistake, images do not always render correct sizing when cache is enabled.
+        /// This forced a layout call
+        /// </summary>
+        private void StackLayout_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            CoreUtility.ExecuteMethod(nameof(StackLayout_PropertyChanged), delegate ()
+            {
+                if (e.PropertyName == StackLayout.WidthProperty.PropertyName)
+                {
+                    StackLayout layout = (sender as StackLayout);
+                    if (layout?.Width > 0)
+                    {
+                        Device.BeginInvokeOnMainThread(delegate ()
+                        {
+                            this.AssignImageSize_BugFix(layout);
+                        });
+                    }
+                }
+            });
+        }
+
+        private async void Image_Tapped(object sender, EventArgs e)
+        {
+            await CoreUtility.ExecuteMethodAsync($"{COMPONENT_NAME}.Image_Tapped", async delegate ()
+            {
+                View view = (sender as View);
+                ImageContext context = view?.BindingContext as ImageContext;
+                if (context != null)
+                {
+                    DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+
+                    if (!string.IsNullOrWhiteSpace(context.CommandName))
+                    {
+                        if (context.CommandScope?.CommandProcessor != null)
+                        {
+                            await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.CommandName, context.CommandParameter, context?.DataViewItem?.DataViewModel);
+                        }
+                    }
+                }
+            });
+        }
     }
+
     public class ImageContext : PreparedBindingContext
     {
         public ImageContext()
             : base(nameof(ImageContext))
         {
 
+        }
+
+        public string CommandName { get; set; }
+        public string CommandParameter { get; set; }
+
+        private bool _fullBleedHorizontal;
+        public bool FullBleedHorizontal
+        {
+            get { return _fullBleedHorizontal; }
+            set { SetProperty(ref _fullBleedHorizontal, value); }
         }
 
         private string _source;
@@ -89,18 +180,18 @@ namespace Stencil.Forms.Views.Standard.v1_0
         }
 
 
-        private int _mimimumWidth = -1;
-        public int MinimumWidth
+        private int _imageWidth = -1;
+        public int ImageWidth
         {
-            get { return _mimimumWidth; }
-            set { SetProperty(ref _mimimumWidth, value); }
+            get { return _imageWidth; }
+            set { SetProperty(ref _imageWidth, value); }
         }
 
-        private int _minimumHeight = -1;
-        public int MinimumHeight
+        private int _imageHeight = -1;
+        public int ImageHeight
         {
-            get { return _minimumHeight; }
-            set { SetProperty(ref _minimumHeight, value); }
+            get { return _imageHeight; }
+            set { SetProperty(ref _imageHeight, value); }
         }
 
         private Thickness _padding = new Thickness();
@@ -110,11 +201,20 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _padding, value); }
         }
 
+
         private string _backgroundColor;
         public string BackgroundColor
         {
             get { return _backgroundColor; }
             set { SetProperty(ref _backgroundColor, value); }
+        }
+
+
+        private ImageSource _uiSource;
+        public ImageSource UISource
+        {
+            get { return _uiSource; }
+            set { SetProperty(ref _uiSource, value); }
         }
     }
 }

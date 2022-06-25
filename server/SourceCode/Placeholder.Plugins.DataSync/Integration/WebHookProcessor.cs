@@ -39,12 +39,14 @@ namespace Placeholder.Plugins.DataSync.Integration
         public static string ProcessAgitateWebHook(IFoundation foundation, string secretkey, string daemonName)
         {
             string result = "";
-            if (secretkey == "codeable")
+            if (secretkey == "codeable" && !string.IsNullOrWhiteSpace(daemonName))
             {
                 IDaemonManager daemonManager = foundation.GetDaemonManager();
-                if (null != daemonManager.GetRegisteredDaemonTask(daemonName))
+
+                IDaemonTask[] matches = daemonManager.FindRegisteredDaemonTasks(x => x.StartsWith(daemonName, StringComparison.OrdinalIgnoreCase));
+                foreach (IDaemonTask item in matches)
                 {
-                    daemonManager.StartDaemon(daemonName);
+                    daemonManager.StartDaemon(item.DaemonName);
                     result = "Agitated";
                 }
             }

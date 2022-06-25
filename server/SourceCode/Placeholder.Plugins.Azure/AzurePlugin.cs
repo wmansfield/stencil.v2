@@ -48,7 +48,32 @@ namespace Placeholder.Plugins.Azure
         {
             base.ExecuteMethod("Initialize", delegate ()
             {
-                this.IFoundation.Container.RegisterSingleton<IUploadFiles, AzureUploadFiles>();
+                AzureUploadFiles uploadFile = new AzureUploadFiles(this.IFoundation);
+                this.IFoundation.Container.RegisterInstance<IUploadFiles>(uploadFile);
+
+                IDaemonManager daemonManager = this.IFoundation.GetDaemonManager();
+                ISettingsResolver settingsResolver = this.IFoundation.Resolve<ISettingsResolver>();
+                bool isBackPane = settingsResolver.IsBackPane();
+                bool isHydrate = settingsResolver.IsHydrate();
+                bool isLocalHost = settingsResolver.IsLocalHost();
+
+                PlaceholderAPI API = this.IFoundation.Resolve<PlaceholderAPI>();
+                List<Tenant> tenants = API.Direct.Tenants.Find(0, int.MaxValue);
+
+                if (isBackPane)
+                {
+                    foreach (Tenant item in tenants)
+                    {
+                        //..
+                    }
+                }
+                else if (isLocalHost)
+                {
+                    foreach (Tenant item in tenants)
+                    {
+                        //..
+                    }
+                }
             });
         }
 

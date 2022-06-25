@@ -582,7 +582,7 @@ namespace Placeholder.Primary.Business.Store
 
         public Task<PermissionInfo> GenerateReadPermissionForPartitionSharedAsync(Guid user_id, string partitionKey, string permissionId = "perm.standard.read")
         {
-            return base.ExecuteFunction("GenerateReadPermissionForPartitionSharedAsync", async delegate ()
+            return base.ExecuteFunctionAsync("GenerateReadPermissionForPartitionSharedAsync", async delegate ()
             {
                 CosmosClient client = this.CreateSharedClient();
                 string databaseId = this.ClientFactory.GetSharedDatabaseId();
@@ -634,7 +634,7 @@ namespace Placeholder.Primary.Business.Store
         }
         public Task<PermissionInfo> GenerateReadPermissionForPartitionIsolatedAsync(Guid shard_id, Guid user_id, string partitionKey, string permissionId = "perm.standard.read")
         {
-            return base.ExecuteFunction(nameof(GenerateReadPermissionForPartitionIsolatedAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GenerateReadPermissionForPartitionIsolatedAsync), async delegate ()
             {
                 string tenant_code = this.ResolveTenant(shard_id);
                 CosmosClient client = this.CreateIsolatedClient(tenant_code);
@@ -687,7 +687,7 @@ namespace Placeholder.Primary.Business.Store
 
         protected virtual string ResolveTenant(Guid shop_id)
         {
-            return base.ExecuteFunction(nameof(ResolveTenant), delegate ()
+            return base.ExecuteFunctionByPassHealth(nameof(ResolveTenant), delegate ()
             {
                 return this.SharedCacheStatic2.PerLifetime(string.Format("IsolatedShop{0}", shop_id), delegate ()
                 {

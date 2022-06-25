@@ -61,11 +61,11 @@ namespace Stencil.Forms.Views.Standard
             return this;
         }
 
-        public Task OnNavigatingToAsync()
+        public Task OnNavigatingToAsync(bool reload)
         {
             return base.ExecuteMethodAsync(nameof(OnNavigatingToAsync), delegate ()
             {
-                return this.DataViewModel.OnNavigatingToAsync();
+                return this.DataViewModel.OnNavigatingToAsync(reload);
             });
         }
         public Task OnNavigatedToAsync()

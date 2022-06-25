@@ -11,7 +11,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         [Obsolete("Use caution, this is expensive for multi-partition tables", false)]
         public Task<ListResult<Account>> FindByStatusAsync(AccountStatus? account_status, int skip, int take, string keyword = "", string order_by = "", bool descending = false)
         {
-            return base.ExecuteFunction(nameof(FindByStatusAsync), delegate ()
+            return base.ExecuteFunctionAsync(nameof(FindByStatusAsync), async delegate ()
             {
                 IQueryable<Account> query = base.QuerySharedWithoutPartitionKey();
 
@@ -30,7 +30,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
 
                 query = this.ApplySafeSort(query, order_by, descending);
 
-                return query.FetchAsSteppedListAsync(skip, take);
+                return await query.FetchAsSteppedListAsync(skip, take);
             });
         }
     }

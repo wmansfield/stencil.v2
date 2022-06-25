@@ -92,7 +92,7 @@ namespace Placeholder.Web.Controllers
             {
                 return base.ExecuteFunction(methodName, function, parameters);
             }
-            catch (UIException ex)
+            catch (Exception ex)
             {
                 if (this.CurrentClientPlatformIsMobile())
                 {
@@ -111,7 +111,7 @@ namespace Placeholder.Web.Controllers
             {
                 return await base.ExecuteFunctionAsync(methodName, function, parameters);
             }
-            catch (UIException ex)
+            catch (Exception ex)
             {
                 if (this.CurrentClientPlatformIsMobile())
                 {
@@ -283,6 +283,16 @@ namespace Placeholder.Web.Controllers
             return base.ExecuteFunction("SimpleFileDownload", delegate ()
             {
                 Stream stream = new FileStream(fullPath, FileMode.Open);
+                return new FileStreamResult(stream, mimeType)
+                {
+                    FileDownloadName = fileName
+                };
+            });
+        }
+        protected virtual IActionResult SimpleFileDownload(string fileName, string mimeType, Stream stream)
+        {
+            return base.ExecuteFunction("SimpleFileDownload", delegate ()
+            {
                 return new FileStreamResult(stream, mimeType)
                 {
                     FileDownloadName = fileName

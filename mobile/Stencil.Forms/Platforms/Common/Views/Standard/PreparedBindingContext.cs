@@ -2,20 +2,40 @@
 using Stencil.Forms.Commanding;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard
 {
-    public abstract class PreparedBindingContext : TrackedClass, IDataViewItemReference
+    [Browsable(false)]
+    public abstract partial class PreparedBindingContext : PreparedBindingContext<StencilAPI>
     {
         public PreparedBindingContext(string trackPrefix)
-            : base(trackPrefix)
+            : base(StencilAPI.Instance, trackPrefix)
+        {
+
+        }
+    }
+    public abstract partial class PreparedBindingContext<TAPI> : TrackedClass<TAPI>, IDataViewItemReference, IPreparedBindingContext
+        where TAPI : StencilAPI
+    {
+        public PreparedBindingContext(TAPI api, string trackPrefix)
+            : base(api, trackPrefix)
         {
 
         }
 
+        public string TypeName
+        {
+            get
+            {
+                return this.GetType().Name;
+            }
+        }
+        
         public List<InteractionStateGroup> InteractionStateGroups { get; set; }
 
 
@@ -77,7 +97,9 @@ namespace Stencil.Forms.Views.Standard
                 this.InteractionLookup = lookup;
             });
         }
-
+        public virtual void OnViewDetachedFromContext()
+        {
+        }
         public virtual void OnInteractionStateChanged(string group, string key, string state)
         {
             base.ExecuteMethod(nameof(OnInteractionStateChanged), delegate ()
@@ -109,34 +131,43 @@ namespace Stencil.Forms.Views.Standard
                             {
                                 bool applyChange = false;
                                 string value = null;
-                                foreach (InteractionStateMap map in stateGroup.state_maps)
+                                if (stateGroup.state_maps == null || stateGroup.state_maps.Count == 0)
                                 {
-                                    bool matched = false;
+                                    // presume passthrough
+                                    applyChange = true;
+                                    value = state;
+                                }
+                                else
+                                {
+                                    foreach (InteractionStateMap map in stateGroup.state_maps)
+                                    {
+                                        bool matched = false;
 
-                                    switch (map.state_operator)
-                                    {
-                                        case InteractionStateOperator.equals:
-                                            matched = map.state == state;
-                                            break;
-                                        case InteractionStateOperator.not_equals:
-                                            matched = map.state != state;
-                                            break;
-                                        case InteractionStateOperator.any:
-                                            matched = true;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    if (matched)
-                                    {
-                                        applyChange = true;
-                                        if (string.IsNullOrEmpty(map.value_format))
+                                        switch (map.state_operator)
                                         {
-                                            value = state;
+                                            case InteractionStateOperator.equals:
+                                                matched = map.state == state;
+                                                break;
+                                            case InteractionStateOperator.not_equals:
+                                                matched = map.state != state;
+                                                break;
+                                            case InteractionStateOperator.any:
+                                                matched = true;
+                                                break;
+                                            default:
+                                                break;
                                         }
-                                        else
+                                        if (matched)
                                         {
-                                            value = string.Format(map.value_format, state);
+                                            applyChange = true;
+                                            if (string.IsNullOrEmpty(map.value_format))
+                                            {
+                                                value = state;
+                                            }
+                                            else
+                                            {
+                                                value = string.Format(map.value_format, state);
+                                            }
                                         }
                                     }
                                 }
@@ -158,6 +189,6 @@ namespace Stencil.Forms.Views.Standard
             // designed for override
         }
 
-
+        
     }
 }

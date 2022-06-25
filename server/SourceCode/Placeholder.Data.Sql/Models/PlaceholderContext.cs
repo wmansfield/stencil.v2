@@ -16,6 +16,7 @@ namespace Placeholder.Data.Sql
         public virtual DbSet<ShopIsolated> ShopIsolateds { get; set; }
         public virtual DbSet<ShopSetting> ShopSettings { get; set; }
         public virtual DbSet<Tenant> Tenants { get; set; }
+        public virtual DbSet<Widget> Widgets { get; set; }
 
         public PlaceholderContext(DbContextOptions<PlaceholderContext> options) : base(options)
         {
@@ -23,18 +24,16 @@ namespace Placeholder.Data.Sql
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasKey(e => e.account_id);
 
                 entity.ToTable("Account");
 
-                entity.HasIndex(e => e.email)
+                entity.HasIndex(e => e.email, "UK_account_email")
                     .IsUnique();
 
-                entity.HasIndex(e => e.api_key)
+                entity.HasIndex(e => e.api_key, "UK_account_key")
                     .IsUnique();
 
                 entity.Property(e => e.account_id).ValueGeneratedNever();
@@ -195,7 +194,7 @@ namespace Placeholder.Data.Sql
 
                 entity.ToTable("GlobalSetting");
 
-                entity.HasIndex(e => e.name)
+                entity.HasIndex(e => e.name, "UK_singleglobal")
                     .IsUnique();
 
                 entity.Property(e => e.global_setting_id).ValueGeneratedNever();
@@ -318,7 +317,7 @@ namespace Placeholder.Data.Sql
 
                 entity.ToTable("ShopSetting");
 
-                entity.HasIndex(e => new { e.shop_id, e.name })
+                entity.HasIndex(e => new { e.shop_id, e.name }, "UK_shop_setting")
                     .IsUnique();
 
                 entity.Property(e => e.shop_setting_id).ValueGeneratedNever();
@@ -355,7 +354,7 @@ namespace Placeholder.Data.Sql
 
                 entity.ToTable("Tenant");
 
-                entity.HasIndex(e => e.tenant_code)
+                entity.HasIndex(e => e.tenant_code, "UK_tenant_code")
                     .IsUnique();
 
                 entity.Property(e => e.tenant_id).ValueGeneratedNever();
@@ -371,6 +370,38 @@ namespace Placeholder.Data.Sql
                     .HasMaxLength(50);
 
                 entity.Property(e => e.updated_utc).HasPrecision(0);
+            });
+
+            modelBuilder.Entity<Widget>(entity =>
+            {
+                entity.HasKey(e => e.widget_id);
+
+                entity.ToTable("Widget");
+
+                entity.Property(e => e.widget_id).ValueGeneratedNever();
+
+                entity.Property(e => e.created_utc).HasPrecision(0);
+
+                entity.Property(e => e.deleted_utc).HasPrecision(0);
+
+                entity.Property(e => e.stamp_utc).HasPrecision(0);
+
+                entity.Property(e => e.sync_agent).HasMaxLength(50);
+
+                entity.Property(e => e.sync_attempt_utc).HasPrecision(0);
+
+                entity.Property(e => e.sync_hydrate_utc).HasPrecision(0);
+
+                entity.Property(e => e.sync_invalid_utc).HasPrecision(0);
+
+                entity.Property(e => e.sync_success_utc).HasPrecision(0);
+
+                entity.Property(e => e.updated_utc).HasPrecision(0);
+
+                entity.HasOne(d => d.Shop)
+                    .WithMany(p => p.Widgets)
+                    .HasForeignKey(d => d.shop_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             OnModelCreatingPartial(modelBuilder);

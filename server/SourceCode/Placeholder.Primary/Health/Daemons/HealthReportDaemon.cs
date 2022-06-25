@@ -72,7 +72,7 @@ namespace Placeholder.Primary.Health.Daemons
             {
                 base.IFoundation.LogTrace("Sending Health Reports");
 
-                string hostName = HealthReporter.GetHostName();
+                string hostName = HealthReporter.Current.GetHostName();
                 Dictionary<string, decimal> metrics = null;
                 List<string> logs = null;
                 HealthReporter.Current.ResetMetrics(out metrics, out logs);
@@ -91,17 +91,17 @@ namespace Placeholder.Primary.Health.Daemons
                     string apiHost = this.ApiHost;
                     if(!string.IsNullOrEmpty(apiKey) && !string.IsNullOrEmpty(apiHost))
                     {
-                        GrafanaGraphiteClient client = this.AcquireGraphiteClient(apiKey, apiHost);
+                        HostedGraphiteClient client = this.AcquireGraphiteClient(apiKey, apiHost);
                         client.SendMany(logs, true);
                     }
                 }
             });
         }
 
-        private GrafanaGraphiteClient _graphiteClient;
+        private HostedGraphiteClient _graphiteClient;
         private DateTime? _graphiteExpiration;
 
-        private GrafanaGraphiteClient AcquireGraphiteClient(string apiKey, string host)
+        private HostedGraphiteClient AcquireGraphiteClient(string apiKey, string host)
         {
             if(!_graphiteExpiration.HasValue || _graphiteExpiration.Value < DateTime.UtcNow)
             {
@@ -120,7 +120,7 @@ namespace Placeholder.Primary.Health.Daemons
             }
             if(_graphiteClient == null)
             {
-                _graphiteClient = new GrafanaGraphiteClient(apiKey, host);
+                _graphiteClient = new HostedGraphiteClient(apiKey, host);
                 _graphiteExpiration = DateTime.UtcNow.AddMinutes(5);
             }
             return _graphiteClient;

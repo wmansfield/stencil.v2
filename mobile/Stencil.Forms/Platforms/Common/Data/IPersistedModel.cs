@@ -1,7 +1,7 @@
 ﻿
 namespace Stencil.Forms.Data
 {
-    public interface IDatabaseModel
+    public interface IPersistedModel
     {
         string id { get; set; }
 

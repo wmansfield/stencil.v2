@@ -9,6 +9,7 @@
               ColumnSpacing="0"
               RowSpacing="0"
               Padding="{Binding Padding}"
+              Margin="{Binding Margin}"
               BackgroundColor="{Binding BackgroundColor}"
               IsVisible="{Binding Visible}"
               HorizontalOptions="Fill"
@@ -27,14 +28,14 @@
                        HorizontalOptions="Start"
                        TextColor="{StaticResource PrimaryWhite}"
                        FontFamily="{StaticResource SansRegular}"
-                       FontSize="{StaticResource FontSizeStandard}" />
+                       FontSize="{Binding FontSize}" />
                 <Label IsVisible="{Binding ShowIcon}"
                        Text="{Binding Icon}"
                        Margin="8,0,0,0"
                        Padding="0,0"
                        HorizontalOptions="Start"
                        VerticalOptions="Center"
-                       FontSize="{StaticResource FontSizeStandard}"
+                       FontSize="{Binding FontSize}"
                        FontFamily="{StaticResource FontAwesome}"
                        TextColor="{StaticResource PrimaryWhite}"
                        HorizontalTextAlignment="Center">

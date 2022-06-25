@@ -29,13 +29,20 @@ namespace Stencil.Forms.Data.Sync
         public virtual bool Enabled { get; set; }
         public virtual bool AppIsActive { get; set; }
 
-        public virtual Dictionary<string, DataDownloadJob> Jobs { get; protected set; }
+        public virtual Dictionary<string, DataSyncJob> Jobs { get; protected set; }
 
         public virtual CancellationTokenSource CancellationTokenSource { get; protected set; }
 
 
-        protected bool IsRunning { get; set; }
+        protected virtual bool IsRunning { get; set; }
 
+        protected virtual TimeSpan JobTimeOut
+        {
+            get
+            {
+                return TimeSpan.FromMinutes(5);
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -112,10 +119,68 @@ namespace Stencil.Forms.Data.Sync
             });
         }
 
+        public virtual bool ShouldDownload(Lifetime lifeTime, DateTimeOffset? lastDownloadUTC, DateTimeOffset? expireUTC, DateTimeOffset? cacheUntilUTC, DateTimeOffset? invalidatedUTC)
+        {
+            return base.ExecuteFunction(nameof(ShouldDownload), delegate ()
+            {
+                switch (lifeTime)
+                {
+                    case Lifetime.until_invalidated:
+                        if (invalidatedUTC.HasValue)
+                        {
+                            return invalidatedUTC.Value < DateTimeOffset.UtcNow;
+                        }
+                        return false;
+                    case Lifetime.until_expired:
+                        bool isExpired = false;
+                        if (expireUTC.HasValue)
+                        {
+                            isExpired = expireUTC.Value < DateTimeOffset.UtcNow;
+                        }
+
+                        bool cacheInValid = false;
+                        if (cacheUntilUTC.HasValue)
+                        {
+                            cacheInValid = cacheUntilUTC.Value > DateTimeOffset.UtcNow;
+                        }
+
+                        return isExpired || cacheInValid;
+                    default:
+                        return true;
+                }
+            });
+        }
+
         #endregion
 
         #region Protected Methods
+        public virtual void AgitateJob(string jobName, TimeSpan? minimumDurationSinceLastStart = null)
+        {
+            base.ExecuteMethod(nameof(AgitateJob), delegate ()
+            {
+                Dictionary<string, DataSyncJob> jobs = this.Jobs;
+                if (jobs != null)
+                {
+                    DataSyncJob match = jobs.Values.FirstOrDefault(x => x.JobName == jobName);
+                    if(match != null)
+                    {
+                        if(minimumDurationSinceLastStart.HasValue && match.LastStartedUTC.HasValue)
+                        {
+                            TimeSpan sinceLastStart = DateTime.UtcNow - match.LastStartedUTC.Value;
+                            if (sinceLastStart < minimumDurationSinceLastStart)
+                            {
+                                return;
+                            }
+                        }
 
+                        Task.Run(async delegate ()
+                        {
+                            await this.ProcessJobsAsync(new DataSyncJob[] { match });
+                        });
+                    }
+                }
+            });
+        }
         protected virtual void StartProcessingJobsIfNeeded()
         {
             base.ExecuteMethod(nameof(StartProcessingJobsIfNeeded), delegate ()
@@ -124,7 +189,7 @@ namespace Stencil.Forms.Data.Sync
                 {
                     return;
                 }
-                Dictionary<string, DataDownloadJob> jobs = this.Jobs;
+                Dictionary<string, DataSyncJob> jobs = this.Jobs;
                 if (jobs != null)
                 {
                     this.IsRunning = true;
@@ -142,13 +207,13 @@ namespace Stencil.Forms.Data.Sync
                 }
             });
         }
-        protected Task ProcessJobsAsync(DataDownloadJob[] dataDownloadJobs)
+        protected virtual Task ProcessJobsAsync(DataSyncJob[] dataDownloadJobs)
         {
             return base.ExecuteMethodAsync(nameof(ProcessJobsAsync), async delegate ()
             {
                 dataDownloadJobs = dataDownloadJobs.OrderByDescending(x => x.Importance).ToArray();
 
-                foreach (DataDownloadJob dataDownloadJob in dataDownloadJobs)
+                foreach (DataSyncJob syncJob in dataDownloadJobs)
                 {
                     if(!this.AppIsActive)
                     {
@@ -156,10 +221,43 @@ namespace Stencil.Forms.Data.Sync
                         break;
                     }
 
+                    if(syncJob.MinimumGap.HasValue)
+                    {
+                        if(syncJob.LastStoppedUTC.HasValue)
+                        {
+                            TimeSpan sinceStopped = DateTime.UtcNow - syncJob.LastStoppedUTC.Value;
+                            if(sinceStopped < syncJob.MinimumGap)
+                            {
+                                this.LogTrace(string.Format("A Job was skipped because it was under the minimum gap: {0}", syncJob.JobName));
+                                continue;
+                            }
+                        }
+                    }
+
+                    if (syncJob.IsRunning)
+                    {
+                        if(syncJob.LastStartedUTC.HasValue)
+                        {
+                            // if more than 5 minutes, restart it
+                            TimeSpan sinceStarted = DateTime.UtcNow - syncJob.LastStartedUTC.Value;
+                            if (sinceStarted > this.JobTimeOut)
+                            {
+                                this.LogTrace(string.Format("A Job was restarted because it took to long or failed without grace: {0}", syncJob.JobName));
+                                syncJob.IsRunning = false;
+                            }
+                        }
+                        if (syncJob.IsRunning)
+                        {
+                            continue;
+                        }
+                    }
                     try
                     {
-                        ScreenDownloadJob screenDownloadJob = dataDownloadJob as ScreenDownloadJob;
-                        TrackedDownloadJob trackedScreenJob = dataDownloadJob as TrackedDownloadJob;
+                        syncJob.IsRunning = true;
+                        syncJob.LastStartedUTC = DateTime.UtcNow;
+
+                        ScreenDownloadJob screenDownloadJob = syncJob as ScreenDownloadJob;
+                        TrackedDownloadJob trackedScreenJob = syncJob as TrackedDownloadJob;
                         if (screenDownloadJob != null)
                         {
                             await this.ProcessScreenJobAsync(screenDownloadJob);
@@ -170,45 +268,50 @@ namespace Stencil.Forms.Data.Sync
                         }
                         else
                         {
-                            await this.ProcessGenericJobAsync(dataDownloadJob);
+                            await this.ProcessGenericJobAsync(syncJob);
                         }
                     }
                     catch (TaskCanceledException)
                     {
-                        this.LogTrace(string.Format("A Job was cancelled: {0}", dataDownloadJob.JobName));
+                        this.LogTrace(string.Format("A Job was cancelled: {0}", syncJob.JobName));
                     }
                     catch (ThreadAbortException)
                     {
-                        this.LogTrace(string.Format("A Job was aborted: {0}", dataDownloadJob.JobName));
+                        this.LogTrace(string.Format("A Job was aborted: {0}", syncJob.JobName));
                     }
                     catch (Exception ex)
                     {
-                        this.LogError(ex, "ProcessJobsAsync:" + dataDownloadJob.JobName);
+                        this.LogError(ex, "ProcessJobsAsync:" + syncJob.JobName);
+                    }
+                    finally
+                    {
+                        syncJob.LastStoppedUTC = DateTime.UtcNow;
+                        syncJob.IsRunning = false;
                     }
                 }
             });
         }
 
-        protected virtual Task ProcessGenericJobAsync(DataDownloadJob dataDownloadJob)
+        protected virtual Task ProcessGenericJobAsync(DataSyncJob dataDownloadJob)
         {
             return base.ExecuteMethodAsync(nameof(ProcessGenericJobAsync), async delegate ()
             {
-                if (dataDownloadJob.DownloadCommand != null)
+                if (dataDownloadJob.Command != null)
                 {
                     CommandScope scope = new CommandScope(this.API.CommandProcessor);
-                    bool success = await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadCommand.CommandName, dataDownloadJob.DownloadCommand.CommandParameter, null);
+                    bool success = await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.Command.CommandName, dataDownloadJob.Command.CommandParameter, null);
                     if (success)
                     {
-                        if (dataDownloadJob.DownloadSuccessCommand != null)
+                        if (dataDownloadJob.SuccessCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadSuccessCommand.CommandName, dataDownloadJob.DownloadSuccessCommand.CommandParameter, null);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.SuccessCommand.CommandName, dataDownloadJob.SuccessCommand.CommandParameter, null);
                         }
                     }
                     else
                     {
-                        if (dataDownloadJob.DownloadFailCommand != null)
+                        if (dataDownloadJob.FailCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.DownloadFailCommand.CommandName, dataDownloadJob.DownloadFailCommand.CommandParameter, null);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, dataDownloadJob.FailCommand.CommandName, dataDownloadJob.FailCommand.CommandParameter, null);
                         }
                     }
                 }
@@ -218,7 +321,7 @@ namespace Stencil.Forms.Data.Sync
         {
             return base.ExecuteMethodAsync(nameof(ProcessTrackedJobAsync), async delegate ()
             {
-                if (trackedJob.DownloadCommand != null && !string.IsNullOrWhiteSpace(trackedJob.EntityName))
+                if (trackedJob.Command != null && !string.IsNullOrWhiteSpace(trackedJob.EntityName))
                 {
                     string storageKey = TrackedDownloadInfo.FormatStorageKey(trackedJob.EntityName, trackedJob.EntityIdentifier);
                     TrackedDownloadInfo downloadInfo = await this.API.StencilTrackedData.RetrieveTrackedDownloadInfoAsync(storageKey, true);
@@ -249,7 +352,7 @@ namespace Stencil.Forms.Data.Sync
                     scope.ExchangeData[nameof(TrackedDownloadJob)] = trackedJob;
                     scope.ExchangeData[nameof(TrackedDownloadInfo)] = downloadInfo;
 
-                    object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, trackedJob.DownloadCommand.CommandName, trackedJob.DownloadCommand.CommandParameter, null);
+                    object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, trackedJob.Command.CommandName, trackedJob.Command.CommandParameter, null);
 
                     downloadInfo = response as TrackedDownloadInfo;
 
@@ -257,16 +360,16 @@ namespace Stencil.Forms.Data.Sync
                     {
                         await this.API.StencilTrackedData.SaveTrackedDownloadInfoAsync(downloadInfo);
 
-                        if (trackedJob.DownloadSuccessCommand != null)
+                        if (trackedJob.SuccessCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, trackedJob.DownloadSuccessCommand.CommandName, trackedJob.DownloadSuccessCommand.CommandParameter, null);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, trackedJob.SuccessCommand.CommandName, trackedJob.SuccessCommand.CommandParameter, null);
                         }
                     }
                     else
                     {
-                        if (trackedJob.DownloadFailCommand != null)
+                        if (trackedJob.FailCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, trackedJob.DownloadFailCommand.CommandName, trackedJob.DownloadFailCommand.CommandParameter, null);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, trackedJob.FailCommand.CommandName, trackedJob.FailCommand.CommandParameter, null);
                         }
                     }
                 }
@@ -277,7 +380,7 @@ namespace Stencil.Forms.Data.Sync
         {
             return base.ExecuteMethodAsync(nameof(ProcessScreenJobAsync), async delegate ()
             {
-                if (screenJob.DownloadCommand != null && !string.IsNullOrWhiteSpace(screenJob.ScreenName))
+                if (screenJob.Command != null && !string.IsNullOrWhiteSpace(screenJob.ScreenName))
                 {
                     NavigationData navigationData = null;
                     if (!string.IsNullOrWhiteSpace(screenJob.NavigationData))
@@ -317,7 +420,7 @@ namespace Stencil.Forms.Data.Sync
 
                     CommandScope scope = new CommandScope(this.API.CommandProcessor);
                     
-                    object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, screenJob.DownloadCommand.CommandName, navigationData, null);
+                    object response = await this.API.CommandProcessor.ExecuteDataCommandAsync(scope, screenJob.Command.CommandName, navigationData, null);
                     
                     ScreenConfig screenConfig = response as ScreenConfig;
                     
@@ -345,76 +448,45 @@ namespace Stencil.Forms.Data.Sync
                             }
                         }
                         
-                        if (screenJob.DownloadSuccessCommand != null)
+                        if (screenJob.SuccessCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.DownloadSuccessCommand.CommandName, screenJob.DownloadSuccessCommand.CommandParameter, null);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.SuccessCommand.CommandName, screenJob.SuccessCommand.CommandParameter, null);
                         }
                     }
                     else
                     {
-                        if (screenJob.DownloadFailCommand != null)
+                        if (screenJob.FailCommand != null)
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.DownloadFailCommand.CommandName, screenJob.DownloadFailCommand.CommandParameter, null);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(scope, screenJob.FailCommand.CommandName, screenJob.FailCommand.CommandParameter, null);
                         }
                     }
                 }
             });
         }
-
-        protected virtual bool ShouldDownload(Lifetime lifeTime, DateTimeOffset? lastDownloadUTC, DateTimeOffset? expireUTC, DateTimeOffset? cacheUntilUTC, DateTimeOffset? invalidatedUTC)
-        {
-            return base.ExecuteFunction(nameof(ShouldDownload), delegate ()
-            {
-                switch (lifeTime)
-                {
-                    case Lifetime.until_invalidated:
-                        if (invalidatedUTC.HasValue)
-                        {
-                            return invalidatedUTC.Value < DateTimeOffset.UtcNow;
-                        }
-                        return false;
-                    case Lifetime.until_expired:
-                        bool isExpired = false;
-                        if(expireUTC.HasValue)
-                        {
-                            isExpired = expireUTC.Value < DateTimeOffset.UtcNow;
-                        }
-
-                        bool cacheInValid = false;
-                        if (cacheUntilUTC.HasValue)
-                        {
-                            cacheInValid = cacheUntilUTC.Value > DateTimeOffset.UtcNow;
-                        }
-
-                        return isExpired || cacheInValid;
-                    default:
-                        return true;
-                }
-            });
-        }
+        
 
         protected virtual Task EnsureJobsAsync()
         {
             return base.ExecuteMethodAsync(nameof(EnsureJobsAsync), async delegate ()
             {
-                Dictionary<string, DataDownloadJob> currentJobs = this.Jobs;
+                Dictionary<string, DataSyncJob> currentJobs = this.Jobs;
 
-                Dictionary<string, DataDownloadJob> prepareJobs = new Dictionary<string, DataDownloadJob>();
+                Dictionary<string, DataSyncJob> prepareJobs = new Dictionary<string, DataSyncJob>();
 
                 if (currentJobs != null)
                 {
-                    foreach (KeyValuePair<string, DataDownloadJob> currentJob in currentJobs)
+                    foreach (KeyValuePair<string, DataSyncJob> currentJob in currentJobs)
                     {
                         prepareJobs[currentJob.Key] = currentJob.Value;
                     }
                 }
 
-                Dictionary<string, DataDownloadJob> preparedJobs = await this.PrepareDownloadJobsAsync(prepareJobs);
+                Dictionary<string, DataSyncJob> preparedJobs = await this.PrepareDownloadJobsAsync(prepareJobs);
 
                 if (preparedJobs != null)
                 {
-                    Dictionary<string, DataDownloadJob> jobs = new Dictionary<string, DataDownloadJob>();
-                    foreach (KeyValuePair<string, DataDownloadJob> job in preparedJobs)
+                    Dictionary<string, DataSyncJob> jobs = new Dictionary<string, DataSyncJob>();
+                    foreach (KeyValuePair<string, DataSyncJob> job in preparedJobs)
                     {
                         if (!string.IsNullOrWhiteSpace(job.Key) && job.Value != null) // extra safety
                         {
@@ -439,7 +511,7 @@ namespace Stencil.Forms.Data.Sync
         /// Return jobs based on the current context, will replace existing jobs.
         /// Consider logged in user, existing data, etc.
         /// </summary>
-        protected abstract Task<Dictionary<string, DataDownloadJob>> PrepareDownloadJobsAsync(Dictionary<string, DataDownloadJob> prepareJobs);
+        protected abstract Task<Dictionary<string, DataSyncJob>> PrepareDownloadJobsAsync(Dictionary<string, DataSyncJob> prepareJobs);
 
         #endregion
     }

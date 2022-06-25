@@ -4,7 +4,7 @@ using System;
 
 namespace Stencil.Forms.Data.Models
 {
-    public class ScreenConfig : RealmObject, IDatabaseModel
+    public class ScreenConfig : RealmObject, IPersistedModel
     {
         public ScreenConfig()
         {

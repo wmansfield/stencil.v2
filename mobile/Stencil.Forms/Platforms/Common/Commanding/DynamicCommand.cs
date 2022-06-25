@@ -2,6 +2,7 @@
 using Stencil.Common.Screens;
 using Stencil.Forms.Screens;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Stencil.Forms.Commanding
@@ -48,6 +49,25 @@ namespace Stencil.Forms.Commanding
                     }
                 }
 
+                return null;
+            });
+        }
+        public virtual Task<string> ValidateUserInputValuesAsync(ICommandScope scope, string group)
+        {
+            return base.ExecuteFunctionAsync(nameof(ValidateUserInputValuesAsync), async delegate ()
+            {
+                ConcurrentDictionary<string, ICommandField> values = this.ExtractCommandGroup(scope, group);
+                if (values != null)
+                {
+                    string[] fields = values.Keys.ToArray();
+                    foreach (string field in fields)
+                    {
+                        if (values.TryGetValue(field, out ICommandField commandField))
+                        {
+                            return await commandField.ValidateUserInputAsync();
+                        }
+                    }
+                }
                 return null;
             });
         }

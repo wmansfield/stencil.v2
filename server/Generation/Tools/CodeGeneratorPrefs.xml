@@ -6,10 +6,10 @@
     <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\Business.xsl</string>
     <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\Domain.xsl</string>
     <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\SDK.xsl</string>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\Security.xsl</string>
     <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\SQLHelper.xsl</string>
-    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\UIHelper-Angular.xsl</string>
   </SelectedFiles>
   <UnSelectedFiles>
-    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\Security.xsl</string>
+    <string>C:\Projects\foundationzero\stencil.v2\server\Generation\XSL\UIHelper-Angular.xsl</string>
   </UnSelectedFiles>
 </Options>

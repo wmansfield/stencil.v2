@@ -6,6 +6,7 @@ using Stencil.Forms.Views.Standard.v1_1;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -56,7 +57,7 @@ namespace Stencil.Forms.Views
 #if DEBUG
                         label.BackgroundColor = Color.Red;
                         label.TextColor = Color.White;
-                        label.SetBinding(Label.TextProperty, nameof(IDataViewItem.PreparedContext));
+                        label.SetBinding(Label.TextProperty, $"{nameof(IDataViewItem.PreparedContext)}.TypeName");
 #endif
                         return label;
                     });
@@ -67,9 +68,9 @@ namespace Stencil.Forms.Views
 
 #endregion
 
-        public Task<IDataViewComponent> ResolveTemplateAndPrepareDataAsync(IDataViewItem dataViewItem)
+        public IDataViewComponent ResolveTemplateAndPrepareData(IDataViewItem dataViewItem)
         {
-            return CoreUtility.ExecuteFunctionAsync(nameof(ResolveTemplateAndPrepareDataAsync), async delegate ()
+            return CoreUtility.ExecuteFunction(nameof(ResolveTemplateAndPrepareData), delegate ()
             {
                 if (dataViewItem != null && !string.IsNullOrWhiteSpace(dataViewItem.Component))
                 {
@@ -87,7 +88,9 @@ namespace Stencil.Forms.Views
                             {
                                 if (dataViewItem.PreparedContext == null || !dataViewComponent.BindingContextCacheEnabled)
                                 {
-                                    dataViewItem.PreparedContext = await dataViewComponent.PrepareBindingContextAsync(this.CommandScope, dataViewItem.DataViewModel, dataViewItem, this, dataViewItem.ConfigurationJson);
+#pragma warning disable 0618
+                                    dataViewItem.PreparedContext = dataViewComponent.PrepareBindingContextAsync(this.CommandScope, dataViewItem.DataViewModel, dataViewItem, this, dataViewItem.ConfigurationJson).SyncResult();
+#pragma warning restore
                                 }
                                 return dataViewComponent;
                             }
@@ -111,12 +114,20 @@ namespace Stencil.Forms.Views
                         dataViewItem = dataViewItemReference.DataViewItem;
                     }
                 }
-                
-                IDataViewComponent dataViewComponent = this.ResolveTemplateAndPrepareDataAsync(dataViewItem).Result; //TODO:SHOULD: Bad Async Result
 
+                if(dataViewItem.UIDataTemplate != null)
+                {
+                    if(dataViewItem.UIDataTemplate.TryGetTarget(out DataTemplate found) && found != null)
+                    {
+                        return found;
+                    }
+                }
+
+                IDataViewComponent dataViewComponent = this.ResolveTemplateAndPrepareData(dataViewItem);
                 if (dataViewComponent != null)
                 {
                     DataTemplate result = dataViewComponent.GetDataTemplate();
+                    dataViewItem.UIDataTemplate = new WeakReference<DataTemplate>(result);
                     return result;
                 }
 

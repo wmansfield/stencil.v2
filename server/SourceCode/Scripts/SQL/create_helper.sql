@@ -232,6 +232,30 @@ CREATE TABLE [dbo].[Company] (
 GO
 
 
+CREATE TABLE [dbo].[Widget] (
+	 [widget_id] uniqueidentifier NOT NULL
+    ,[shop_id] uniqueidentifier NOT NULL
+    ,[stamp_utc] datetimeoffset(0) NOT NULL
+    ,[text] nvarchar(max) NULL
+    ,[payload] nvarchar(max) NULL
+    ,[created_utc] DATETIMEOFFSET(0) NOT NULL
+    ,[updated_utc] DATETIMEOFFSET(0) NOT NULL
+    ,[deleted_utc] DATETIMEOFFSET(0) NULL
+	,[sync_hydrate_utc] DATETIMEOFFSET(0) NULL
+    ,[sync_success_utc] DATETIMEOFFSET(0) NULL
+    ,[sync_invalid_utc] DATETIMEOFFSET(0) NULL
+    ,[sync_attempt_utc] DATETIMEOFFSET(0) NULL
+    ,[sync_agent] NVARCHAR(50) NULL
+    ,[sync_log] NVARCHAR(MAX) NULL
+  ,CONSTRAINT [PK_Widget] PRIMARY KEY CLUSTERED 
+  (
+	  [widget_id] ASC
+  )
+)
+
+GO
+
+
 -- </Tables> --------------------------------------------------------------------
 
 
@@ -246,6 +270,7 @@ AS
    UPDATE [dbo].[ShopAccount] SET [sync_success_utc] = NULL, [sync_log] = 'invalidateall'
    UPDATE [dbo].[ShopSetting] SET [sync_success_utc] = NULL, [sync_log] = 'invalidateall'
    UPDATE [dbo].[Company] SET [sync_success_utc] = NULL, [sync_log] = 'invalidateall'
+   UPDATE [dbo].[Widget] SET [sync_success_utc] = NULL, [sync_log] = 'invalidateall'
 
 GO
 
@@ -258,6 +283,7 @@ AS
    UPDATE [dbo].[ShopAccount] SET [sync_hydrate_utc] = NULL
    UPDATE [dbo].[ShopSetting] SET [sync_hydrate_utc] = NULL
    UPDATE [dbo].[Company] SET [sync_hydrate_utc] = NULL
+   UPDATE [dbo].[Widget] SET [sync_hydrate_utc] = NULL
 GO
 
 
@@ -287,6 +313,7 @@ SELECT * FROM
       UNION ALL (select '30 - ShopAccount' as [Entity], count(1) as [Count] from [dbo].[ShopAccount] where [sync_success_utc] IS NULL)
       UNION ALL (select '30 - ShopSetting' as [Entity], count(1) as [Count] from [dbo].[ShopSetting] where [sync_success_utc] IS NULL)
       UNION ALL (select '30 - Company' as [Entity], count(1) as [Count] from [dbo].[Company] where [sync_success_utc] IS NULL)
+      UNION ALL (select '90 - Widget' as [Entity], count(1) as [Count] from [dbo].[Widget] where [sync_success_utc] IS NULL)
 ) a
 WHERE [Count] > 0
 GO
@@ -304,6 +331,7 @@ SELECT * FROM
       UNION ALL (select '30 - ShopAccount' as [Entity], count(1)  as [Count] from [dbo].[ShopAccount] where [sync_hydrate_utc] IS NULL)
       UNION ALL (select '30 - ShopSetting' as [Entity], count(1)  as [Count] from [dbo].[ShopSetting] where [sync_hydrate_utc] IS NULL)
       UNION ALL (select '30 - Company' as [Entity], count(1)  as [Count] from [dbo].[Company] where [sync_hydrate_utc] IS NULL)
+      UNION ALL (select '90 - Widget' as [Entity], count(1)  as [Count] from [dbo].[Widget] where [sync_hydrate_utc] IS NULL)
 ) a
 WHERE [Count] > 0
 GO
@@ -314,6 +342,10 @@ GO
 
 
 -- <Foreign Keys> --------------------------------------------------------------------
+
+ALTER TABLE [dbo].[Widget] WITH CHECK ADD  CONSTRAINT [FK_Widget_Shop_shop_id] FOREIGN KEY([shop_id])
+REFERENCES [dbo].[Shop] ([shop_id])
+GO
 
 ALTER TABLE [dbo].[Company] WITH CHECK ADD  CONSTRAINT [FK_Company_Shop_shop_id] FOREIGN KEY([shop_id])
 REFERENCES [dbo].[Shop] ([shop_id])

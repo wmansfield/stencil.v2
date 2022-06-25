@@ -1,0 +1,29 @@
+
+
+"_accountstatus": {
+  "0": "Enabled",
+  "1": "Pending",
+  "2": "Disabled",
+  "3": "Denied"
+},
+"_assetkind": {
+  "0": "image",
+  "1": "video"
+},
+"_dependency": {
+  "0": "none",
+  "1": "account",
+  "2": "shop"
+},
+"_emailtemplatekind": {
+  "0": "generic",
+  "1": "password_reset_started",
+  "2": "password_reset_completed",
+  "2": "email_changed",
+  "2": "email_verify_started"
+},
+"_shoprole": {
+  "0": "Reader",
+  "1": "Manager",
+  "2": "Admin"
+},

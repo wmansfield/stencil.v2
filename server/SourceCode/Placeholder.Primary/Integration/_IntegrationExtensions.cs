@@ -1,4 +1,4 @@
-﻿using Placeholder.Primary.Integration;
+using Placeholder.Primary.Integration;
 using System;
 using System.Collections.Generic;
 using System.Linq;

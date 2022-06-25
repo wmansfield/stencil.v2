@@ -53,7 +53,7 @@ namespace Placeholder.Web.Controllers
             }
             return null;
         }
-        
+
         public static void ValidateShopAdmin(this PlaceholderApiController controller, Guid shop_id)
         {
             controller.ValidateShopAdmin(shop_id, controller.GetCurrentAccount());
@@ -93,7 +93,7 @@ namespace Placeholder.Web.Controllers
                 {
                     return false;
                 }
-                return (platform.Contains("android", StringComparison.OrdinalIgnoreCase) || platform.Contains("ios", StringComparison.OrdinalIgnoreCase));
+                return (platform.Contains("droid", StringComparison.OrdinalIgnoreCase) || platform.Contains("ios", StringComparison.OrdinalIgnoreCase));
             }
             catch
             {
@@ -118,6 +118,23 @@ namespace Placeholder.Web.Controllers
             }
 
             return "web";
+        }
+        public static string GetClientPlatformVersion(this ControllerBase controller)
+        {
+            try
+            {
+                if (controller?.Request?.Headers != null
+                    && controller.Request.Headers.ContainsKey(SecurityAssumptions.PARAM_VERSION))
+                {
+                    return controller.Request.Headers[SecurityAssumptions.PARAM_VERSION];
+                }
+            }
+            catch
+            {
+                // gulp
+            }
+
+            return "2.0.0";
         }
         public static string GetRawBodyString(this ControllerBase controller, System.Text.Encoding encoding = null)
         {

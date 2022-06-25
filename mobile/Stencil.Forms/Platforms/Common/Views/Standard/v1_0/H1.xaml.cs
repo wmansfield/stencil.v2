@@ -49,6 +49,11 @@ namespace Stencil.Forms.Views.Standard.v1_0
                     result = new H1Context();
                 }
 
+                if (result.HeightRequest <= 0)
+                {
+                    result.HeightRequest = 30;
+                }
+
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
@@ -64,7 +69,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
         public H1Context()
             : base(nameof(H1Context))
         {
-
+            this.HeightRequest = -1;
         }
 
         private string _text;
@@ -87,6 +92,16 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _backgroundColor; }
             set { SetProperty(ref _backgroundColor, value); }
         }
+
+        private Thickness _padding;
+        public Thickness Padding
+        {
+            get { return _padding; }
+            set { SetProperty(ref _padding, value); }
+        }
+
+        public int HeightRequest { get; set; }
+
 
         protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
         {

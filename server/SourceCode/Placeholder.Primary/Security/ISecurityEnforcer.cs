@@ -11,5 +11,6 @@ namespace Placeholder.Primary.Security
 
         bool IsShopRole(Account account, Guid shop_id, sdk.ShopRole? role);
         bool IsAnyShopRole(Account account, Guid shop_id);
+
     }
 }

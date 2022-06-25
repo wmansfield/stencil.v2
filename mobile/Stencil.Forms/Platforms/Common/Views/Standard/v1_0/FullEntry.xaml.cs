@@ -160,7 +160,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
         }
-
+        
         #endregion
 
         #region Binding Properties

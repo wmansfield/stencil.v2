@@ -47,29 +47,33 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     result = JsonConvert.DeserializeObject<HeaderTitleBarContext>(configuration_json);
                 }
-                if (string.IsNullOrWhiteSpace(result.CommandName))
+                if (string.IsNullOrWhiteSpace(result.LeftCommandName))
                 {
-                    result.CommandName = "app.navigate.pop";//TODO:MUST:Magic String
-                    result.CommandParameter = null;
+                    result.LeftCommandName = "app.navigate.pop";//TODO:MUST:Magic String
+                    result.LeftCommandParameter = null;
                 }
-                if(string.IsNullOrWhiteSpace(result.TextColor))
+                if (string.IsNullOrWhiteSpace(result.LeftIcon))
+                {
+                    result.LeftIcon = ""; // convention
+                }
+                if (string.IsNullOrWhiteSpace(result.TextColor))
                 {
                     result.TextColor = AppColors.TextOverPrimary;
                 }
-                if (string.IsNullOrWhiteSpace(result.BackIcon))
-                {
-                    result.BackIcon = "";
-                }
                 
+
+                result.UILeftVisible = !string.IsNullOrEmpty(result.LeftCommandName);
+                result.UIRightVisible = !string.IsNullOrEmpty(result.RightCommandName);
+
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
                 return Task.FromResult<IDataViewItemReference>(result);
             });
         }
 
-        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        private async void Left_Tapped(object sender, EventArgs e)
         {
-            await CoreUtility.ExecuteMethodAsync(nameof(TapGestureRecognizer_Tapped), async delegate ()
+            await CoreUtility.ExecuteMethodAsync(nameof(Left_Tapped), async delegate ()
             {
                 View view = (sender as View);
                 HeaderTitleBarContext context = view?.BindingContext as HeaderTitleBarContext;
@@ -77,7 +81,22 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     if (context.CommandScope?.CommandProcessor != null)
                     {
-                        await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.CommandName, context.CommandParameter, context?.DataViewItem?.DataViewModel);
+                        await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.LeftCommandName, context.LeftCommandParameter, context?.DataViewItem?.DataViewModel);
+                    }
+                }
+            });
+        }
+        private async void Right_Tapped(object sender, EventArgs e)
+        {
+            await CoreUtility.ExecuteMethodAsync(nameof(Right_Tapped), async delegate ()
+            {
+                View view = (sender as View);
+                HeaderTitleBarContext context = view?.BindingContext as HeaderTitleBarContext;
+                if (context != null)
+                {
+                    if (context.CommandScope?.CommandProcessor != null)
+                    {
+                        await context.CommandScope.CommandProcessor.ExecuteCommandAsync(context.CommandScope, context.RightCommandName, context.RightCommandParameter, context?.DataViewItem?.DataViewModel);
                     }
                 }
             });
@@ -107,11 +126,18 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _backgroundColor, value); }
         }
 
-        private string _backIcon;
-        public string BackIcon
+        private string _leftIcon;
+        public string LeftIcon
         {
-            get { return _backIcon; }
-            set { SetProperty(ref _backIcon, value); }
+            get { return _leftIcon; }
+            set { SetProperty(ref _leftIcon, value); }
+        }
+
+        private string _rightIcon;
+        public string RightIcon
+        {
+            get { return _rightIcon; }
+            set { SetProperty(ref _rightIcon, value); }
         }
 
         private string _title;
@@ -135,8 +161,25 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _titleFontSize, value); }
         }
 
-        public string CommandName { get; set; }
-        public string CommandParameter { get; set; }
+        public string LeftCommandName { get; set; }
+        public string LeftCommandParameter { get; set; }
 
+        public string RightCommandName { get; set; }
+        public string RightCommandParameter { get; set; }
+
+
+        private bool _uiLeftVisible;
+        public bool UILeftVisible
+        {
+            get { return _uiLeftVisible; }
+            set { SetProperty(ref _uiLeftVisible, value); }
+        }
+
+        private bool _uiRightVisible;
+        public bool UIRightVisible
+        {
+            get { return _uiRightVisible; }
+            set { SetProperty(ref _uiRightVisible, value); }
+        }
     }
 }

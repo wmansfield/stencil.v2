@@ -87,14 +87,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _text, value); }
         }
 
-        private string _textColor;
+        private string _textColor = AppColors.PrimaryBlack;
         public string TextColor
         {
             get { return _textColor; }
             set { SetProperty(ref _textColor, value); }
         }
 
-        private string _backgroundColor;
+        private string _backgroundColor = AppColors.Transparent;
         public string BackgroundColor
         {
             get { return _backgroundColor; }
@@ -107,6 +107,41 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
         }
+        private Thickness _margin;
+        public Thickness Margin
+        {
+            get { return _margin; }
+            set { SetProperty(ref _margin, value); }
+        }
+
+        private bool _center;
+        public bool Center
+        {
+            get { return _center; }
+            set
+            {
+                if (SetProperty(ref _center, value))
+                {
+                    this.OnPropertyChanged(nameof(UITextAlignment));
+                }
+            }
+        }
+
+        public TextAlignment UITextAlignment
+        {
+            get
+            {
+                if(this.Center)
+                {
+                    return TextAlignment.Center;
+                }
+                else
+                {
+                    return TextAlignment.Start;
+                }
+            }
+        }
+        
 
         protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
         {

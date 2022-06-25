@@ -88,5 +88,18 @@ namespace Placeholder.Data.Sql
             }
         }
         
+        public static void InvalidateSync(this db.Widget model, string agent, string reason)
+        {
+            if (model != null)
+            {
+                model.sync_attempt_utc = null;
+                model.sync_success_utc = null;
+                model.sync_hydrate_utc = null;
+                model.sync_log = reason;
+                model.sync_invalid_utc = DateTime.UtcNow;
+                model.sync_agent = agent;
+            }
+        }
+        
     }
 }

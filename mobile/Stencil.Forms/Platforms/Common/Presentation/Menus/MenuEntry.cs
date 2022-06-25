@@ -12,7 +12,22 @@ namespace Stencil.Forms.Presentation.Menus
         }
 
         public string Identifier { get; set; }
-        public bool IsIcon { get; set; }
+
+        private bool _isIcon;
+        public bool IsIcon
+        {
+            get
+            {
+                return _isIcon;
+            }
+            set
+            {
+                if (SetProperty(ref _isIcon, value))
+                {
+                    this.OnPropertyChanged(nameof(UIShowIcon));
+                }
+            }
+        }
         public string IconCharacter { get; set; }
         public string Label { get; set; }
         public string CommandName { get; set; }
@@ -76,7 +91,38 @@ namespace Stencil.Forms.Presentation.Menus
                 {
                     this.OnPropertyChanged(nameof(UIBackgroundColor));
                     this.OnPropertyChanged(nameof(UITextColor));
+                    this.OnPropertyChanged(nameof(UIShowIcon));
                 }
+            }
+        }
+
+        private bool _uiActiveSlow;
+        public bool UIActiveSlow
+        {
+            get { return _uiActiveSlow; }
+            set
+            {
+                if (SetProperty(ref _uiActiveSlow, value))
+                {
+                    this.OnPropertyChanged(nameof(UIShowIcon));
+                }
+            }
+        }
+
+
+        public bool UIShowIcon
+        {
+            get 
+            { 
+                if (!this.IsIcon)
+                {
+                    return false;
+                }
+                return !this.UIActiveSlow; 
+            }
+            set
+            {
+                
             }
         }
 

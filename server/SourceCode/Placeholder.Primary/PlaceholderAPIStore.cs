@@ -37,6 +37,10 @@ namespace Placeholder.Primary
         {
             get { return this.IFoundation.Resolve<ICompanyStore>(); }
         }
+        public IWidgetStore Widgets
+        {
+            get { return this.IFoundation.Resolve<IWidgetStore>(); }
+        }
         
     }
 }

@@ -1,4 +1,7 @@
 ﻿
+using System;
+using Xamarin.Forms;
+
 namespace Stencil.Forms.Views.Standard
 {
     public class StandardDataViewItem : PropertyClass, IDataViewItem
@@ -9,6 +12,7 @@ namespace Stencil.Forms.Views.Standard
         }
         public string Library { get; set; }
         public string Component { get; set; }
+
 
         private object _preparedData;
         public object PreparedContext
@@ -46,6 +50,10 @@ namespace Stencil.Forms.Views.Standard
         /// Warning: Does not support property changed notification, rely on custom application of changes instead
         /// </summary>
         public IDataViewModel DataViewModel { get; set; }
+
+
+        public WeakReference<DataTemplate> UIDataTemplate { get; set; }
+
 
 
     }

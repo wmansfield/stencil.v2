@@ -32,21 +32,31 @@ namespace Stencil.Forms.Views.Standard
         public List<ICommandConfig> BeforeShowCommands { get; set; }
         public List<ICommandConfig> AfterShowCommands { get; set; }
 
-        
         private ObservableCollection<IMenuEntry> _menuEntries;
         public ObservableCollection<IMenuEntry> MenuEntries
         {
             get { return _menuEntries; }
             set { SetProperty(ref _menuEntries, value); }
         }
+        public NavigationData NavigationData { get; set; }
 
-      
-        public override Task OnNavigatingToAsync()
+
+        public override Task OnNavigatingToAsync(bool reload = false)
         {
             return base.ExecuteMethodAsync(nameof(OnNavigatingToAsync), async delegate ()
             {
                 await base.OnNavigatingToAsync();
-                if(this.BeforeShowCommands != null)
+
+                if (reload)
+                {
+                    if (!string.IsNullOrWhiteSpace(this.NavigationData?.screen_name))
+                    {
+                        IScreenConfig screenConfig = await this.API.StencilScreens.LoadScreenConfigAsync(this.CommandScope?.CommandProcessor, this.NavigationData);
+                        await this.API.StencilScreens.PrepareViewModelAsync(this.API.CommandProcessor, screenConfig, this);
+                    }
+                }
+
+                if (this.BeforeShowCommands != null)
                 {
                     foreach (ICommandConfig showCommand in this.BeforeShowCommands)
                     {

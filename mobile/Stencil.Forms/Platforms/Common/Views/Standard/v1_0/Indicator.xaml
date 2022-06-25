@@ -13,6 +13,6 @@
                        MaximumVisible="{Binding MaximumVisible}"
                        Count="{Binding ItemCount}"
                        Position="{Binding CurrentPosition, Mode=OneWay}"
-                       HorizontalOptions="Center" />
+                       HorizontalOptions="Fill" />
     </DataTemplate>
 </ResourceDictionary>

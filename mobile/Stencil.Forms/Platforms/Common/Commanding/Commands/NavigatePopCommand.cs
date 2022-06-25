@@ -1,4 +1,5 @@
-﻿using Stencil.Forms.Views;
+﻿using Newtonsoft.Json;
+using Stencil.Forms.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,11 +35,62 @@ namespace Stencil.Forms.Commanding.Commands
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate ()
             {
-                await this.API.Router.PopViewAsync();
+                PopOptions options = commandParameter as PopOptions;
+                if(options == null)
+                {
+                    options = new PopOptions();
+                }
+                if (commandParameter != null)
+                {
+                    string commandParameterString = commandParameter.ToString();
+                    if(commandParameterString.StartsWith("{"))
+                    {
+                        options = JsonConvert.DeserializeObject<PopOptions>(commandParameterString);
+                    }
+                    else if(commandParameterString.Equals("true", StringComparison.OrdinalIgnoreCase))
+                    {
+                        options.reload = true;
+                    }
+                    else if (commandParameterString.Equals("false", StringComparison.OrdinalIgnoreCase))
+                    {
+                        options.reload = false;
+                    }
+                    else
+                    {
+                        if (int.TryParse(commandParameterString, out int iterations))
+                        {
+                            if(iterations.ToString() == commandParameterString)
+                            {
+                                options.iterations = iterations;
+                            }
+                        }
+                    }
+                }
+
+                if(options.iterations < 1)
+                {
+                    options.iterations = 1;
+                }
+
+                for (int i = 0; i < options.iterations; i++) 
+                {
+                    bool reload = false;
+                    if(i == options.iterations - 1)
+                    {
+                        reload = options.reload; // only reload last one
+                    }
+                    await this.API.Router.PopViewAsync(reload);
+                }
                 return true;
             });
         }
 
+
+        public class PopOptions
+        {
+            public bool reload { get; set; }
+            public int iterations { get; set; }
+        }
 
     }
 }

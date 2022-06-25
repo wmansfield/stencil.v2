@@ -199,9 +199,9 @@ namespace Placeholder.Web.Security
                 // see if it's a language we understand
                 if (!string.IsNullOrEmpty(result) && shop_id.HasValue)
                 {
-                    PlaceholderAPI API = this.IFoundation.Resolve<PlaceholderAPI>();
                     /*
                     //TODO:SHOULD: Add language support and resolve here
+                    PlaceholderAPI API = this.IFoundation.Resolve<PlaceholderAPI>();
                     sdk.Language match = API.Store.Languages.GetBestMatchCached(shop_id.Value, result);
                     if (match != null)
                     {

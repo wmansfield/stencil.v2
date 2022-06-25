@@ -5,16 +5,22 @@
                     x:Class="Stencil.Forms.Views.Standard.v1_0.H1">
     <DataTemplate x:Key="h1" x:DataType="local:H1Context">
         <!--<ViewCell>-->
-        <StackLayout Orientation="Vertical" HorizontalOptions="Fill" Padding="0" Margin="0" Spacing="0" BackgroundColor="{Binding BackgroundColor}">
+        <!--<Margin is not visually needed, however, it fixes smooth scrolling>-->
+        <Grid HorizontalOptions="Fill" 
+              RowSpacing="0" ColumnSpacing="0"
+              HeightRequest="{Binding HeightRequest}"
+              Margin="3" Padding="0"
+              BackgroundColor="{Binding BackgroundColor}"
+              RowDefinitions="*">
             <Label Text="{Binding Text}"
-                       HorizontalOptions="Fill"
-                       VerticalOptions="Start"
-                       FontSize="{StaticResource FontSizeH1}"
-                       FontFamily="{StaticResource SansBold}"
-                       TextColor="{Binding TextColor}"
-                       HorizontalTextAlignment="Center"
-                       Margin="0,8" />
-        </StackLayout>
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Start"
+                   Padding="{Binding Padding}"
+                   FontSize="{StaticResource FontSizeH1}"
+                   FontFamily="{StaticResource SansBold}"
+                   TextColor="{Binding TextColor}"
+                   HorizontalTextAlignment="Center"/>
+        </Grid>
         <!--</ViewCell>-->
     </DataTemplate>
 </ResourceDictionary>

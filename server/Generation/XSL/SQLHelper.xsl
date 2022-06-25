@@ -209,11 +209,13 @@ GO
 -- &lt;Index&gt; --------------------------------------------------------------------
 <xsl:for-each select="items/item[@useIndex='true' or @useStore='true']">
 
-CREATE NONCLUSTERED INDEX [ix_<xsl:value-of select="@name"/>_sync] ON [dbo].[<xsl:value-of select="@name"/>]
+CREATE NONCLUSTERED INDEX [ix_<xsl:value-of select="@name"/>_sync_agent] ON [dbo].[<xsl:value-of select="@name"/>]
 (
-	[sync_success_utc] ASC
-)
+	[sync_success_utc] ASC,
+	[sync_agent] ASC
+) WITH (ONLINE = ON)
 GO
+
 
 <xsl:for-each select="field[string-length(@foreignKey)>0]">
 CREATE NONCLUSTERED INDEX [ix_<xsl:value-of select="text()"/>] ON [dbo].[<xsl:value-of select="../@name"/>]

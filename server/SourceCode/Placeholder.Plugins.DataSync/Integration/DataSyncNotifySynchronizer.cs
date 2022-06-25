@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Placeholder.Common;
@@ -35,47 +36,16 @@ namespace Placeholder.Plugins.DataSync.Integration
                 {
                     if (this.API.Integration.Settings.IsLocalHost())
                     {
-                        return "http://localhost:4337/";
+                        return "https://localhost:44328/";
                     }
                     return this.API.Direct.GlobalSettings.GetValueOrDefault(CommonAssumptions.APP_KEY_BACKING_URL, "https://placeholder-backing.foundationzero.com");
                 });
             }
         }
 
-        public void OnSyncFailed(string tenant, string argument)
-        {
-            base.ExecuteMethod("OnSyncFailed", delegate ()
-            {
-                try
-                {
-                    ISettingsResolver settingsResolver = this.IFoundation.Resolve<ISettingsResolver>();
-                    bool isBackPlane = settingsResolver.IsBackPane();
-                    if (isBackPlane)
-                    {
-                        WebHookProcessor.ProcessSyncWebHook(this.IFoundation, "codeable", "failed", tenant);
-                    }
-                    else
-                    {
-                        Task.Run(delegate ()
-                        {
-                            string url = string.Format("{0}/api/datasync/failed", this.DaemonUrl.Trim('/'));
-                            string content = string.Format("key=codeable&tenant={0}&arg={1}", tenant, argument);
-                            SendPostInNewThread(url, content);
-                        });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.IFoundation.LogError(ex, "OnSyncFailed");
-                }
-            });
-        }
-
-
-
         public void AgitateSyncDaemon(Guid? shop_id)
         {
-            this.AgitateDaemon(DataSynchronizeDaemon.DAEMON_NAME_TENANT_FORMAT);
+            this.AgitateDaemon(shop_id, DataSynchronizeDaemon.DAEMON_NAME_TENANT_FORMAT);
         }
         public void AgitateDaemon(Guid? shop_id, string nameFormat)
         {
@@ -126,20 +96,17 @@ namespace Placeholder.Plugins.DataSync.Integration
         }
         private void SendPostInNewThread(string url, string content)
         {
-            Task.Run(delegate ()
+            Task.Run(async delegate ()
             {
                 try
                 {
-                    byte[] requestBytes = new ASCIIEncoding().GetBytes(content);
-
-                    var request = WebRequest.CreateHttp(url);
-                    request.Method = "POST";
-                    request.ContentType = @"application/x-www-form-urlencoded";
-                    request.ContentLength = content.Length;
-                    var reqStream = request.GetRequestStream();
-                    reqStream.Write(requestBytes, 0, requestBytes.Length);
-                    reqStream.Close();
-                    request.GetResponse();
+                    HttpRequestMessage request = new HttpRequestMessage()
+                    {
+                        RequestUri = new Uri(url),
+                        Method = HttpMethod.Post,
+                        Content = new StringContent(content, Encoding.UTF8, @"application/x-www-form-urlencoded"),
+                    };
+                    var response = await PrimaryUtility.HttpClient.SendAsync(request);
                 }
                 catch
                 {

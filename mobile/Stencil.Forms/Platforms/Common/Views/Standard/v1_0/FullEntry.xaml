@@ -17,7 +17,8 @@
                    FontSize="{StaticResource FontSizeStandard}"
                    IsVisible="{Binding Label, Converter={StaticResource isValidStringConverter}}"
                    Padding="0,0,0,0"/>
-            <Frame Grid.Row="1"
+            <Frame IsVisible="{Binding IsMultiLine, Converter={StaticResource negateBoolConverter}}"
+                   Grid.Row="1"
                    HeightRequest="48"
                    HasShadow="False"
                    CornerRadius="4"
@@ -26,6 +27,7 @@
                 <Entry Text="{Binding Input}"
                        FontFamily="{StaticResource SansRegular}"
                        FontSize="{StaticResource FontSizeStandard}"
+                       IsReadOnly="{Binding IsReadOnly}"
                        IsPassword="{Binding UIAsPassword}"
                        Placeholder="{Binding Placeholder}"
                        IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"

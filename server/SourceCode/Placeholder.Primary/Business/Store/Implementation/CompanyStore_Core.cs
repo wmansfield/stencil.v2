@@ -122,7 +122,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<Company> GetDocumentAsync(Guid shop_id, Guid company_id)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 Company found = await this.RetrieveByIdIsolatedAsync(shop_id, shop_id.ToString(), company_id.ToString());
                 
@@ -135,7 +135,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
 
         public Task<bool> CreateDocumentAsync(Company model)
         {
-            return base.ExecuteFunction(nameof(CreateDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(CreateDocumentAsync), async delegate ()
             {
                 ItemResponse<Company> result = await base.UpsertIsolatedAsync(model.shop_id, model);
                 return result.StatusCode.IsSuccess();
@@ -153,7 +153,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<ListResult<Company>> FindForShopAsync(Guid shop_id, int skip, int take, string order_by = "", bool descending = false, string keyword = "", bool? disabled = null)
         {
-            return base.ExecuteFunction(nameof(FindForShopAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(FindForShopAsync), async delegate ()
             {
                 IQueryable<Company> query = this.QueryByPartitionIsolated(shop_id, shop_id.ToString());
                 
@@ -181,11 +181,11 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task DeleteForShopAsync(Guid shop_id)
         {
-            return base.ExecuteFunction(nameof(DeleteForShopAsync), async delegate ()
+            return base.ExecuteMethodAsync(nameof(DeleteForShopAsync), async delegate ()
             {
                 List<Company> deleteItems = await base.RetrieveByPartitionIsolatedAsync(shop_id, shop_id.ToString());
 
-                return base.BulkRemoveIsolatedAsync(shop_id, deleteItems);
+                await base.BulkRemoveIsolatedAsync(shop_id, deleteItems);
             });
         }
         

@@ -5,21 +5,17 @@
                     x:Class="Stencil.Forms.Views.Standard.v1_0.PlainText">
     <DataTemplate x:Key="plainText" x:DataType="local:PlainTextContext">
         <!--<ViewCell>-->
-        <StackLayout Orientation="Vertical" 
-                     HorizontalOptions="Fill" 
-                     Padding="{Binding Padding}" 
-                     Margin="0" 
-                     Spacing="0" 
-                     BackgroundColor="{Binding BackgroundColor}">
-            <Label Text="{Binding Text}"
-                       HorizontalOptions="Start"
-                       VerticalOptions="Start"
-                       FontSize="{Binding FontSize}"
-                       FontFamily="{StaticResource SansRegular}"
-                       TextColor="{Binding TextColor}"
-                       HorizontalTextAlignment="Start"
-                       Margin="0" />
-        </StackLayout>
+        <Label Text="{Binding Text}"
+                BackgroundColor="{Binding BackgroundColor}"
+                HorizontalOptions="Fill"
+                VerticalOptions="Start"
+                LineBreakMode="WordWrap"
+                FontSize="{Binding FontSize}"
+                FontFamily="{StaticResource SansRegular}"
+                TextColor="{Binding TextColor}"
+                Padding="{Binding Padding}"
+                Margin="{Binding Margin}"
+                HorizontalTextAlignment="{Binding UITextAlignment}"/>
         <!--</ViewCell>-->
     </DataTemplate>
 </ResourceDictionary>

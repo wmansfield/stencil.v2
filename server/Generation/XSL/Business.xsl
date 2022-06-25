@@ -95,7 +95,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct
         
         void CascadeInvalidate(<xsl:value-of select="../@projectName"/>Context database, Guid <xsl:value-of select="field[1]/text()"/>, HashSet&lt;string&gt; chain = null);
         void CascadeCompute(<xsl:value-of select="../@projectName"/>Context database, Guid <xsl:value-of select="field[1]/text()"/>, HashSet&lt;string&gt; chain = null);
-        void CascadeSynchronize(Guid <xsl:value-of select="field[1]/text()"/>, Availability availability, HashSet&lt;string&gt; chain = null);
+        void CascadeSynchronize(<xsl:value-of select="../@projectName"/>Context database, IdentityInfo identity, Availability availability, HashSet&lt;string&gt; chain = null);
         
         </xsl:if>
         <xsl:text>
@@ -108,6 +108,13 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct
         void Update<xsl:value-of select="../@name"/><xsl:value-of select="@friendlyName"/>(<xsl:for-each select="../field[@tenant='true' and not(@isolated='true') and text()!=$priorityGroupBy]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:if test="@priorityGroupBy!='self'">Guid <xsl:value-of select="@priorityGroupBy"/>, </xsl:if>Guid <xsl:value-of select="../field[1]"/>, int priority);
         </xsl:for-each>
         void Delete(<xsl:for-each select="field[@tenant='true' and not(@isolated='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>);
+        
+        <xsl:if test="(@useIndex='true' or @useStore='true') and @tenant='Route'">
+        void SynchronizationUpdateIsolated(<xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>, bool success, DateTime sync_date_utc, string sync_log);
+        List&lt;IdentityInfo&gt; SynchronizationGetInvalidIsolated(<xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>, int retryPriorityThreshold, string sync_agent);
+        void SynchronizationHydrateUpdateIsolated(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each>Guid <xsl:value-of select="field[1]"/>, bool success, DateTime sync_date_utc, string sync_log);
+        List&lt;IdentityInfo&gt; SynchronizationHydrateGetInvalidIsolated(<xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>, int retryPriorityThreshold, string sync_agent);
+        </xsl:if>
         
         <xsl:if test="@useIndex='true' or @useStore='true'">void SynchronizationUpdate(<xsl:for-each select="field[@tenant='true' and not(@isolated='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each>Guid <xsl:value-of select="field[1]"/>, bool success, DateTime sync_date_utc, string sync_log);
         List&lt;IdentityInfo&gt; SynchronizationGetInvalid(<xsl:for-each select="field[@tenant='true']">string tenant_code, </xsl:for-each>int retryPriorityThreshold, string sync_agent);
@@ -230,11 +237,16 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                                 where n.<xsl:value-of select="field[1]"/> == dbModel.<xsl:value-of select="field[1]"/>
                                 select n).FirstOrDefault();
 
-                        if (match != null)
+                        if (match == null)
+                        {
+                            match = insert<xsl:value-of select="@name"/>.ToDbModel();
+                            dbIsolated.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>.Add(match);
+                        }
+                        else
                         {
                             match = insert<xsl:value-of select="@name"/>.ToDbModel(match);
-                            dbIsolated.SaveChanges();
                         }
+                        dbIsolated.SaveChanges();
                     }
                     </xsl:if>
 
@@ -254,7 +266,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
 
                     <xsl:for-each select="field[@foreignKeyComputesMe='true']">
                     // Cascade to <xsl:value-of select="@foreignKey" />
-                    this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(dbModel.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.GetValueOrDefault()</xsl:if>, availability);
+                    this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(database, new IdentityInfo(dbModel.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.Value</xsl:if><xsl:for-each select="../field[@tenant='true' and not(@isolated='true')]">, dbModel.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.GetValueOrDefault()</xsl:if></xsl:for-each>), availability);
                     </xsl:for-each>
                     this.DependencyCoordinator.<xsl:value-of select="@name"/>Invalidated(Dependency.none, dbModel.<xsl:value-of select="field[1]"/><xsl:for-each select="field[@tenant='true' and not(@isolated='true')]">, dbModel.<xsl:value-of select="text()"/></xsl:for-each>);
                 }
@@ -337,7 +349,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                         <xsl:if test="@useIndex='true' or @useStore='true'">this.Synchronizer.SynchronizeItem(new IdentityInfo(found.<xsl:value-of select="field[1]"/><xsl:for-each select="field[@tenant='true']">, found.<xsl:value-of select="text()"/></xsl:for-each>), Availability.<xsl:choose><xsl:when test="@indexForSearchable='true'">Searchable</xsl:when><xsl:otherwise>Retrievable</xsl:otherwise></xsl:choose>);
                         this.AfterUpdateIndexed(database, found);
                         <xsl:for-each select="field[@foreignKeyComputesMe='true']">
-                        this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(found.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.GetValueOrDefault()</xsl:if>, availability);// Cascade to <xsl:value-of select="@foreignKey" />
+                        this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(database, new IdentityInfo(found.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.Value</xsl:if><xsl:for-each select="../field[@tenant='true' and not(@isolated='true')]">, found.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.GetValueOrDefault()</xsl:if></xsl:for-each>), availability);// Cascade to <xsl:value-of select="@foreignKey" />
                         </xsl:for-each>
                         </xsl:if>
                         this.DependencyCoordinator.<xsl:value-of select="@name"/>Invalidated(Dependency.none, found.<xsl:value-of select="field[1]"/><xsl:for-each select="field[@tenant='true' and not(@isolated='true')]">, found.<xsl:value-of select="text()"/></xsl:for-each>);
@@ -581,7 +593,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                         <xsl:if test="@useIndex='true' or @useStore='true'">this.Synchronizer.SynchronizeItem(new IdentityInfo(found.<xsl:value-of select="field[1]"/><xsl:for-each select="field[@tenant='true']">, found.<xsl:value-of select="text()" /></xsl:for-each>), Availability.<xsl:choose><xsl:when test="@indexForSearchable='true'">Searchable</xsl:when><xsl:otherwise>Retrievable</xsl:otherwise></xsl:choose>);
                         this.AfterDeleteIndexed(database, found);
                         <xsl:for-each select="field[@foreignKeyComputesMe='true']">
-                        this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(found.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.GetValueOrDefault()</xsl:if>, Availability.<xsl:choose><xsl:when test="../@indexForSearchable='true'">Searchable</xsl:when><xsl:otherwise>Retrievable</xsl:otherwise></xsl:choose>);// Cascade to <xsl:value-of select="@foreignKey" />
+                        this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(database, new IdentityInfo(found.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.Value</xsl:if><xsl:for-each select="../field[@tenant='true' and not(@isolated='true')]">, found.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.GetValueOrDefault()</xsl:if></xsl:for-each>), Availability.<xsl:choose><xsl:when test="../@indexForSearchable='true'">Searchable</xsl:when><xsl:otherwise>Retrievable</xsl:otherwise></xsl:choose>);// Cascade to <xsl:value-of select="@foreignKey" />
                         </xsl:for-each>
                         </xsl:if>
                         this.DependencyCoordinator.<xsl:value-of select="@name"/>Invalidated(Dependency.none, found.<xsl:value-of select="field[1]"/><xsl:for-each select="field[@tenant='true' and not(@isolated='true')]">, found.<xsl:value-of select="text()"/></xsl:for-each>);
@@ -651,20 +663,23 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                 if (found != null)
                 {
                     <xsl:for-each select="field[@foreignKeyComputesMe='true']">// Cascade To <xsl:value-of select="@foreignKey"/>
-                    this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeCompute(db, found.<xsl:value-of select="text()"/>, chain);
+                    this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeCompute(database, found.<xsl:value-of select="text()"/>, chain);
                     </xsl:for-each>
                 }
                 </xsl:if>
             });
         }
-        public void CascadeSynchronize(Guid <xsl:value-of select="field[1]/text()"/>, Availability availability, HashSet&lt;string&gt; chain = null)
+        public void CascadeSynchronize(<xsl:value-of select="../@projectName"/>Context database, IdentityInfo identity, Availability availability, HashSet&lt;string&gt; chain = null)
         {
             base.ExecuteMethod("CascadeSynchronize", delegate ()
             {
                 if(chain == null) { chain = new HashSet&lt;string&gt;(); }
 
                 // sync self
-                this.Synchronizer.SynchronizeItem(new IdentityInfo(<xsl:value-of select="field[1]/text()"/>), availability);
+                this.Synchronizer.SynchronizeItem(identity, availability);
+
+                // any invalidations
+                this.DependencyCoordinator.<xsl:value-of select="@name"/>Invalidated(Dependency.none, identity.primary_key<xsl:if test="count(field[@tenant='true' and not(@isolated='true')])>0">, identity.route_id.Value</xsl:if>);
 
                 if(!chain.Add("<xsl:value-of select="@name"/>"))
                 {
@@ -672,11 +687,11 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                 }
 
                 <xsl:if test="count(field[@foreignKeyComputesMe='true'])>0">
-                <xsl:value-of select="@name"/> found = this.GetById(<xsl:value-of select="field[1]/text()"/>);
+                <xsl:value-of select="@name"/> found = this.GetById(<xsl:if test="count(field[@tenant='true' and not(@isolated='true')])>0">identity.route_id.Value, </xsl:if>identity.primary_key);
                 if (found != null)
                 {
                     <xsl:for-each select="field[@foreignKeyComputesMe='true']">// Cascade To <xsl:value-of select="@foreignKey"/>
-                    this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(found.<xsl:value-of select="text()"/>, availability, chain);
+                    this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(database, new IdentityInfo(found.<xsl:value-of select="text()"/>, identity.route_id), availability, chain);
                     </xsl:for-each>
                 }
                 </xsl:if>
@@ -812,30 +827,27 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
         {
             base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQL<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>Context(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="text()"/></xsl:for-each>))
                 {
-                    using (var db = base.CreateSQL<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>Context(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="text()"/></xsl:for-each>))
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         <xsl:if test="@tenant='Route'">
@@ -843,30 +855,27 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
         {
             base.ExecuteMethod("SynchronizationHydrateUpdateIsolated", delegate ()
             {
-                base.ExecuteMethod("SynchronizationHydrateUpdate", delegate ()
+                using (var db = base.CreateSQLIsolatedContext(<xsl:value-of select="field[1]"/>))
                 {
-                    using (var db = base.CreateSQLIsolatedContext(<xsl:value-of select="field[1]"/>))
+                    if (success)
                     {
-                        if (success)
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = sync_date_utc
-                                });
-                        }
-                        else
-                        {
-                            db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
-                                .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
-                                .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
-                                {
-                                    sync_hydrate_utc = null
-                                });
-                        }
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = sync_date_utc
+                            });
                     }
-                });
+                    else
+                    {
+                        db.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@name"/></xsl:call-template>
+                            .Where(x =&gt; x.<xsl:value-of select="field[1]"/> == <xsl:value-of select="field[1]"/>)
+                            .Update(x =&gt; new db.<xsl:value-of select="@name"/>()
+                            {
+                                sync_hydrate_utc = null
+                            });
+                    }
+                }
             });
         }
         </xsl:if>
@@ -1229,7 +1238,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                 <xsl:if test="@isNullable='true'"><xsl:text>
                 </xsl:text>if (insertInfo.DbModel.<xsl:value-of select="text()"/>.HasValue)
                 {</xsl:if><xsl:text>
-                </xsl:text><xsl:if test="@isNullable='true'"><xsl:text>    </xsl:text></xsl:if>this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(insertInfo.DbModel.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.Value</xsl:if>, availability, insertInfo.Chain);<xsl:if test="@isNullable='true'">
+                </xsl:text><xsl:if test="@isNullable='true'"><xsl:text>    </xsl:text></xsl:if>this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(database, new IdentityInfo(insertInfo.DbModel.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.Value</xsl:if><xsl:for-each select="../field[@tenant='true' and not(@isolated='true')]">, insertInfo.DbModel.<xsl:value-of select="text()"/></xsl:for-each>), availability, insertInfo.Chain);<xsl:if test="@isNullable='true'">
                 }</xsl:if>
                 </xsl:for-each>
                 this.DependencyCoordinator.<xsl:value-of select="@name"/>Invalidated(Dependency.none, insertInfo.DbModel.<xsl:value-of select="field[1]"/><xsl:for-each select="field[@tenant='true' and not(@isolated='true')]">, insertInfo.DbModel.<xsl:value-of select="text()"/></xsl:for-each>);
@@ -1287,7 +1296,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Direct.Imple
                 <xsl:if test="@isNullable='true'"><xsl:text>
                 </xsl:text>if (updateInfo.DbModel.<xsl:value-of select="text()"/>.HasValue)
                 {</xsl:if><xsl:text>
-                </xsl:text><xsl:if test="@isNullable='true'"><xsl:text>    </xsl:text></xsl:if>this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(updateInfo.DbModel.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.Value</xsl:if>, availability, updateInfo.Chain);<xsl:if test="@isNullable='true'">
+                </xsl:text><xsl:if test="@isNullable='true'"><xsl:text>    </xsl:text></xsl:if>this.API.Direct.<xsl:call-template name="Pluralize"><xsl:with-param name="inputString" select="@foreignKey"/></xsl:call-template>.CascadeSynchronize(database, new IdentityInfo(updateInfo.DbModel.<xsl:value-of select="text()"/><xsl:if test="@isNullable='true'">.Value</xsl:if><xsl:for-each select="../field[@tenant='true' and not(@isolated='true')]">, updateInfo.DbModel.<xsl:value-of select="text()"/></xsl:for-each>), availability, updateInfo.Chain);<xsl:if test="@isNullable='true'">
                 }</xsl:if>
                 </xsl:for-each>
                 this.DependencyCoordinator.<xsl:value-of select="@name"/>Invalidated(Dependency.none, updateInfo.DbModel.<xsl:value-of select="field[1]"/><xsl:for-each select="field[@tenant='true' and not(@isolated='true')]">, updateInfo.DbModel.<xsl:value-of select="text()"/></xsl:for-each>);
@@ -1529,7 +1538,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
         [Obsolete("Use caution, this is expensive for multi-partition tables", false)]
         public Task&lt;<xsl:value-of select="@name"/>&gt; GetDocumentAsync(<xsl:for-each select="field[@tenant='true' and not(@isolated='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 <xsl:choose><xsl:when test="count(field[@storePartitionKey='Global' or @storePartitionKey='Self' or @storePartitionKey='SplitID'])>0">
                 string partitionKey = new <xsl:value-of select="@name"/>(){ <xsl:value-of select="field[1]/text()"/> = <xsl:value-of select="field[1]/text()"/>}.partition_key;
@@ -1547,7 +1556,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
         </xsl:if></xsl:when><xsl:otherwise>
         public Task&lt;<xsl:value-of select="@name"/>&gt; GetDocumentAsync(<xsl:for-each select="field[@tenant='true' and not(@isolated='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:value-of select="field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[1]/text()"/>)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 <xsl:choose>
                 <xsl:when test="count(field[@storePartitionKey='Global' or @storePartitionKey='Self' or @storePartitionKey='SplitID'])>0">
@@ -1569,7 +1578,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
         <xsl:for-each select="field[@storePartitionKey='true']">
         public Task&lt;<xsl:value-of select="../@name"/>&gt; GetDocumentAsync(<xsl:if test="not(@tenant='true' and not(@isolated='true'))"><xsl:for-each select="../field[@tenant='true']"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each></xsl:if><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/><xsl:if test="not(../field[1]/@isolated='true')">, <xsl:value-of select="../field[1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="../field[1]/text()"/></xsl:if>)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 <xsl:value-of select="../@name"/> found<xsl:value-of select="@name"/> = await this.RetrieveById<xsl:if test="../@tenant='Isolated'">Isolated</xsl:if><xsl:if test="../@tenant='Shared' or ../@tenant='Route'">Shared</xsl:if>Async(<xsl:for-each select="../field[@tenant='true']"><xsl:value-of select="text()" />, </xsl:for-each><xsl:value-of select="text()"/>.ToString(), <xsl:value-of select="../field[1]/text()"/>.ToString());
                 <xsl:if test="count(../indexfield[@sensitive='true'])>0 or count(../field[@sensitive='true'])>0">
@@ -1583,7 +1592,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
 
         public Task&lt;bool&gt; CreateDocumentAsync(<xsl:value-of select="@name"/> model)
         {
-            return base.ExecuteFunction(nameof(CreateDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(CreateDocumentAsync), async delegate ()
             {
                 <xsl:if test="@storeBulk='true'">model.transaction_id = Guid.NewGuid().ToString();
                 model.transaction_stamp_utc = DateTime.UtcNow;
@@ -1604,7 +1613,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
         <xsl:if test="count(field[@storePartitionKey='Self'])>0 or count(field[@storePartitionKey='SplitID'])>0">[Obsolete("Use caution, this is expensive for multi-partition tables", false)]</xsl:if>
         public Task&lt;ListResult&lt;<xsl:value-of select="@name"/>&gt;&gt; <xsl:choose><xsl:when test="count(field[@storePartitionKey='Global' or @storePartitionKey='Self' or @storePartitionKey='SplitID'])>0">Find</xsl:when><xsl:otherwise>FindFor<xsl:value-of select="field[@storePartitionKey='true'][1]/@friendlyName"/></xsl:otherwise></xsl:choose>Async(<xsl:for-each select="field[@tenant='true' and not(@storePartitionKey='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:if test="count(field[@storePartitionKey='true'])>0"><xsl:value-of select="field[@storePartitionKey='true'][1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[@storePartitionKey='true'][1]/text()"/>, </xsl:if>int skip, int take, string order_by = "", bool descending = false<xsl:if test="count(field[@searchable='true'])>0 or count(indexfield[@searchable='true'])>0">, string keyword = ""</xsl:if><xsl:for-each select="field[@filter='true']">, <xsl:value-of select="@type"/><xsl:if test="not(@type='string')">?</xsl:if><xsl:text> </xsl:text><xsl:value-of select="text()"/> = null</xsl:for-each><xsl:for-each select="field[string-length(@searchToggle)>0]">, <xsl:variable name="searchType"><xsl:value-of select="@type" /></xsl:variable><xsl:if test="/items/enum[@name=$searchType]">sdk.</xsl:if><xsl:value-of select="@type"/><xsl:if test="not(@type='string')">?</xsl:if><xsl:text> </xsl:text><xsl:value-of select="text()"/> = <xsl:if test="/items/enum[@name=$searchType] and @searchToggle!='null'">sdk.</xsl:if><xsl:value-of select="@searchToggle"/></xsl:for-each><xsl:for-each select="indexfield[string-length(@searchToggle)>0]">, <xsl:variable name="searchType"><xsl:value-of select="@type" /></xsl:variable><xsl:if test="/items/enum[@name=$searchType]">sdk.</xsl:if><xsl:value-of select="@type"/><xsl:if test="not(@type='string')">?</xsl:if><xsl:text> </xsl:text><xsl:value-of select="text()"/> = <xsl:if test="/items/enum[@name=$searchType] and @searchToggle!='null'">sdk.</xsl:if><xsl:value-of select="@searchToggle"/></xsl:for-each>)
         {
-            return base.ExecuteFunction(nameof(<xsl:choose><xsl:when test="count(field[@storePartitionKey='Global' or @storePartitionKey='Self' or @storePartitionKey='SplitID'])>0">Find</xsl:when><xsl:otherwise>FindFor<xsl:value-of select="field[@storePartitionKey='true'][1]/@friendlyName"/></xsl:otherwise></xsl:choose>Async), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(<xsl:choose><xsl:when test="count(field[@storePartitionKey='Global' or @storePartitionKey='Self' or @storePartitionKey='SplitID'])>0">Find</xsl:when><xsl:otherwise>FindFor<xsl:value-of select="field[@storePartitionKey='true'][1]/@friendlyName"/></xsl:otherwise></xsl:choose>Async), async delegate ()
             {
                 <xsl:choose><xsl:when test="count(field[@storePartitionKey='Global'])>0">
                 IQueryable&lt;<xsl:value-of select="@name"/>&gt; query = base.QueryByPartition<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>(<xsl:for-each select="field[@tenant='true' and @isolated='true']"><xsl:value-of select="text()"/>, </xsl:for-each><xsl:value-of select="@name"/>.GLOBAL_PARTITION);
@@ -1668,7 +1677,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
         <xsl:for-each select="field[@filter='true']">
         public Task&lt;ListResult&lt;<xsl:value-of select="../@name"/>&gt;&gt; GetBy<xsl:value-of select="@friendlyName"/>Async(<xsl:for-each select="../field[@tenant='true' and not(@storePartitionKey='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:if test="count(../field[@storePartitionKey='true'])>0"><xsl:value-of select="../field[@storePartitionKey='true'][1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="../field[@storePartitionKey='true'][1]/text()"/>, </xsl:if><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, int skip, int take, string order_by = "", bool descending = false<xsl:if test="count(../field[@searchable='true'])>0 or count(../indexfield[@searchable='true'])>0"><xsl:if test="count(../field[@searchable='true'])>0 or (count(../indexfield[@searchable='true'])>0)">, string keyword = ""</xsl:if></xsl:if>)
         {
-            return base.ExecuteFunction(nameof(GetBy<xsl:value-of select="@friendlyName"/>Async), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetBy<xsl:value-of select="@friendlyName"/>Async), async delegate ()
             {
                 <xsl:choose><xsl:when test="count(../field[@storePartitionKey='Global'])>0">
                 IQueryable&lt;<xsl:value-of select="../@name"/>&gt; query = base.QueryByPartition<xsl:if test="../@tenant='Isolated'">Isolated</xsl:if><xsl:if test="../@tenant='Shared' or ../@tenant='Route'">Shared</xsl:if>(<xsl:value-of select="../@name"/>.GLOBAL_PARTITION);
@@ -1705,7 +1714,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
 
         <xsl:if test="../@storeBulk='true'">public Task BulkDisplaceAsync(<xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, List&lt;<xsl:value-of select="../@name"/>&gt; entities)
         {
-            return.ExecuteFunction("BulkDisplace", delegate ()
+            return base.ExecuteMethodAsync("BulkDisplace", async delegate ()
             {
                 DateTime stamp_utc = DateTime.UtcNow;
                 string transaction_id = Guid.NewGuid().ToString();
@@ -1721,18 +1730,18 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
                     .Where(x => x.transaction_id != transaction_id &amp;&amp; x.transaction_stamp_utc &lt; stamp_utc)
                     .ToList();
 
-                base.BulkRemoveAsync(deleteItems).Wait();
+                await base.BulkRemoveAsync(deleteItems);
             });
         }
         </xsl:if>
         <xsl:if test="count(field[@storePartitionKey='true'])>0">
         public Task DeleteFor<xsl:value-of select="field[@storePartitionKey='true'][1]/@friendlyName"/>Async(<xsl:for-each select="field[@tenant='true' and not(@storePartitionKey='true')]"><xsl:value-of select="@type"/><xsl:text> </xsl:text><xsl:value-of select="text()"/>, </xsl:for-each><xsl:value-of select="field[@storePartitionKey='true'][1]/@type"/><xsl:text> </xsl:text><xsl:value-of select="field[@storePartitionKey='true'][1]/text()"/>)
         {
-            return base.ExecuteFunction(nameof(DeleteFor<xsl:value-of select="field[@storePartitionKey='true'][1]/@friendlyName"/>Async), async delegate ()
+            return base.ExecuteMethodAsync(nameof(DeleteFor<xsl:value-of select="field[@storePartitionKey='true'][1]/@friendlyName"/>Async), async delegate ()
             {
                 List&lt;<xsl:value-of select="@name"/>&gt; deleteItems = await base.RetrieveByPartition<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>Async(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="text()"/>, </xsl:for-each><xsl:value-of select="field[@storePartitionKey='true'][1]/text()"/>.ToString());
 
-                return base.BulkRemove<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>Async(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="text()"/>, </xsl:for-each>deleteItems);
+                await base.BulkRemove<xsl:if test="@tenant='Isolated'">Isolated</xsl:if><xsl:if test="@tenant='Shared' or @tenant='Route'">Shared</xsl:if>Async(<xsl:for-each select="field[@tenant='true']"><xsl:value-of select="text()"/>, </xsl:for-each>deleteItems);
             });
         }
         </xsl:if>
@@ -1765,7 +1774,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
                     {
                         switch (item.field)
                         {
-                            <xsl:for-each select="field[not(@noStore='true') and not(@sdkHidden='true') and (@sortable='true' or @searchable='true' or @isEnum='true' or @type='int')]">case nameof(<xsl:value-of select="../@name"/>.<xsl:value-of select="text()"/>):
+                            <xsl:for-each select="field[not(@noStore='true') and not(@sdkHidden='true') and (@sortable='true' or @searchable='true' or @isEnum='true' or @type='int' or @type='DateTime')]">case nameof(<xsl:value-of select="../@name"/>.<xsl:value-of select="text()"/>):
                                 if(item.descending)
                                 {
                                     if(result == null)
@@ -1789,7 +1798,7 @@ namespace <xsl:value-of select="../@projectName"/>.Primary.Business.Store.Implem
                                     }
                                 }
                                 break;
-                            </xsl:for-each><xsl:for-each select="indexfield[not(@noStore='true') and not(@sdkHidden='true') and (@sortable='true' or @searchable='true' or @isEnum='true' or @type='int')]">case nameof(<xsl:value-of select="../@name"/>.<xsl:value-of select="text()"/>):
+                            </xsl:for-each><xsl:for-each select="indexfield[not(@noStore='true') and not(@sdkHidden='true') and (@sortable='true' or @searchable='true' or @isEnum='true' or @type='int' or @type='DateTime')]">case nameof(<xsl:value-of select="../@name"/>.<xsl:value-of select="text()"/>):
                                 if(item.descending)
                                 {
                                     if(result == null)

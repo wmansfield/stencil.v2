@@ -101,6 +101,14 @@
     <field type="string" dbType="nvarchar(150)" isNullable="true" sortable="true" searchable="true" friendlyName="Name">company_name</field>
     <field type="bool" dbType="bit" isNullable="false" searchToggle="null" friendlyName="Is Disabled">disabled</field>
   </item>
+  <item name="Widget" friendlyName="Widget" tenant="Isolated" useStore="true" indexPriority="90" indexForSearchable="true" uiDefaultSort="stamp_utc" uiDefaultSortDescending="true" hasMarkdown="true">
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" friendlyName="Widget">widget_id</field>
+    <field type="Guid" dbType="uniqueidentifier" isNullable="false" tenant="true" storePartitionKey="true" foreignKey="Shop" foreignKeyField="shop_id" friendlyName="Shop">shop_id</field>
+    <field type="DateTime" dbType="datetimeoffset(0)" isNullable="false" friendlyName="Stamp">stamp_utc</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true"  html="true" friendlyName="Text">text</field>
+    <field type="string" dbType="nvarchar(max)" isNullable="true"  html="true" friendlyName="Payload">payload</field>
+    <indexfield type="MarkdownSection[]" isNullable="false" friendlyName="Sections">sections</indexfield>
+  </item>
   <enum name="AccountStatus">
     <field value="0" friendlyName="Enabled">enabled</field>
     <field value="1" friendlyName="Pending">pending</field>

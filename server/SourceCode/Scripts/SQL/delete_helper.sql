@@ -2,6 +2,9 @@
 
 -- <Foreign Keys> --------------------------------------------------------------------
 
+ALTER TABLE [dbo].[Widget] DROP  [FK_Widget_Shop_shop_id]
+GO
+
 ALTER TABLE [dbo].[Company] DROP  [FK_Company_Shop_shop_id]
 GO
 
@@ -75,6 +78,9 @@ GO
 
 
 -- <Tables> --------------------------------------------------------------------
+
+DROP TABLE [dbo].[Widget]
+GO
 
 DROP TABLE [dbo].[Company]
 GO

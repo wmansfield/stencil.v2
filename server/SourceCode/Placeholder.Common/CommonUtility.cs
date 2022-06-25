@@ -9,6 +9,7 @@ namespace Placeholder.Common
 {
     public static class CommonUtility
     {
+
         #region File Helpers
 
         private static Regex _fileNameOnlyCharacters = new Regex("[^a-zA-Z0-9\\._-]");

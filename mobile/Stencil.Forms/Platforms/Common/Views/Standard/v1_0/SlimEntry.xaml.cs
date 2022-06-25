@@ -121,6 +121,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _borderless, value); }
         }
 
+        private bool _isReadOnly;
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+            set { SetProperty(ref _isReadOnly, value); }
+        }
+        
+
         private string _backgroundColor;
         public string BackgroundColor
         {
@@ -155,6 +163,13 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _padding, value); }
         }
 
+        private Thickness _margin = new Thickness();
+        public Thickness Margin
+        {
+            get { return _margin; }
+            set { SetProperty(ref _margin, value); }
+        }
+        
         #endregion
 
         #region Binding Properties

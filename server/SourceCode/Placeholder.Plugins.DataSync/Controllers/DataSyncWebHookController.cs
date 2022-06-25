@@ -18,7 +18,7 @@ namespace Placeholder.Plugins.DataSync.Controllers
 
         [HttpPost]
         [Route("failed")]
-        public IActionResult OnSynchronousFailed(SyncInput input)
+        public IActionResult OnSynchronousFailed([FromForm] SyncInput input)
         {
             return base.ExecuteFunction("OnSynchronousFailed", delegate ()
             {
@@ -30,7 +30,7 @@ namespace Placeholder.Plugins.DataSync.Controllers
 
         [HttpPost]
         [Route("sync")]
-        public IActionResult OnSyncWasRequested(SyncInput input)
+        public IActionResult OnSyncWasRequested([FromForm] SyncInput input)
         {
             return base.ExecuteFunction("OnSyncWasRequested", delegate ()
             {
@@ -43,7 +43,7 @@ namespace Placeholder.Plugins.DataSync.Controllers
 
         [HttpPost]
         [Route("agitate")]
-        public IActionResult Agitate(AgitateInput input)
+        public IActionResult Agitate([FromForm] AgitateInput input)
         {
             return base.ExecuteFunction("Agitate", delegate ()
             {

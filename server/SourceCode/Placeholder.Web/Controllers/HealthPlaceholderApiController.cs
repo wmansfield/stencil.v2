@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Placeholder.Primary.Health;
 using Zero.Foundation;
 using Zero.Foundation.System;
@@ -33,6 +34,7 @@ namespace Placeholder.Web.Controllers
                 base.ExecuteMethod(methodName, action, parameters);
             }
         }
+
         protected async override Task ExecuteMethodAsync(string methodName, Func<Task> action, params object[] parameters)
         {
             using (var scope = HealthReporter.BeginTrack(HealthTrackType.CountAndDurationAverage, string.Format(HealthReporter.RESTAPI_FORMAT, this.TrackPrefix + "." + methodName)))

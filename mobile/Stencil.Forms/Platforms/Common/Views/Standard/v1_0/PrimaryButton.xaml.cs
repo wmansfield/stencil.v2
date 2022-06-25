@@ -50,6 +50,11 @@ namespace Stencil.Forms.Views.Standard.v1_0
                     result = new PrimaryButtonContext();
                 }
 
+                if (result.FontSize <= 0)
+                {
+                    result.FontSize = 16;
+                }
+
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
@@ -130,6 +135,13 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _padding, value); }
         }
 
+        private Thickness _margin = new Thickness();
+        public Thickness Margin
+        {
+            get { return _margin; }
+            set { SetProperty(ref _margin, value); }
+        }
+
         private bool _showIcon;
         public bool ShowIcon
         {
@@ -149,6 +161,13 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             get { return _visible; }
             set { SetProperty(ref _visible, value); }
+        }
+
+        private int _fontSize;
+        public int FontSize
+        {
+            get { return _fontSize; }
+            set { SetProperty(ref _fontSize, value); }
         }
 
         protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)

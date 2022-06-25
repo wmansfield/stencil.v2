@@ -122,7 +122,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         
         public Task<Account> GetDocumentAsync(Guid account_id)
         {
-            return base.ExecuteFunction(nameof(GetDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(GetDocumentAsync), async delegate ()
             {
                 
                 string partitionKey = new Account(){ account_id = account_id}.partition_key;
@@ -139,7 +139,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
 
         public Task<bool> CreateDocumentAsync(Account model)
         {
-            return base.ExecuteFunction(nameof(CreateDocumentAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(CreateDocumentAsync), async delegate ()
             {
                 ItemResponse<Account> result = await base.UpsertSharedAsync(model);
                 return result.StatusCode.IsSuccess();
@@ -157,7 +157,7 @@ namespace Placeholder.Primary.Business.Store.Implementation
         [Obsolete("Use caution, this is expensive for multi-partition tables", false)]
         public Task<ListResult<Account>> FindAsync(int skip, int take, string order_by = "", bool descending = false, string keyword = "")
         {
-            return base.ExecuteFunction(nameof(FindAsync), async delegate ()
+            return base.ExecuteFunctionAsync(nameof(FindAsync), async delegate ()
             {
                 
                 IQueryable<Account> query = base.QuerySharedWithoutPartitionKey();
@@ -330,6 +330,126 @@ namespace Placeholder.Primary.Business.Store.Implementation
                                     else
                                     {
                                         result = result.ThenBy(x => x.account_status);
+                                    }
+                                }
+                                break;
+                            case nameof(Account.email_verify_utc):
+                                if(item.descending)
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderByDescending(x => x.email_verify_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenByDescending(x => x.email_verify_utc);
+                                    }
+                                }
+                                else
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderBy(x => x.email_verify_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenBy(x => x.email_verify_utc);
+                                    }
+                                }
+                                break;
+                            case nameof(Account.password_changed_utc):
+                                if(item.descending)
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderByDescending(x => x.password_changed_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenByDescending(x => x.password_changed_utc);
+                                    }
+                                }
+                                else
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderBy(x => x.password_changed_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenBy(x => x.password_changed_utc);
+                                    }
+                                }
+                                break;
+                            case nameof(Account.password_reset_utc):
+                                if(item.descending)
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderByDescending(x => x.password_reset_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenByDescending(x => x.password_reset_utc);
+                                    }
+                                }
+                                else
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderBy(x => x.password_reset_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenBy(x => x.password_reset_utc);
+                                    }
+                                }
+                                break;
+                            case nameof(Account.single_login_token_expire_utc):
+                                if(item.descending)
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderByDescending(x => x.single_login_token_expire_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenByDescending(x => x.single_login_token_expire_utc);
+                                    }
+                                }
+                                else
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderBy(x => x.single_login_token_expire_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenBy(x => x.single_login_token_expire_utc);
+                                    }
+                                }
+                                break;
+                            case nameof(Account.last_login_utc):
+                                if(item.descending)
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderByDescending(x => x.last_login_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenByDescending(x => x.last_login_utc);
+                                    }
+                                }
+                                else
+                                {
+                                    if(result == null)
+                                    {
+                                        result = query.OrderBy(x => x.last_login_utc);
+                                    }
+                                    else
+                                    {
+                                        result = result.ThenBy(x => x.last_login_utc);
                                     }
                                 }
                                 break;

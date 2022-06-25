@@ -110,7 +110,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             {
                 View view = (sender as View);
                 CarouselContext context = view?.BindingContext as CarouselContext;
-                if (!string.IsNullOrEmpty(context.InteractionGroup))
+                if (!string.IsNullOrEmpty(context?.InteractionGroup))
                 {
                     IDataViewModel viewModel = context?.DataViewItem?.DataViewModel;
 
@@ -124,7 +124,6 @@ namespace Stencil.Forms.Views.Standard.v1_0
         }
     }
 
-    
 
     public class CarouselContext : PreparedBindingContext, IStateEmitter
     {

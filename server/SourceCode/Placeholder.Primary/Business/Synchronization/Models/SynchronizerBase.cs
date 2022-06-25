@@ -157,22 +157,12 @@ namespace Placeholder.Primary.Business.Synchronization
                     HealthReporter.Current.UpdateMetric(HealthTrackType.Each, string.Format(HealthReporter.INDEXER_INSTANT_FAIL_TIMEOUT_FORMAT, this.EntityName), 0, 1);
 
                     this.IFoundation.LogError(cex, "AttemptExecuteWithinTimeout:" + methodName);
-                    INotifySynchronizer notifySync = this.IFoundation.SafeResolve<INotifySynchronizer>();
-                    if (notifySync != null)
-                    {
-                        notifySync.OnSyncFailed(this.EntityName, "");
-                    }
                 }
                 catch (Exception ex)
                 {
                     HealthReporter.Current.UpdateMetric(HealthTrackType.Each, string.Format(HealthReporter.INDEXER_INSTANT_FAIL_ERROR_FORMAT, this.EntityName), 0, 1);
 
                     this.IFoundation.LogError(ex, "AttemptExecuteWithinTimeout:" + methodName);
-                    INotifySynchronizer notifySync = this.IFoundation.SafeResolve<INotifySynchronizer>();
-                    if (notifySync != null)
-                    {
-                        notifySync.OnSyncFailed(this.EntityName, "");
-                    }
                 }
 
             });

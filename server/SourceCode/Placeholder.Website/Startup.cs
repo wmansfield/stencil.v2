@@ -115,6 +115,30 @@ namespace Placeholder.Website
                 app.UseHttpsRedirection();
             }
 
+            app.UseRewriter(new RewriteOptions() { StaticFileProvider = app.ApplicationServices.GetService<IFileProvider>() }
+                .AddRedirect("^$", "/v1/", 302)
+                .AddRewrite("^v1$", "/Content/v1/index.html", true)
+                .AddRewrite("^v1/$", "/Content/v1/index.html", true)
+                .AddRewrite("apple-app-site-association$", "/Content/deep/apple-app-site-association.json", true)
+                .AddRewrite("\\.well-known/apple-app-site-association$", "/Content/deep/apple-app-site-association.json", true)
+                .AddRewrite("assetlinks.json$", "/Content/deep/assetlinks.json", true)
+                .AddRewrite("\\.well-known/assetlinks.json$", "/Content/deep/assetlinks.json", true)
+                .AddRewrite("^v1/assets(.*)", "/Content/v1/assets$1", true)
+                .AddRewrite("^assets(.*)", "/Content/v1/assets$1", true)
+                .Add(context =>
+                {
+                    if (context.HttpContext.Request.Path.StartsWithSegments("/v1", out PathString remaining))
+                    {
+                        if (context.StaticFileProvider.GetFileInfo("Content/v1/" + remaining).Exists)
+                        {
+                            // rewrite to file
+                            context.HttpContext.Request.Path = "/Content/v1/" + remaining;
+                            context.Result = RuleResult.SkipRemainingRules;
+                        }
+                    }
+                })
+                .AddRewrite("^v1(.*)", "/Content/v1/index.html", true));
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = app.ApplicationServices.GetService<IFileProvider>(),
@@ -150,7 +174,6 @@ namespace Placeholder.Website
                 domains.Add(string.Format("https://{0}", shop.public_domain));
                 domains.Add(string.Format("https://{0}", shop.private_domain));
             }
-            shops.Select(x => x.public_domain).ToList();
 
             return domains.ToArray();
         }

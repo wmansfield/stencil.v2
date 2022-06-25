@@ -11,7 +11,12 @@ namespace Stencil.Common.Markdown
         {
 
         }
+        public AnnotatedTextItem(string source)
+        {
+            _source = source;
+        }
         public string text { get; set; }
+        public string extra { get; set; }
         public List<TextAnnotation> annotations { get; set; }
 
         /// <summary>
@@ -32,5 +37,16 @@ namespace Stencil.Common.Markdown
 
         [JsonIgnore]
         public float? ui_height { get; set; }
+
+
+        private string _source = string.Empty;
+        public string GetSource()
+        {
+            return _source;
+        }
+        public void SetSource(string value)
+        {
+            _source = value;
+        }
     }
 }

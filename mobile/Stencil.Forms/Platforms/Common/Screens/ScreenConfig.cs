@@ -33,6 +33,8 @@ namespace Stencil.Forms.Screens
         public bool SuppressPersist { get; set; }
         public bool AutomaticDownload { get; set; }
         public bool IsMenuSupported { get; set; }
+        public bool DisableCellReuse { get; set; }
+        public bool DisableCellSizeCaching { get; set; }
 
         public Lifetime Lifetime { get; set; }
 
@@ -56,7 +58,5 @@ namespace Stencil.Forms.Screens
         public List<IMenuConfig> MenuConfigs { get; set; }
 
         public List<string> Claims { get; set; }
-
-
     }
 }

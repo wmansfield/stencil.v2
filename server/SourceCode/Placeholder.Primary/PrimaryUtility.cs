@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,6 +14,8 @@ namespace Placeholder.Primary
 {
     public static class PrimaryUtility
     {
+        public static readonly HttpClient HttpClient = new HttpClient();
+
         public static TEntity JsonClone<TEntity>(TEntity entity)
             where TEntity : class
         {
@@ -144,6 +147,29 @@ namespace Placeholder.Primary
                 int ix = RANDOM.Next(items.Count);
                 return items[ix];
             }
+        }
+
+        /// <summary>
+        /// Move the datetime to the proper timezone
+        /// </summary>
+        public static DateTimeOffset ConvertToDateTimeOffset(this DateTimeOffset date, IDictionary<string, TimeZoneInfo> timeZones, string timezone)
+        {
+            if (!string.IsNullOrEmpty(timezone) && timeZones.ContainsKey(timezone))
+            {
+                return date.ToOffset(timeZones[timezone].GetUtcOffset(date));
+            }
+            return date;
+        }
+        /// <summary>
+        /// Move the datetime to the proper timezone
+        /// </summary>
+        public static DateTimeOffset ConvertToDateTimeOffset(this DateTime date, IDictionary<string, TimeZoneInfo> timeZones, string timezone)
+        {
+            if (!string.IsNullOrEmpty(timezone) && timeZones.ContainsKey(timezone))
+            {
+                return new DateTimeOffset(date).ToOffset(timeZones[timezone].GetUtcOffset(date));
+            }
+            return date;
         }
     }
 }

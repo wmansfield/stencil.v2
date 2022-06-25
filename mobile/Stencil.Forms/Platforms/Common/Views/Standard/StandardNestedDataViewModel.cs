@@ -26,11 +26,8 @@ namespace Stencil.Forms.Views.Standard
         public StandardNestedDataViewModel(string trackPrefix, ICommandProcessor commandProcessor, Func<ICommandScope, DataTemplateSelector> dataTemplateSelectorCreator)
             : base(trackPrefix)
         {
-            this.Adjusters = new List<IDataViewAdjuster>();
-            this.Filters = new List<IDataViewFilter>();
-            this.StateEmitters = new List<IStateEmitter>();
-            this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
-            this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.ResetState();
+
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelectorCreator(this.CommandScope);
         }
@@ -38,11 +35,8 @@ namespace Stencil.Forms.Views.Standard
         public StandardNestedDataViewModel(string trackPrefix, ICommandProcessor commandProcessor, DataTemplateSelector dataTemplateSelector)
             : base(trackPrefix)
         {
-            this.Adjusters = new List<IDataViewAdjuster>();
-            this.Filters = new List<IDataViewFilter>();
-            this.StateEmitters = new List<IStateEmitter>();
-            this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
-            this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            this.ResetState();
+
             this.CommandScope = new CommandScope(commandProcessor);
             this.DataTemplateSelector = dataTemplateSelector;
         }
@@ -66,6 +60,20 @@ namespace Stencil.Forms.Views.Standard
             set { SetProperty(ref _mainItemsFiltered, value); }
         }
 
+
+        private bool _enableCellReuse;
+        public virtual bool EnableCellReuse
+        {
+            get { return _enableCellReuse; }
+            set { SetProperty(ref _enableCellReuse, value); }
+        }
+
+        private bool _enableCellSizeCaching;
+        public virtual bool EnableCellSizeCaching
+        {
+            get { return _enableCellSizeCaching; }
+            set { SetProperty(ref _enableCellSizeCaching, value); }
+        }
 
         private Thickness _padding;
         public virtual Thickness Padding
@@ -322,21 +330,21 @@ namespace Stencil.Forms.Views.Standard
 
         public virtual Task ExtractAndPrepareExtensionsAsync(IDataViewItem item)
         {
-            return base.ExecuteMethodAsync(nameof(ExtractAndPrepareExtensionsAsync), async delegate ()
+            return base.ExecuteFunction(nameof(ExtractAndPrepareExtensionsAsync), delegate ()
             {
                 if (item == null)
                 {
-                    return;
+                    return Task.CompletedTask;
                 }
 
                 IResolvableTemplateSelector selector = this.DataTemplateSelector as IResolvableTemplateSelector;
                 if (selector == null)
                 {
                     this.LogError(new Exception("Unable to cast dataTemplateSelector to IResolvableTemplateSelector"), "ExtractAndPrepareExtensionsAsync");
-                    return;
+                    return Task.CompletedTask;
                 }
 
-                IDataViewComponent viewComponent = await selector.ResolveTemplateAndPrepareDataAsync(item);
+                IDataViewComponent viewComponent = selector.ResolveTemplateAndPrepareData(item);
 
                 if (item.PreparedContext is IDataViewFilter dataViewFilter)
                 {
@@ -354,8 +362,22 @@ namespace Stencil.Forms.Views.Standard
                 {
                     this.StateEmitters.Add(stateEmitter);
                 }
+
+                return Task.CompletedTask;
             });
             
+        }
+
+        public virtual void ResetState()
+        {
+            base.ExecuteMethod(nameof(ResetState), delegate ()
+            {
+                this.Adjusters = new List<IDataViewAdjuster>();
+                this.Filters = new List<IDataViewFilter>();
+                this.StateEmitters = new List<IStateEmitter>();
+                this.StateResponders = new Dictionary<string, List<IStateResponder>>(StringComparer.OrdinalIgnoreCase);
+                this.Claims = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            });
         }
     }
 }
