@@ -15,5 +15,15 @@ namespace Stencil.Forms.Views.Standard
         /// See ITrackBindingContext
         /// </summary>
         void OnViewDetachedFromContext();
+
+        string TypeName
+        {
+            get;
+        }
+
+        IDataViewItem DataViewItem
+        {
+            get;
+        }
     }
 }

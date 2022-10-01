@@ -26,7 +26,12 @@ namespace Stencil.Forms.Resourcing
         public const string fa_bars = "";//[&#xf0c9]
         public const string fa_cog = "";//[&#xf013;]
         public const string fa_caret_down = "";//[&#xf0d7;]
+        public const string fa_caret_right = "";//[&#xf0da;]
+        public const string fa_caret_left = "";//[&#xf0d9;]
         public const string fa_caret_square_o_up = "";//[&#xf151;]
         public const string fa_caret_square_o_down = "";//[&#xf150;]
+
+        public const string fa_square_o = "";//[&#xf096;]
+        public const string fa_check_square_o = "";//[&#xf046;]
     }
 }

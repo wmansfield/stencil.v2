@@ -448,7 +448,25 @@ namespace Stencil.Forms.Screens
             });
         }
 
-        
+        #region Resources
+
+        protected Color StaticResourceColor(string key)
+        {
+            return base.ExecuteFunction(nameof(StaticResourceColor), delegate ()
+            {
+                return (Color)Application.Current.Resources[key];
+            });
+        }
+        protected string StaticResourceFont(string key)
+        {
+            return base.ExecuteFunction(nameof(StaticResourceFont), delegate ()
+            {
+                string result = (string)(OnPlatform<string>)Application.Current.Resources[key];
+                return result;
+            });
+        }
+
+        #endregion
 
         #endregion
 

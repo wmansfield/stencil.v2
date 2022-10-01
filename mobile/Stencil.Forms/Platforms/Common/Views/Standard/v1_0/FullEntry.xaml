@@ -6,13 +6,14 @@
                     x:Class="Stencil.Forms.Views.Standard.v1_0.FullEntry">
     <DataTemplate x:Key="fullEntry" x:DataType="local:FullEntryContext">
         <!--<ViewCell>-->
-        <Grid RowDefinitions="20,48,20"
+        <Grid RowDefinitions="20,48"
               RowSpacing="4" ColumnSpacing="0"
-              Margin="0" Padding="1"
+              Margin="{Binding Margin}" Padding="1"
+              IsVisible="{Binding UIVisible}"
               BackgroundColor="{Binding BackgroundColor}">
             <Label Grid.Row="0"
                    Text="{Binding Label}"
-                   TextColor="{StaticResource TextOverBackground}"
+                   TextColor="{Binding LabelColor}"
                    FontFamily="{StaticResource SansRegular}"
                    FontSize="{StaticResource FontSizeStandard}"
                    IsVisible="{Binding Label, Converter={StaticResource isValidStringConverter}}"
@@ -58,12 +59,6 @@
                     <TapGestureRecognizer Command="{Binding UITogglePasswordVisibilityCommand}"/>
                 </Frame.GestureRecognizers>
             </Frame>
-            <Label Grid.Row="2"
-                   IsVisible="false"
-                   FontFamily="{StaticResource SansRegular}"
-                   FontSize="{StaticResource FontSizeStandard}"
-                   TextColor="{x:StaticResource Warning}"
-                   Padding="8,0,8,0"/>
         </Grid>
         <!--</ViewCell>-->
     </DataTemplate>

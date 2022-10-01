@@ -29,10 +29,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
             _dataViewComponents[DualColumnMarkdown.COMPONENT_NAME] = new DualColumnMarkdown();
             _dataViewComponents[HeaderTitleBar.COMPONENT_NAME] = new HeaderTitleBar();
             _dataViewComponents[Indicator.COMPONENT_NAME] = new Indicator();
+            _dataViewComponents[SingleColumnView.COMPONENT_NAME] = new SingleColumnView();
             _dataViewComponents[DualColumnView.COMPONENT_NAME] = new DualColumnView();
             _dataViewComponents[TriColumnView.COMPONENT_NAME] = new TriColumnView();
             _dataViewComponents[DropDown.COMPONENT_NAME] = new DropDown();
-
+            _dataViewComponents[GlyphHeader.COMPONENT_NAME] = new GlyphHeader();
+            _dataViewComponents[CheckBox.COMPONENT_NAME] = new CheckBox();
+            _dataViewComponents[ToggleView.COMPONENT_NAME] = new ToggleView();
+            
             foreach (string key in _dataViewComponents.Keys.ToList())
             {
                 _dataViewComponents[ComponentUtility.GenerateVersionedName(key, VERSION)] = _dataViewComponents[key];

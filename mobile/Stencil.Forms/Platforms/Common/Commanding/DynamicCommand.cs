@@ -40,7 +40,11 @@ namespace Stencil.Forms.Commanding
                     {
                         if(values.TryGetValue(field, out ICommandField commandField))
                         {
-                            return await commandField.ValidateUserInputAsync();
+                            string error = await commandField.ValidateUserInputAsync();
+                            if(!string.IsNullOrWhiteSpace(error))
+                            {
+                                return error;
+                            }
                         }
                         else
                         {

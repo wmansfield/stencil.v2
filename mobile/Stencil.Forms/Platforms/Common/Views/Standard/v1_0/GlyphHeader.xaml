@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    xmlns:controls="clr-namespace:Stencil.Forms.Controls"
+                    xmlns:stencil="clr-namespace:Stencil.Forms"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.GlyphHeader">
+    <DataTemplate x:Key="glyphHeader" x:DataType="local:GlyphHeaderContext">
+        <!--<ViewCell>-->
+        <RelativeLayout x:Name="glyphLayoutRoot" HorizontalOptions="Fill"
+              HeightRequest="{Binding HeightRequest}"
+              Margin="{Binding Margin}" Padding="10">
+            <StackLayout x:Name="glyphStackRoot" Spacing="0"
+                         Margin="0"
+                         Padding="0"
+                         RelativeLayout.WidthConstraint="{stencil:CenterOffsetExpression Type=Width, ParentElementName=glyphLayoutRoot, ChildElementName=glyphStackRoot}"
+                         RelativeLayout.HeightConstraint="{stencil:CenterOffsetExpression Type=Height, ParentElementName=glyphLayoutRoot, ChildElementName=glyphStackRoot}"
+                         RelativeLayout.XConstraint="{stencil:CenterOffsetExpression Type=X, ParentElementName=glyphLayoutRoot, ChildElementName=glyphStackRoot}"
+                         RelativeLayout.YConstraint="{stencil:CenterOffsetExpression Type=Y, ParentElementName=glyphLayoutRoot, ChildElementName=glyphStackRoot}"
+                         BackgroundColor="Transparent"
+                         Orientation="Horizontal"
+                         BindableLayout.ItemsSource="{Binding Glyphs}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="local:GlyphInfo">
+                        <controls:TrimLabel HorizontalOptions="Start"
+                               VerticalOptions="Center"
+                               Padding="{Binding Padding}"
+                               Margin="0"
+                               FontSize="{Binding FontSize}"
+                               FontFamily="{Binding FontFamily}"
+                               Text="{Binding Text}"
+                               TextColor="{Binding Color}"
+                               VerticalTextAlignment="{Binding UIVerticalTextAlignment}"
+                               HorizontalTextAlignment="Start"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
+        </RelativeLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

@@ -7,11 +7,12 @@
         <!--<ViewCell>-->
         <Label Text="{Binding Text}"
                 BackgroundColor="{Binding BackgroundColor}"
+                IsVisible="{Binding UIVisible}"
                 HorizontalOptions="Fill"
                 VerticalOptions="Start"
                 LineBreakMode="WordWrap"
                 FontSize="{Binding FontSize}"
-                FontFamily="{StaticResource SansRegular}"
+                FontFamily="{Binding FontFamily}"
                 TextColor="{Binding TextColor}"
                 Padding="{Binding Padding}"
                 Margin="{Binding Margin}"

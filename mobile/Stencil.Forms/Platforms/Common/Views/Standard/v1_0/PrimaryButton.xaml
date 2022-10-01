@@ -11,7 +11,7 @@
               Padding="{Binding Padding}"
               Margin="{Binding Margin}"
               BackgroundColor="{Binding BackgroundColor}"
-              IsVisible="{Binding Visible}"
+              IsVisible="{Binding UIVisible}"
               HorizontalOptions="Fill"
               VerticalOptions="Fill">
             <BoxView CornerRadius="4"

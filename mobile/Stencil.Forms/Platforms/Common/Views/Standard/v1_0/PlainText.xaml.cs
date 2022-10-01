@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Resourcing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,6 +53,10 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     result.FontSize = 16;
                 }
+                if (string.IsNullOrWhiteSpace(result.FontFamily))
+                {
+                    result.FontFamily = "SansRegular";
+                }
 
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
@@ -72,6 +77,17 @@ namespace Stencil.Forms.Views.Standard.v1_0
         }
 
         public const string INTERACTION_KEY_TEXT = "text";
+        public const string INTERACTION_KEY_HIDDEN = "hidden";
+
+        private string _fontFamily = "SansRegular";
+        public string FontFamily
+        {
+            get
+            {
+                return _fontFamily;
+            }
+            set { SetProperty(ref _fontFamily, value); }
+        }
 
         private int _fontSize;
         public int FontSize
@@ -126,6 +142,19 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 }
             }
         }
+        private bool _hidden;
+        public bool Hidden
+        {
+            get { return _hidden; }
+            set
+            {
+                if (SetProperty(ref _hidden, value))
+                {
+                    this.RaisePropertyChanged(nameof(UIVisible));
+                }
+            }
+        }
+
 
         public TextAlignment UITextAlignment
         {
@@ -141,7 +170,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 }
             }
         }
-        
+        public bool UIVisible
+        {
+            get
+            {
+                return !this.Hidden;
+            }
+        }
+
 
         protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
         {
@@ -151,6 +187,12 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     case INTERACTION_KEY_TEXT:
                         this.Text = value;
+                        break;
+                    case INTERACTION_KEY_HIDDEN:
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            this.Hidden = value.Equals("true", StringComparison.OrdinalIgnoreCase);
+                        }
                         break;
                     default:
                         break;

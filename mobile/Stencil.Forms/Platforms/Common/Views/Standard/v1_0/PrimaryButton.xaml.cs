@@ -99,10 +99,9 @@ namespace Stencil.Forms.Views.Standard.v1_0
         public PrimaryButtonContext()
             : base(nameof(PrimaryButtonContext))
         {
-            this.Visible = true;
         }
         public const string INTERACTION_KEY_TEXT = "text";
-        public const string INTERACTION_KEY_VISIBLE = "visible";
+        public const string INTERACTION_KEY_HIDDEN = "hidden";
 
         public string CommandName { get; set; }
         public string CommandParameter { get; set; }
@@ -156,11 +155,25 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _icon, value); }
         }
 
-        private bool _visible;
-        public bool Visible
+        private bool _hidden;
+        public bool Hidden
         {
-            get { return _visible; }
-            set { SetProperty(ref _visible, value); }
+            get { return _hidden; }
+            set
+            {
+                if (SetProperty(ref _hidden, value))
+                {
+                    this.RaisePropertyChanged(nameof(UIVisible));
+                }
+            }
+        }
+
+        public bool UIVisible
+        {
+            get
+            {
+                return !this.Hidden;
+            }
         }
 
         private int _fontSize;
@@ -176,17 +189,16 @@ namespace Stencil.Forms.Views.Standard.v1_0
             {
                 switch (value_key)
                 {
-                    case INTERACTION_KEY_VISIBLE:
+                    case INTERACTION_KEY_HIDDEN:
                         if (!string.IsNullOrEmpty(value))
                         {
-                            this.Visible = value.Equals("true", StringComparison.OrdinalIgnoreCase);
+                            this.Hidden = value.Equals("true", StringComparison.OrdinalIgnoreCase);
                         }
                         break;
                     case INTERACTION_KEY_TEXT:
                         this.Text = value;
                         break;
                     default:
-                        this.Text = value;
                         break;
                 }
             });

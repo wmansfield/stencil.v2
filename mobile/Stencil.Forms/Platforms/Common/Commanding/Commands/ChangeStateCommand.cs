@@ -64,9 +64,18 @@ namespace Stencil.Forms.Commanding.Commands
                     if (stateInfo != null)
                     {
                         List<IStateEmitter> emitters = dataViewModel.StateEmitters.Where(x => x.InteractionGroup == stateInfo.group).ToList();
-                        foreach (IStateEmitter emitter in emitters)
+                        if (emitters.Count > 0)
                         {
-                            emitter.ChangeStateAsync(stateInfo.name, stateInfo.state);
+                            // specific emitter, presume its a secondary invocation mechanism
+                            foreach (IStateEmitter emitter in emitters)
+                            {
+                                emitter.ChangeStateAsync(stateInfo.name, stateInfo.state);
+                            }
+                        }
+                        else
+                        {
+                            // no specific emitter, just raise it
+                            dataViewModel?.RaiseStateChange(stateInfo.group, stateInfo.name, stateInfo.state);
                         }
                         return Task.FromResult(true);
                     }

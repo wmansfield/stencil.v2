@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:effects="clr-namespace:Stencil.Forms.Effects;assembly=Stencil.Forms"
+                    xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.CheckBox">
+    <DataTemplate x:Key="checkBox" x:DataType="local:CheckBoxContext">
+        <!--<ViewCell>-->
+        <Grid HorizontalOptions="Fill" 
+              RowSpacing="0" ColumnSpacing="0"
+              Margin="{Binding Margin}" Padding="0"
+              BackgroundColor="{Binding BackgroundColor}"
+              ColumnDefinitions="40,*"
+              RowDefinitions="*">
+                <Label Grid.Column="0" 
+                       Text="{Binding UIIcon}"
+                       Margin="8,0,8,0"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       FontSize="{StaticResource FontSizeLarge}"
+                       FontFamily="{StaticResource FontAwesome}"
+                       TextColor="{Binding TextColor}"
+                       HorizontalTextAlignment="Center" />
+                <Label Grid.Column="1" 
+                        Text="{Binding Label}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Fill"
+                        HorizontalTextAlignment="Start"
+                        Margin="0,0,12,0"
+                        TextColor="{Binding TextColor}"
+                        FontFamily="{StaticResource SansRegular}"
+                        FontSize="{StaticResource FontSizeMedium}" />
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="CheckBox_Clicked" />
+            </Grid.GestureRecognizers>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

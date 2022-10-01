@@ -51,7 +51,26 @@ namespace Stencil.Forms.Views.Standard.v1_0
 
                 if (result.HeightRequest <= 0)
                 {
-                    result.HeightRequest = 30;
+                    result.HeightRequest = -1;
+                }
+                if (result.FontSize <= 0)
+                {
+                    try
+                    {
+                        result.FontSize = (int)Application.Current.Resources["FontSizeH1"];
+                    }
+                    catch
+                    {
+                        // gulp
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(result.FontFamily))
+                {
+                    result.FontFamily = "SansBold";
+                }
+                if(result.Margin == null)
+                {
+                    result.Margin = new Thickness(3); // fixes smooth scrolling
                 }
 
                 result.CommandScope = commandScope;
@@ -71,6 +90,17 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             this.HeightRequest = -1;
         }
+
+        private string _fontFamily = "SansBold";
+        public string FontFamily
+        {
+            get {
+                return _fontFamily; 
+            }
+            set { SetProperty(ref _fontFamily, value); }
+        }
+
+        
 
         private string _text;
         public string Text
@@ -98,6 +128,20 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
+        }
+
+        private Thickness _margin;
+        public Thickness Margin
+        {
+            get { return _margin; }
+            set { SetProperty(ref _margin, value); }
+        }
+
+        private int _fontSize;
+        public int FontSize
+        {
+            get { return _fontSize; }
+            set { SetProperty(ref _fontSize, value); }
         }
 
         public int HeightRequest { get; set; }

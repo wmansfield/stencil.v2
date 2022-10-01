@@ -57,6 +57,9 @@ namespace Stencil.Forms.Platforms.ios.Renderers
                                     // Xamarin Forms Renderer does not properly cache sizing (though they have the plumbing!)
                                     // We cannot re-use their measurements without reflection, this is the safest method to get the known size.
                                     preparedBindingContext.CachedSize = templatedCell.Measure();
+#if DEBUG
+                                    //System.Diagnostics.Debug.WriteLine($"Row {indexPath.Row} {preparedBindingContext.TypeName} is now: {preparedBindingContext.CachedSize}. Payload: {preparedBindingContext.DataViewItem?.ConfigurationJson}");
+#endif
                                 }
                             }
                         }

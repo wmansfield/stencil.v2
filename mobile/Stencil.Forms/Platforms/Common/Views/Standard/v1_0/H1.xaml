@@ -9,16 +9,17 @@
         <Grid HorizontalOptions="Fill" 
               RowSpacing="0" ColumnSpacing="0"
               HeightRequest="{Binding HeightRequest}"
-              Margin="3" Padding="0"
-              BackgroundColor="{Binding BackgroundColor}"
+              Margin="{Binding Margin}" Padding="0"
               RowDefinitions="*">
-            <Label Text="{Binding Text}"
-                   HorizontalOptions="Fill"
-                   VerticalOptions="Start"
+            <Label HorizontalOptions="Fill"
+                   BackgroundColor="{Binding BackgroundColor}"
                    Padding="{Binding Padding}"
-                   FontSize="{StaticResource FontSizeH1}"
-                   FontFamily="{StaticResource SansBold}"
+                   Margin="0"
+                   FontSize="{Binding FontSize}"
+                   FontFamily="{Binding FontFamily}"
+                   Text="{Binding Text}"
                    TextColor="{Binding TextColor}"
+                   VerticalTextAlignment="Center"
                    HorizontalTextAlignment="Center"/>
         </Grid>
         <!--</ViewCell>-->

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Resourcing;
+using System;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -61,6 +62,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
+                result.PrepareInteractions();
+
                 commandScope.RegisterCommandField(result);
 
                 return Task.FromResult<IDataViewItemReference>(result);
@@ -70,7 +73,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
         #endregion
     }
     
-    public class FullEntryContext : PreparedBindingContext, ICommandField
+    public class FullEntryContext : PreparedBindingContext, ICommandField, IStateResponder
     {
         #region Constructor
 
@@ -78,6 +81,34 @@ namespace Stencil.Forms.Views.Standard.v1_0
             : base(nameof(FullEntryContext))
         {
             this.ApplyPasswordVisibility();
+        }
+
+        #endregion
+
+        #region State Responders
+
+        public const string INTERACTION_KEY_VALUE = "value";
+        public const string INTERACTION_KEY_HIDDEN = "hidden";
+
+        protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
+        {
+            base.ExecuteMethod(nameof(ApplyStateValue), delegate ()
+            {
+                switch (value_key)
+                {
+                    case INTERACTION_KEY_HIDDEN:
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            this.Hidden = value.Equals("true", StringComparison.OrdinalIgnoreCase);
+                        }
+                        break;
+                    case INTERACTION_KEY_VALUE:
+                        this.SetFieldValue(value);
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         #endregion
@@ -154,13 +185,40 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _placeholderColor, value); }
         }
 
+        private string _labelColor = AppColors.TextOverBackground;
+        public string LabelColor
+        {
+            get { return _labelColor; }
+            set { SetProperty(ref _labelColor, value); }
+        }
+
         private Thickness _padding = new Thickness();
         public Thickness Padding
         {
             get { return _padding; }
             set { SetProperty(ref _padding, value); }
         }
-        
+
+        private bool _hidden;
+        public bool Hidden
+        {
+            get { return _hidden; }
+            set
+            {
+                if (SetProperty(ref _hidden, value))
+                {
+                    this.RaisePropertyChanged(nameof(UIVisible));
+                }
+            }
+        }
+
+        private Thickness _margin;
+        public Thickness Margin
+        {
+            get { return _margin; }
+            set { SetProperty(ref _margin, value); }
+        }
+
         #endregion
 
         #region Binding Properties
@@ -193,6 +251,16 @@ namespace Stencil.Forms.Views.Standard.v1_0
             get { return _uiPasswordIcon; }
             set { SetProperty(ref _uiPasswordIcon, value); }
         }
+
+        public bool UIVisible
+        {
+            get
+            {
+                return !this.Hidden;
+            }
+        }
+        
+
 
         public Command _UITogglePasswordVisibilityCommand;
         public Command UITogglePasswordVisibilityCommand

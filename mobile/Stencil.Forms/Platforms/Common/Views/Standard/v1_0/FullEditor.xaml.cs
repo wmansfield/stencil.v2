@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Stencil.Forms.Commanding;
 using Stencil.Forms.Resourcing;
+using System;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -55,9 +56,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     result = new FullEditorContext();
                 }
-
+                if(result.HeightRequest == 0)
+                {
+                    result.HeightRequest = -1;
+                }
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
+
+                result.PrepareInteractions();
 
                 commandScope.RegisterCommandField(result);
 
@@ -68,13 +74,41 @@ namespace Stencil.Forms.Views.Standard.v1_0
         #endregion
     }
     
-    public class FullEditorContext : PreparedBindingContext, ICommandField
+    public class FullEditorContext : PreparedBindingContext, ICommandField, IStateResponder
     {
         #region Constructor
 
         public FullEditorContext()
             : base(nameof(FullEditorContext))
         {
+        }
+
+        #endregion
+
+        #region State Responders
+
+        public const string INTERACTION_KEY_VALUE = "value";
+        public const string INTERACTION_KEY_HIDDEN = "hidden";
+
+        protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
+        {
+            base.ExecuteMethod(nameof(ApplyStateValue), delegate ()
+            {
+                switch (value_key)
+                {
+                    case INTERACTION_KEY_HIDDEN:
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            this.Hidden = value.Equals("true", StringComparison.OrdinalIgnoreCase);
+                        }
+                        break;
+                    case INTERACTION_KEY_VALUE:
+                        this.SetFieldValue(value);
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         #endregion
@@ -138,6 +172,13 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _placeholderColor, value); }
         }
 
+        private string _labelColor = AppColors.TextOverBackground;
+        public string LabelColor
+        {
+            get { return _labelColor; }
+            set { SetProperty(ref _labelColor, value); }
+        }
+
         private Thickness _padding = new Thickness();
         public Thickness Padding
         {
@@ -151,6 +192,28 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _margin, value); }
         }
 
+        private bool _isReadOnly;
+        public bool IsReadOnly
+        {
+            get { return _isReadOnly; }
+            set { SetProperty(ref _isReadOnly, value); }
+        }
+
+        private bool _hidden;
+        public bool Hidden
+        {
+            get { return _hidden; }
+            set
+            {
+                if (SetProperty(ref _hidden, value))
+                {
+                    this.RaisePropertyChanged(nameof(UIVisible));
+                }
+            }
+        }
+        public double HeightRequest { get; set; }
+
+
         #endregion
 
         #region Binding Properties
@@ -162,6 +225,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _uiEntryFocused, value); }
         }
 
+
+        public bool UIVisible
+        {
+            get
+            {
+                return !this.Hidden;
+            }
+        }
 
         #endregion
 
