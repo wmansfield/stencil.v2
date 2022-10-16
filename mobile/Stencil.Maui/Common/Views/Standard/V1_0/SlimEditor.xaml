@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    xmlns:effects="clr-namespace:Stencil.Maui.Effects;assembly=Stencil.Maui"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.SlimEditor">
+    <DataTemplate x:Key="slimEditor" x:DataType="local:SlimEditorContext">
+        <!--<ViewCell>-->
+        <Grid RowDefinitions="48,20"
+              RowSpacing="4" ColumnSpacing="0"
+              Margin="{Binding Margin}"
+              Padding="{Binding Padding}"
+              BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
+            <Frame Grid.Row="0"
+                   HeightRequest="48"
+                   HasShadow="False"
+                   CornerRadius="4"
+                   Margin="0"
+                   Padding="0,0,0,0">
+                <Editor x:Name="entText"
+                           FontFamily="{StaticResource SansRegular}"
+                           FontAutoScalingEnabled="false"
+                           FontSize="{StaticResource FontSizeStandard}"
+                           Text="{Binding Input}"
+                           AutoSize="TextChanges"
+                           IsReadOnly="{Binding IsReadOnly}"
+                           Placeholder="{Binding Placeholder}"
+                           IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                           PlaceholderColor="{Binding PlaceholderColor, Converter={StaticResource stringToColorConverter}}"
+                           TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                           BackgroundColor="{Binding InputBackgroundColor, Converter={StaticResource stringToColorConverter}}">
+                </Editor>
+            </Frame>
+            <Label x:Name="lblFeedback"
+                   Grid.Row="1"
+                   IsVisible="false"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   FontSize="{StaticResource FontSizeSmall}"
+                   TextColor="{x:StaticResource Warning}"
+                   Padding="8,0,8,0"/>
+        </Grid>
+            <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

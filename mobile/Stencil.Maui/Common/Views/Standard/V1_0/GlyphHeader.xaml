@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:cmp="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    xmlns:stencil="clr-namespace:Stencil.Maui"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.GlyphHeader">
+    <DataTemplate x:Key="glyphHeader" x:DataType="local:GlyphHeaderContext">
+        <!--<ViewCell>-->
+        <AbsoluteLayout x:Name="glyphLayoutRoot" HorizontalOptions="Fill" HeightRequest="{Binding HeightRequest}" SizeChanged="glyphLayoutRoot_SizeChanged">
+            <StackLayout x:Name="glyphStackRoot" Spacing="0"
+                         Margin="0"
+                         Padding="0"
+                         SizeChanged="glyphStackRoot_SizeChanged"
+                         Orientation="Horizontal"
+                         BackgroundColor="Transparent"
+                         BindableLayout.ItemsSource="{Binding Glyphs}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="local:GlyphInfo">
+                        <Label HorizontalOptions="Start"
+                               VerticalOptions="Center"
+                               Padding="{Binding Padding}"
+                               Margin="0"
+                               FontSize="{Binding FontSize}"
+                               FontFamily="{Binding FontFamily}"
+                               FontAutoScalingEnabled="false"
+                               Text="{Binding Text}"
+                               TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                               VerticalTextAlignment="{Binding UIVerticalTextAlignment}"
+                               HorizontalTextAlignment="Start"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </StackLayout>
+        </AbsoluteLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

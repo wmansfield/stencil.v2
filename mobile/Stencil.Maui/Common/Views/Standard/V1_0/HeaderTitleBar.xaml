@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.HeaderTitleBar">
+    <DataTemplate x:Key="headerTitleBar" x:DataType="local:HeaderTitleBarContext">
+        <!--<ViewCell>-->
+        <Grid HorizontalOptions="Fill"
+              ColumnDefinitions="48,*,48"
+              Padding="0" Margin="0"
+              HeightRequest="55"
+              RowSpacing="0"
+              ColumnSpacing="0"
+              BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
+            <Label Grid.Column="0"
+                   Text="{Binding LeftIcon}"
+                   Margin="0,0"
+                   Padding="4,0"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Center"
+                   FontSize="{Binding IconFontSize}"
+                   FontFamily="{StaticResource FontAwesome}"
+                   FontAutoScalingEnabled="false"
+                   TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalTextAlignment="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Left_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1"
+                   Text="{Binding Title}"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Center"
+                   LineBreakMode="TailTruncation"
+                   Padding="8,0,54,0"
+                   FontSize="{Binding TitleFontSize}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalTextAlignment="Center" />
+            <Label Grid.Column="2"
+                   Text="{Binding RightIcon}"
+                   Margin="0,0"
+                   Padding="4,0"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Center"
+                   FontSize="{Binding IconFontSize}"
+                   FontFamily="{StaticResource FontAwesome}"
+                   FontAutoScalingEnabled="false"
+                   TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalTextAlignment="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Right_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

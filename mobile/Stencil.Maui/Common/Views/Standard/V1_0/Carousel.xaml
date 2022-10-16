@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:standard="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    xmlns:views="clr-namespace:Stencil.Maui.Views"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.Carousel">
+    <DataTemplate x:Key="carousel" x:DataType="standard:CarouselContext">
+        <CarouselView x:Name="crslParent" BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                        MinimumHeightRequest="{Binding HeightRequest}"
+                        VerticalOptions="{Binding VerticalOptions}"
+                        Loop="{Binding Loop}"
+                        IsBounceEnabled="{Binding BounceEnabled}"
+                        Position="{Binding Position}"
+                        PositionChanged="CarouselView_PositionChanged"
+                        Loaded="CarouselView_Loaded"
+                        Unloaded="CarouselView_Unloaded"
+                        ItemsSource="{Binding Cells}">
+            <CarouselView.ItemTemplate>
+                <DataTemplate x:DataType="views:INestedDataViewModel">
+                    <CollectionView 
+                        MinimumHeightRequest="{Binding Source={x:Reference crslParent}, Path=BindingContext.UIMinContentHeight}"
+                        VerticalOptions="Fill"
+                        HorizontalOptions="Fill"
+                        ItemSizingStrategy="MeasureAllItems"
+                        SelectionMode="None"
+                        VerticalScrollBarVisibility="Never"
+                        HorizontalScrollBarVisibility="Never"
+                        ItemsSource="{Binding MainItemsFiltered}"
+                        ItemTemplate="{Binding DataTemplateSelector}" />
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+    </DataTemplate>
+</ResourceDictionary>

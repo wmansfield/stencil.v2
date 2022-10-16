@@ -29,20 +29,20 @@ namespace Stencil.Forms.Droid.Markdown
 
         }
 
-        public MarkdownLinearLayout(Context contect, IAttributeSet attrs)
-            : base(contect, attrs)
+        public MarkdownLinearLayout(Context context, IAttributeSet attrs)
+            : base(context, attrs)
         {
             this.TrackPrefix = "MarkdownLinearLayout";
         }
 
-        public MarkdownLinearLayout(Context contect, IAttributeSet attrs, int defStyleAttr)
-            : base(contect, attrs, defStyleAttr)
+        public MarkdownLinearLayout(Context context, IAttributeSet attrs, int defStyleAttr)
+            : base(context, attrs, defStyleAttr)
         {
             this.TrackPrefix = "MarkdownLinearLayout";
         }
 
-        public MarkdownLinearLayout(Context contect, IAttributeSet attrs, int defStyleAttr, int defStyleRes)
-            : base(contect, attrs, defStyleAttr, defStyleRes)
+        public MarkdownLinearLayout(Context context, IAttributeSet attrs, int defStyleAttr, int defStyleRes)
+            : base(context, attrs, defStyleAttr, defStyleRes)
         {
             this.TrackPrefix = "MarkdownLinearLayout";
         }

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.FullEntry">
+    <DataTemplate x:Key="fullEntry" x:DataType="local:FullEntryContext">
+        <!--<ViewCell>-->
+        <Grid RowDefinitions="20,48"
+              RowSpacing="4" ColumnSpacing="0"
+              Margin="{Binding Margin}" Padding="0"
+              IsVisible="{Binding UIVisible}">
+            <Label Grid.Row="0"
+                   Text="{Binding Label}"
+                   TextColor="{Binding LabelColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalTextAlignment="{Binding LabelUITextAlignment}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   FontSize="{StaticResource FontSizeStandard}"
+                   IsVisible="{Binding Label, Converter={StaticResource isValidStringConverter}}"
+                   Padding="0,0,0,0"/>
+            <Border Grid.Row="1"
+                    HeightRequest="48"
+                    StrokeThickness="0"
+                    BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                    HorizontalOptions="Fill">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12,12,12,12" />
+                </Border.StrokeShape>
+                <Entry Text="{Binding Input}"
+                       FontFamily="{Binding FontFamily}"
+                       FontAutoScalingEnabled="false"
+                       FontSize="{Binding FontSize}"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Fill"
+                       HeightRequest="48"
+                       IsReadOnly="{Binding IsReadOnly}"
+                       IsPassword="{Binding UIAsPassword}"
+                       Placeholder="{Binding Placeholder}"
+                       IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                       PlaceholderColor="{Binding PlaceholderColor, Converter={StaticResource stringToColorConverter}}"
+                       TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                       BackgroundColor="Transparent">
+                </Entry>
+            </Border>
+            <Frame IsVisible="{Binding IsPassword}"
+                   Grid.Row="1"
+                   HasShadow="False"
+                   Padding="10"
+                   Margin="0,0,10,0"
+                   BackgroundColor="{Binding InputBackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalOptions="End"
+                   VerticalOptions="Center">
+                <Label Padding="0"
+                       Margin="0"
+                       Grid.Row="1"
+                       Text="{Binding UIPasswordIcon}"
+                       FontFamily="{StaticResource FontAwesome}"
+                       FontAutoScalingEnabled="false"
+                       FontSize="{StaticResource FontSizeStandard}"
+                       TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding UITogglePasswordVisibilityCommand}"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

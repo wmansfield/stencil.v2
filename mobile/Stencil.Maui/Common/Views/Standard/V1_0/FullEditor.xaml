@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:effects="clr-namespace:Stencil.Maui.Effects;assembly=Stencil.Maui"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.FullEditor">
+    <DataTemplate x:Key="fullEditor" x:DataType="local:FullEditorContext">
+        <!--<ViewCell>-->
+        <Grid RowDefinitions="20,*"
+              RowSpacing="4" ColumnSpacing="0"
+              Margin="0" Padding="0"
+              IsVisible="{Binding UIVisible}"
+              HorizontalOptions="Fill"
+              HeightRequest="{Binding HeightRequest}">
+            <Label Grid.Row="0"
+                   Text="{Binding Label}"
+                   TextColor="{Binding LabelColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalTextAlignment="{Binding LabelUITextAlignment}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   FontSize="{StaticResource FontSizeStandard}"
+                   IsVisible="{Binding Label, Converter={StaticResource isValidStringConverter}}"
+                   Padding="0,0,0,0"/>
+            <Border Grid.Row="1"
+                    StrokeThickness="0"
+                    BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                    HorizontalOptions="FillAndExpand">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12,12,12,12" />
+                </Border.StrokeShape>
+                <Editor Text="{Binding Input}"
+                        HorizontalOptions="FillAndExpand"
+                        IsReadOnly="{Binding IsReadOnly}"
+                        FontFamily="{Binding FontFamily}"
+                        FontAutoScalingEnabled="false"
+                        FontSize="{Binding FontSize}"
+                        AutoSize="TextChanges"
+                        Placeholder="{Binding Placeholder}"
+                        IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                        PlaceholderColor="{Binding PlaceholderColor, Converter={StaticResource stringToColorConverter}}"
+                        TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}">
+                </Editor>
+            </Border>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Markdown"
+                    xmlns:stencil="clr-namespace:Stencil.Maui.Views;assembly=Stencil.Maui"
+                    x:Class="Stencil.Maui.Views.Markdown.MarkdownContainer">
+    <DataTemplate x:Key="markdownContainer" x:DataType="local:MarkdownContainerContext">
+        <stencil:MarkdownView 
+            HorizontalOptions="Fill"
+            VerticalOptions="Start"
+            LinkTappedCommand="{Binding LinkTappedCommand}"
+            Sections="{Binding Sections}"
+            FontSize="{Binding FontSize}"
+            SuppressDivider="{Binding SuppressDivider}">
+        </stencil:MarkdownView>
+    </DataTemplate>
+</ResourceDictionary>

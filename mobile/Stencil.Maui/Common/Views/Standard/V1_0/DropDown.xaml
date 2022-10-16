@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:effects="clr-namespace:Stencil.Maui.Effects;assembly=Stencil.Maui"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.DropDown">
+    <DataTemplate x:Key="dropDown" x:DataType="local:DropDownContext">
+        <!--<ViewCell>-->
+        <Grid RowDefinitions="20,48,20"
+              RowSpacing="4" ColumnSpacing="0"
+              Margin="0" Padding="1"
+              BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
+            <Label Grid.Row="0"
+                   Text="{Binding Label}"
+                   TextColor="{StaticResource TextOverBackground}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   FontSize="{StaticResource FontSizeStandard}"
+                   IsVisible="{Binding Label, Converter={StaticResource isValidStringConverter}}"
+                   Padding="0,0,0,0"/>
+            <Frame Grid.Row="1"
+                   HeightRequest="48"
+                   HasShadow="False"
+                   CornerRadius="4"
+                   Margin="0"
+                   Padding="0,0,0,0">
+                <Entry Text="{Binding SelectedDisplay}"
+                       FontFamily="{StaticResource SansRegular}"
+                       FontAutoScalingEnabled="false"
+                       FontSize="{StaticResource FontSizeStandard}"
+                       Placeholder="{Binding Placeholder}"
+                       IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                       PlaceholderColor="{Binding PlaceholderColor, Converter={StaticResource stringToColorConverter}}"
+                       TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                       BackgroundColor="{Binding InputBackgroundColor, Converter={StaticResource stringToColorConverter}}">
+                </Entry>
+            </Frame>
+            <Grid Grid.Row="1"
+                  Padding="0"
+                  Margin="10,0,0,0"
+                  ColumnSpacing="0"
+                  RowSpacing="0"
+                  HorizontalOptions="Start"
+                  VerticalOptions="Center"
+                  ColumnDefinitions="*,30">
+                <Frame CornerRadius="4"
+                       HasShadow="false"
+                       Padding="0"
+                       Margin="0"
+                       BorderColor="{StaticResource TextOverBackgroundMuted}"
+                       BackgroundColor="{Binding ButtonBackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="FillAndExpand"/>
+                <StackLayout HeightRequest="33" Spacing="0" Orientation="Horizontal" HorizontalOptions="Start" VerticalOptions="Start">
+                    <Label Grid.Column="0" 
+                           Text="{Binding SelectedDisplay}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Start"
+                           Margin="0,0,12,0"
+                           TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                           FontFamily="{StaticResource SansRegular}"
+                           FontAutoScalingEnabled="false"
+                           FontSize="{StaticResource FontSizeMedium}" />
+                    <Label Grid.Column="1" 
+                           Text="{Binding DropDownIcon}"
+                           Margin="8,0,8,0"
+                           HorizontalOptions="Start"
+                           VerticalOptions="Center"
+                           FontSize="{StaticResource FontSizeMedium}"
+                           FontFamily="{StaticResource FontAwesome}"
+                           FontAutoScalingEnabled="false"
+                           TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                           HorizontalTextAlignment="Center">
+                    </Label>
+                </StackLayout>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="DropDown_Clicked" />
+                </Grid.GestureRecognizers>
+            </Grid>
+            <Label Grid.Row="2"
+                   IsVisible="false"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   FontSize="{StaticResource FontSizeStandard}"
+                   TextColor="{x:StaticResource Warning}"
+                   Padding="8,0,8,0"/>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

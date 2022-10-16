@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.SlimEntry">
+    <DataTemplate x:Key="slimEntry" x:DataType="local:SlimEntryContext">
+        <!--<ViewCell>-->
+        <Grid RowDefinitions="48"
+              RowSpacing="0" ColumnSpacing="0"
+              Margin="{Binding Margin}"
+              Padding="{Binding Padding}"
+              IsVisible="{Binding UIVisible}">
+            <Border Grid.Row="0"
+                    HeightRequest="48"
+                    StrokeThickness="0"
+                    BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                    HorizontalOptions="Fill">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12,12,12,12" />
+                </Border.StrokeShape>
+                <Entry x:Name="entText"
+                       FontFamily="{Binding FontFamily}"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Fill"
+                       HeightRequest="48"
+                       Margin="12,0"
+                       FontAutoScalingEnabled="false"
+                       FontSize="{Binding FontSize}"
+                       Text="{Binding Input}"
+                       IsReadOnly="{Binding IsReadOnly}"
+                       IsPassword="{Binding UIAsPassword}"
+                       Placeholder="{Binding Placeholder}"
+                       IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
+                       PlaceholderColor="{Binding PlaceholderColor, Converter={StaticResource stringToColorConverter}}"
+                       TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                       BackgroundColor="Transparent">
+                </Entry>
+            </Border>
+            <Frame Grid.Row="0"
+                   IsVisible="{Binding IsPassword}"
+                   HasShadow="False"
+                   Padding="10"
+                   Margin="0,0,10,0"
+                   BackgroundColor="Transparent"
+                   HorizontalOptions="End"
+                   VerticalOptions="Center">
+                <Label Padding="0"
+                       Margin="0"
+                       Text="{Binding UIPasswordIcon}"
+                       FontFamily="{StaticResource FontAwesome}"
+                       FontAutoScalingEnabled="false"
+                       FontSize="{Binding FontSize}"
+                       TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding UITogglePasswordVisibilityCommand}"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+        </Grid>
+            <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

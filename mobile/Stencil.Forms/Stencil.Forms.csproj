@@ -90,38 +90,11 @@
 	  <Compile Include="Platforms\ios\**\*.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Platforms\Common\Views\Standard\v1_0\CheckBox.xaml.cs">
-      <DependentUpon>CheckBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Platforms\Common\Views\Standard\v1_0\ToggleView.xaml.cs">
-      <DependentUpon>ToggleView.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Platforms\Common\Views\Standard\v1_0\FullEditor.xaml.cs">
-      <DependentUpon>FullEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Platforms\Common\Views\Standard\v1_0\GlyphHeader.xaml.cs">
-      <DependentUpon>GlyphHeader.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Platforms\Common\Views\Standard\v1_0\SlimEditor.xaml.cs">
-      <DependentUpon>SlimEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Platforms\Common\Views\Standard\v1_0\SingleColumnView.xaml.cs">
-      <DependentUpon>SingleColumnView.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Stencil.Common\Stencil.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Platforms\Common\Views\Standard\v1_0\DualColumnView - Copy.xaml.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Platforms\Common\Views\Standard\v1_0\DualColumnView - Copy.xaml.cs" />
-  </ItemGroup>
 
 
 </Project>

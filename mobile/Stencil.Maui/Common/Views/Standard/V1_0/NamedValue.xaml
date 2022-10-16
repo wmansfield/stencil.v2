@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.NamedValue">
+    <DataTemplate x:Key="namedValue" x:DataType="local:NamedValueContext">
+        <!--<ViewCell>-->
+        <Grid HorizontalOptions="Fill" 
+              RowSpacing="0" ColumnSpacing="0"
+              HeightRequest="{Binding HeightRequest}"
+              Padding="{Binding Padding}" 
+              Margin="0" 
+              ColumnDefinitions="*,2*"
+              BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
+            <Label Grid.Column="0"
+                   Text="{Binding NameText}"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Start"
+                   FontSize="{Binding FontSize}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   TextColor="{Binding NameTextColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalTextAlignment="End"
+                   Margin="0,0,6,0"
+                   Padding="0"/>
+            <Label Grid.Column="1"
+                   Text="{Binding ValueText}"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Start"
+                   FontSize="{Binding FontSize}"
+                   FontFamily="{StaticResource SansRegular}"
+                   FontAutoScalingEnabled="false"
+                   TextColor="{Binding ValueTextColor, Converter={StaticResource stringToColorConverter}}"
+                   HorizontalTextAlignment="Start"
+                   Margin="6,0,0,0"
+                   Padding="0"/>
+        </Grid>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

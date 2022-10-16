@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.TripleStackView">
+    <DataTemplate x:Key="tripleStackView" x:DataType="local:TripleStackViewContext">
+        <VerticalStackLayout Spacing="0" 
+                     BackgroundColor="Transparent"
+                     VerticalOptions="Fill" 
+                     HorizontalOptions="Start" 
+                     Padding="0" 
+                     Margin="0">
+            <ContentView Content="{Binding FirstContent}" HorizontalOptions="{Binding Column1Config.HorizontalOptions}" VerticalOptions="{Binding Column1Config.VerticalOptions}" BackgroundColor="Transparent" Margin="{Binding Column1Config.Margin}"/>
+            <ContentView Content="{Binding SecondContent}" HorizontalOptions="{Binding Column2Config.HorizontalOptions}" VerticalOptions="{Binding Column2Config.VerticalOptions}" BackgroundColor="Transparent" Margin="{Binding Column2Config.Margin}"/>
+            <ContentView Content="{Binding ThirdContent}" HorizontalOptions="{Binding Column3Config.HorizontalOptions}" VerticalOptions="{Binding Column3Config.VerticalOptions}" BackgroundColor="Transparent" Margin="{Binding Column3Config.Margin}"/>
+        </VerticalStackLayout>
+    </DataTemplate>
+</ResourceDictionary>

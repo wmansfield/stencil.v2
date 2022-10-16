@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.CenterText">
+    <DataTemplate x:Key="centerText" x:DataType="local:CenterTextContext">
+        <!--<ViewCell>-->
+        <VerticalStackLayout
+            Spacing="0"
+            Padding="0"
+            VerticalOptions="Center">
+            <Label IsVisible="True"
+                   WidthRequest="{Binding ContentWidth}"
+                   MaximumWidthRequest="{Binding ContentWidth}"
+                   HorizontalTextAlignment="Center"
+                   VerticalOptions="Start"
+                   BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                   LineBreakMode="WordWrap"
+                   FontSize="{Binding FontSize}"
+                   FontFamily="{Binding FontFamily}"
+                   FontAutoScalingEnabled="false"
+                   TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                   Margin="{Binding Margin}" 
+                   Padding="{Binding Padding}"
+                   Text="{Binding Text}"
+                   />
+        </VerticalStackLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

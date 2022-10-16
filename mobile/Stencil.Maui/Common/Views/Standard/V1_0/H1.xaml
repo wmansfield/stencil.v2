@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.H1">
+    <DataTemplate x:Key="h1" x:DataType="local:H1Context">
+        <!--<ViewCell>-->
+        <VerticalStackLayout
+            Spacing="0"
+            Padding="0"
+            VerticalOptions="Center">
+            <Label HorizontalOptions="Center"
+                   BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                   Padding="{Binding Padding}"
+                   Margin="0"
+                   FontSize="{Binding FontSize}"
+                   FontFamily="{Binding FontFamily}"
+                   FontAutoScalingEnabled="false"
+                   Text="{Binding Text}"
+                   TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Center"/>
+        </VerticalStackLayout>
+        <!--</ViewCell>-->
+    </DataTemplate>
+</ResourceDictionary>

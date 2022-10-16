@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:standard="clr-namespace:Stencil.Maui.Views.Standard"
+                      xmlns:controls="clr-namespace:Stencil.Maui.Controls"
+                      xmlns:base="clr-namespace:Stencil.Maui.Base"
+                      x:Class="Stencil.Maui.Views.Standard.StandardDataView"
+                      x:DataType="standard:StandardNestedDataViewModel">
+    <ContentView.Content>
+        <Grid x:Name="grdContainer"
+              BackgroundColor="{Binding BackgroundColor}"
+              Background="{Binding BackgroundBrush}"
+              VerticalOptions="FillAndExpand" 
+              HorizontalOptions="Fill"
+              RowSpacing="0"
+              ColumnSpacing="0">
+            <Image IsVisible="{Binding BackgroundImage, Converter={StaticResource isValidStringConverter}}"
+                   Source="{Binding BackgroundImage}" 
+                   VerticalOptions="Fill" 
+                   HorizontalOptions="Fill" 
+                   Aspect="AspectFill" />
+            <StackLayout Orientation="Vertical" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" Spacing="0" Margin="0">
+                <StackLayout HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                      IsVisible="{Binding ShowHeader}"
+                      BindableLayout.ItemsSource="{Binding HeaderItems}"
+                      BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
+                </StackLayout>
+
+                <!--- StencilCollectionView.Margin as Padding is Not a mistake -->
+                <controls:StencilCollectionView 
+                      Margin="{Binding Padding}" 
+                      BackgroundColor="{Binding BackgroundColor}"
+                      VerticalOptions="FillAndExpand"
+                      HorizontalOptions="Fill"
+                      ItemSizingStrategy="MeasureAllItems"
+                      SelectionMode="None"
+                      HorizontalScrollBarVisibility="Never"
+                      VerticalScrollBarVisibility="Never"
+                      EnableDynamicCellReuse="{Binding EnableCellReuse}"
+                      EnableDynamicCellSizeCaching="{Binding EnableCellSizeCaching}"
+                      ItemsSource="{Binding MainItemsFiltered}"
+                      ItemTemplate="{Binding DataTemplateSelector}">
+                </controls:StencilCollectionView>
+
+                <StackLayout 
+                    HorizontalOptions="Fill"
+                    IsVisible="{Binding ShowFooter}"
+                    BindableLayout.ItemsSource="{Binding FooterItems}"
+                    BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentView.Content>
+</base:BaseContentView>

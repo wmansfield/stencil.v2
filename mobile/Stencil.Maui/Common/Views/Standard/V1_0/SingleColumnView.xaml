@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.SingleColumnView">
+    <DataTemplate x:Key="singleColumnView" x:DataType="local:SingleColumnViewContext">
+        <Grid HorizontalOptions="Fill"
+              VerticalOptions="StartAndExpand"
+              Padding="0" Margin="0"
+              HeightRequest="{Binding HeightRequest}"
+              RowSpacing="0"
+              ColumnSpacing="0"
+              BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding Column1Config.ColumnWidth}" />
+            </Grid.ColumnDefinitions>
+
+            <ContentView Grid.Column="0" Content="{Binding FirstContent}" HorizontalOptions="{Binding Column1Config.HorizontalOptions}" VerticalOptions="{Binding Column1Config.VerticalOptions}" BackgroundColor="{Binding Column1Config.BackgroundColor, Converter={StaticResource stringToColorConverter}}" Margin="{Binding Column1Config.Margin}"/>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

@@ -199,7 +199,7 @@ namespace Stencil.Forms.Screens
                 if (viewConfig.sections != null)
                 {
                     List<IDataViewSection> sections = new List<IDataViewSection>();
-                    foreach (SectionConfig section in viewConfig.sections)
+                    foreach (ISectionConfig section in viewConfig.sections)
                     {
                         StandardDataViewSection dataSection = new StandardDataViewSection();
                         if (section.ViewConfigs != null)
