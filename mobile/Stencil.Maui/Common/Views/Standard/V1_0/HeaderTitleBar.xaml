@@ -14,10 +14,11 @@
               BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
             <Label Grid.Column="0"
                    Text="{Binding LeftIcon}"
-                   Margin="0,0"
+                   Margin="8,0,0,0"
                    Padding="4,0"
                    HorizontalOptions="Fill"
-                   VerticalOptions="Center"
+                   VerticalOptions="Fill"
+                   VerticalTextAlignment="Center"
                    FontSize="{Binding IconFontSize}"
                    FontFamily="{StaticResource FontAwesome}"
                    FontAutoScalingEnabled="false"

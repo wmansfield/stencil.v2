@@ -32,12 +32,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Common\Views\Standard\V1_0\ColumnCollection.xaml.cs">
+	    <DependentUpon>ColumnCollection.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Common\Views\Standard\V1_0\TripleStackView.xaml.cs">
 	    <DependentUpon>TripleStackView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Common\Views\Standard\V1_0\ColumnCollection.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Common\Views\Standard\V1_0\TripleStackView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

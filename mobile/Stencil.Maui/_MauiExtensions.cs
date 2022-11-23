@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using Microsoft.Maui.Hosting;
 using Stencil.Maui.Controls;
 using Stencil.Maui.Handlers;
+using Stencil.Maui.Platform;
 using Stencil.Maui.Views;
 using System;
 using System.Collections.Generic;
@@ -19,9 +21,9 @@ namespace Stencil.Maui
         {
             builder.ConfigureMauiHandlers(handlers =>
             {
-                handlers.AddHandler(typeof(TrimLabel), typeof(TrimLabelHandler));
                 handlers.AddHandler(typeof(MarkdownView), typeof(MarkdownViewHandler));
             });
+            
             builder.ConfigureFonts(fonts =>
             {
                 fonts.AddFont("LibreFranklin-Regular.ttf", "LibreFranklin-Regular");
@@ -31,6 +33,18 @@ namespace Stencil.Maui
                 fonts.AddFont("fontawesome-webfont.ttf", "FontAwesome");
             });
             builder.UseMauiCompatibility();
+
+#if ANDROID
+            NativeApplication.Keyboard = new Stencil.Maui.Droid.DroidKeyboardManager();
+#elif IOS
+            NativeApplication.Keyboard = new Stencil.Maui.iOS.iOSKeyboardManager();
+#endif
+
+            StencilEditorHandler.Register();
+            StencilCollectionViewHandler.Register();
+
+
+
             return builder;
         }
     }

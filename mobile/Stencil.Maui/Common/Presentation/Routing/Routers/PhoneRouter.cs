@@ -104,7 +104,7 @@ namespace Stencil.Maui.Presentation.Routing.Routers
                 }
                 await navigatingToTask;
                 await view.OnNavigatedToAsync();
-                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                NativeApplication.Keyboard?.TryHideKeyboard();
             });
 
         }
@@ -201,7 +201,7 @@ namespace Stencil.Maui.Presentation.Routing.Routers
                     this.API.Alerts.Toast("Error loading data. Reason: " + ex.FirstNonAggregateException().Message, TimeSpan.FromSeconds(3));
                 }
 
-                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                NativeApplication.Keyboard?.TryHideKeyboard();
 
             });
 
@@ -249,7 +249,7 @@ namespace Stencil.Maui.Presentation.Routing.Routers
                 {
                     await onNavigatedTask;
                 }
-                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                NativeApplication.Keyboard?.TryHideKeyboard();
 
             });
         }

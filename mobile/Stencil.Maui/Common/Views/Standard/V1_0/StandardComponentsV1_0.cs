@@ -38,6 +38,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
             _dataViewComponents[ToggleView.COMPONENT_NAME] = new ToggleView();
             _dataViewComponents[CenterText.COMPONENT_NAME] = new CenterText();
             _dataViewComponents[TripleStackView.COMPONENT_NAME] = new TripleStackView();
+            _dataViewComponents[ColumnCollection.COMPONENT_NAME] = new ColumnCollection();
             
             foreach (string key in _dataViewComponents.Keys.ToList())
             {

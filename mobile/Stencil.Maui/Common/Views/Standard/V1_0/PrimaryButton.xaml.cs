@@ -73,7 +73,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 PrimaryButtonContext context = view?.BindingContext as PrimaryButtonContext;
                 if (context != null)
                 {
-                    DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                    NativeApplication.Keyboard?.TryHideKeyboard();
 
                     try
                     {

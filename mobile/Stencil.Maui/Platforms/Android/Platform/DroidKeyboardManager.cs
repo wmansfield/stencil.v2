@@ -6,7 +6,6 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Microsoft.Maui.Controls;
-using Quantum.Native.Droid.Stencil.Platform;
 using Stencil.Maui;
 using Stencil.Maui.Platform;
 using System;
@@ -14,11 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-[assembly: Dependency(typeof(DroidKeyboardHelper))]
-
-namespace Quantum.Native.Droid.Stencil.Platform
+namespace Stencil.Maui.Droid
 {
-    public class DroidKeyboardHelper : IKeyboardManager
+    public class DroidKeyboardManager : IKeyboardManager
     {
         public void TryHideKeyboard()
         {

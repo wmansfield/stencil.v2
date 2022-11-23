@@ -18,14 +18,18 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12,12,12,12" />
                 </Border.StrokeShape>
-                <Entry x:Name="entText"
-                       FontFamily="{Binding FontFamily}"
+                <Entry FontFamily="{Binding FontFamily}"
                        HorizontalOptions="Fill"
                        VerticalOptions="Fill"
                        HeightRequest="48"
                        Margin="12,0"
                        FontAutoScalingEnabled="false"
                        FontSize="{Binding FontSize}"
+                       Keyboard="{Binding KeyboardType}"
+                       ReturnType="{Binding UIReturnType}"
+                       ReturnCommand="{Binding UIReturnCommand}"
+                       IsSpellCheckEnabled="{Binding SpellCheckEnabled}"
+                       IsTextPredictionEnabled="{Binding TextPredictionEnabled}"
                        Text="{Binding Input}"
                        IsReadOnly="{Binding IsReadOnly}"
                        IsPassword="{Binding UIAsPassword}"

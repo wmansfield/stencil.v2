@@ -4,16 +4,15 @@
                     xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
                     x:Class="Stencil.Maui.Views.Standard.v1_0.CenterText">
     <DataTemplate x:Key="centerText" x:DataType="local:CenterTextContext">
-        <!--<ViewCell>-->
         <VerticalStackLayout
             Spacing="0"
             Padding="0"
+            HorizontalOptions="Fill"
             VerticalOptions="Center">
             <Label IsVisible="True"
-                   WidthRequest="{Binding ContentWidth}"
-                   MaximumWidthRequest="{Binding ContentWidth}"
                    HorizontalTextAlignment="Center"
-                   VerticalOptions="Start"
+                   WidthRequest="{Binding ContentWidth}"
+                   VerticalOptions="Fill"
                    BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
                    LineBreakMode="WordWrap"
                    FontSize="{Binding FontSize}"

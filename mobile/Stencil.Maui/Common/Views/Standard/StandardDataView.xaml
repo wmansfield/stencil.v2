@@ -35,6 +35,7 @@
                       HorizontalOptions="Fill"
                       ItemSizingStrategy="MeasureAllItems"
                       SelectionMode="None"
+                      SuppressOverScroll="True"
                       HorizontalScrollBarVisibility="Never"
                       VerticalScrollBarVisibility="Never"
                       EnableDynamicCellReuse="{Binding EnableCellReuse}"

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using System.Windows.Input;
+using System;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -57,7 +59,21 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 {
                     result = new SlimEditorContext();
                 }
-
+                if (result.FontSize <= 0)
+                {
+                    try
+                    {
+                        result.FontSize = (int)Application.Current.Resources["FontSizeMedium"];
+                    }
+                    catch
+                    {
+                        result.FontSize = 14;
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(result.FontFamily))
+                {
+                    result.FontFamily = "SansRegular";
+                }
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
@@ -77,6 +93,34 @@ namespace Stencil.Maui.Views.Standard.v1_0
         public SlimEditorContext()
             : base(nameof(SlimEditorContext))
         {
+        }
+
+        #endregion
+
+        #region State Responders
+
+        public const string INTERACTION_KEY_VALUE = "value";
+        public const string INTERACTION_KEY_HIDDEN = "hidden";
+
+        protected override void ApplyStateValue(string group, string state_key, string state, string value_key, string value)
+        {
+            base.ExecuteMethod(nameof(ApplyStateValue), delegate ()
+            {
+                switch (value_key)
+                {
+                    case INTERACTION_KEY_HIDDEN:
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            this.Hidden = value.Equals("true", StringComparison.OrdinalIgnoreCase);
+                        }
+                        break;
+                    case INTERACTION_KEY_VALUE:
+                        this.SetFieldValue(value);
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         #endregion
@@ -152,6 +196,61 @@ namespace Stencil.Maui.Views.Standard.v1_0
             get { return _margin; }
             set { SetProperty(ref _margin, value); }
         }
+
+        private string _keyboardType;
+        public string KeyboardType
+        {
+            get { return _keyboardType; }
+            set { SetProperty(ref _keyboardType, value); }
+        }
+
+        private bool _spellCheckEnabled = true;
+        public bool SpellCheckEnabled
+        {
+            get { return _spellCheckEnabled; }
+            set { SetProperty(ref _spellCheckEnabled, value); }
+        }
+
+        private bool _textPredictionEnabled = true;
+        public bool TextPredictionEnabled
+        {
+            get { return _textPredictionEnabled; }
+            set { SetProperty(ref _textPredictionEnabled, value); }
+        }
+
+        private bool _suppressBottomLine = true;
+        public bool SuppressBottomLine
+        {
+            get { return _suppressBottomLine; }
+            set { SetProperty(ref _suppressBottomLine, value); }
+        }
+
+        
+        private string _fontFamily;
+        public string FontFamily
+        {
+            get { return _fontFamily; }
+            set { SetProperty(ref _fontFamily, value); }
+        }
+
+        private double _fontSize;
+        public double FontSize
+        {
+            get { return _fontSize; }
+            set { SetProperty(ref _fontSize, value); }
+        }
+        private bool _hidden;
+        public bool Hidden
+        {
+            get { return _hidden; }
+            set
+            {
+                if (SetProperty(ref _hidden, value))
+                {
+                    this.RaisePropertyChanged(nameof(UIVisible));
+                }
+            }
+        }
         #endregion
 
         #region Binding Properties
@@ -161,6 +260,14 @@ namespace Stencil.Maui.Views.Standard.v1_0
         {
             get { return _uiEntryFocused; }
             set { SetProperty(ref _uiEntryFocused, value); }
+        }
+
+        public bool UIVisible
+        {
+            get
+            {
+                return !this.Hidden;
+            }
         }
 
         #endregion

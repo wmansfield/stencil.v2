@@ -81,7 +81,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 DropDownContext context = view?.BindingContext as DropDownContext;
                 if (context != null)
                 {
-                    DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                    NativeApplication.Keyboard?.TryHideKeyboard();
 
                     string display = await NativeApplication.Alerts.ActionSheetAsync(context.Label, context.DropDownCancelText, null, null, context.AvailableValues.Select(x => x.display).ToArray());
                     if (display != context.DropDownCancelText)

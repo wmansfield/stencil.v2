@@ -5,6 +5,7 @@ using Stencil.Maui.Commanding;
 using Stencil.Maui.Data;
 using Stencil.Maui.Data.Sync;
 using Stencil.Maui.Data.Sync.Manager;
+using Stencil.Maui.Platform;
 using Stencil.Maui.Presentation;
 using Stencil.Maui.Presentation.Routing;
 using Stencil.Maui.Screens;
@@ -34,7 +35,9 @@ namespace Stencil.Maui
 
     public abstract class NativeApplication : TrackedClass
     {
+
         #region Constructor
+
 
         public NativeApplication(string trackPrefix)
             : base(trackPrefix)
@@ -60,6 +63,7 @@ namespace Stencil.Maui
         public static NativeApplication Instance { get; protected set; }
         public static IDataSync DataSync { get; protected set; }
         public static IAlerts Alerts { get; protected set; }
+        public static IKeyboardManager Keyboard { get; set; }
 
         #endregion
 

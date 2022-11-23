@@ -40,5 +40,19 @@ namespace Stencil.Maui.Controls
                 SetValue(EnableDynamicCellSizeCachingProperty, value);
             }
         }
+
+        public static readonly BindableProperty SuppressOverScrollProperty = BindableProperty.Create(nameof(SuppressOverScroll), typeof(bool), typeof(StencilCollectionView), false);
+
+        public bool SuppressOverScroll
+        {
+            get
+            {
+                return (bool)GetValue(SuppressOverScrollProperty);
+            }
+            set
+            {
+                SetValue(SuppressOverScrollProperty, value);
+            }
+        }
     }
 }

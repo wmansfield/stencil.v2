@@ -46,6 +46,14 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 {
                     result = JsonConvert.DeserializeObject<HeaderTitleBarContext>(configuration_json);
                 }
+                if(result.IconFontSize <= 0)
+                {
+                    result.IconFontSize = 24;
+                }
+                if (result.TitleFontSize <= 0)
+                {
+                    result.TitleFontSize = 16;
+                }
                 if (string.IsNullOrWhiteSpace(result.LeftCommandName))
                 {
                     result.LeftCommandName = "app.navigate.pop";//TODO:MUST:Magic String

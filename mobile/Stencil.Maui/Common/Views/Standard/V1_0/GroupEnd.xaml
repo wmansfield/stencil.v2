@@ -9,7 +9,7 @@
         <Grid HeightRequest="20"
               ColumnSpacing="0"
               RowSpacing="0"
-              Margin="0"
+              Margin="{Binding Margin}"
               BackgroundColor="Transparent"
               HorizontalOptions="Fill">
             <Border StrokeThickness="0"

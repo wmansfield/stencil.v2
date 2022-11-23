@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:standard="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
+                    xmlns:views="clr-namespace:Stencil.Maui.Views"
+                    x:Class="Stencil.Maui.Views.Standard.v1_0.ColumnCollection">
+    <DataTemplate x:Key="columnCollection" x:DataType="standard:ColumnCollectionContext">
+        <CollectionView x:Name="crslParent" 
+                        BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+                        HeightRequest="{Binding HeightRequest}"
+                        VerticalOptions="{Binding VerticalOptions}"
+                        Margin="{Binding Margin}"
+                        ItemsLayout="HorizontalList"
+                        ItemsSource="{Binding Cells}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="views:INestedDataViewModel">
+                    <FlexLayout Direction="Column"
+                                JustifyContent="SpaceEvenly"
+                                WidthRequest="{Binding Source={x:Reference crslParent}, Path=BindingContext.ContentWidth}"
+                                HeightRequest="{Binding Source={x:Reference crslParent}, Path=BindingContext.ContentHeight}"
+                                BackgroundColor="Transparent"
+                                VerticalOptions="Fill"
+                                HorizontalOptions="Fill"
+                                Padding="0"
+                                Margin="0"
+                                BindableLayout.ItemsSource="{Binding MainItemsFiltered}"
+                                BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
+                    </FlexLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </DataTemplate>
+</ResourceDictionary>

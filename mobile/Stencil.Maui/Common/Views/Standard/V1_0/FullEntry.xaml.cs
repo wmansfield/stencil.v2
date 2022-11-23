@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using System.Windows.Input;
+using Stencil.Maui.Platform;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -215,6 +217,20 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _padding, value); }
         }
 
+        private string _returnCommandName;
+        public string ReturnCommandName
+        {
+            get { return _returnCommandName; }
+            set { SetProperty(ref _returnCommandName, value); }
+        }
+
+        private string _returnCommandParameter;
+        public string ReturnCommandParameter
+        {
+            get { return _returnCommandParameter; }
+            set { SetProperty(ref _returnCommandParameter, value); }
+        }
+
         private bool _hidden;
         public bool Hidden
         {
@@ -267,9 +283,52 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 }
             }
         }
-        
 
-        
+        private bool _dismissKeyboardOnReturn;
+        public bool DismissKeyboardOnReturn
+        {
+            get { return _dismissKeyboardOnReturn; }
+            set { SetProperty(ref _dismissKeyboardOnReturn, value); }
+        }
+
+        private bool _spellCheckEnabled = true;
+        public bool SpellCheckEnabled
+        {
+            get { return _spellCheckEnabled; }
+            set { SetProperty(ref _spellCheckEnabled, value); }
+        }
+
+        private bool _textPredictionEnabled = true;
+        public bool TextPredictionEnabled
+        {
+            get { return _textPredictionEnabled; }
+            set { SetProperty(ref _textPredictionEnabled, value); }
+        }
+
+        private string _keyboardType;
+        public string KeyboardType
+        {
+            get { return _keyboardType; }
+            set { SetProperty(ref _keyboardType, value); }
+        }
+
+        private string _returnType = "Default";
+        public string ReturnType
+        {
+            get { return _returnType; }
+            set
+            {
+                if (SetProperty(ref _returnType, value))
+                {
+                    if (Enum.TryParse<ReturnType>(value, true, out ReturnType parsed))
+                    {
+                        this.UIReturnType = parsed;
+                    }
+                }
+            }
+        }
+
+
         #endregion
 
         #region Binding Properties
@@ -303,6 +362,14 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _uiPasswordIcon, value); }
         }
 
+        private ReturnType _uiReturnType;
+        public ReturnType UIReturnType
+        {
+            get { return _uiReturnType; }
+            set { SetProperty(ref _uiReturnType, value); }
+        }
+
+        
         public bool UIVisible
         {
             get
@@ -355,6 +422,32 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 {
                     this.UIPasswordIcon = FontAwesome.fa_eye_slashed;
                     this.UIAsPassword = true;
+                }
+            });
+        }
+
+        public Command _uiReturnCommand;
+        public Command UIReturnCommand
+        {
+            get
+            {
+                return _uiReturnCommand ?? (_uiReturnCommand = new Command(async () => await this.UIReturn()));
+            }
+        }
+        protected Task UIReturn()
+        {
+            return base.ExecuteMethodAsync(nameof(UIReturn), async delegate ()
+            {
+                if (this.DismissKeyboardOnReturn)
+                {
+                    NativeApplication.Keyboard?.TryHideKeyboard();
+                }
+                if (!string.IsNullOrWhiteSpace(this.ReturnCommandName))
+                {
+                    if (this.CommandScope?.CommandProcessor != null)
+                    {
+                        await this.CommandScope.CommandProcessor.ExecuteCommandAsync(this.CommandScope, this.ReturnCommandName, this.ReturnCommandParameter, this?.DataViewItem?.DataViewModel);
+                    }
                 }
             });
         }

@@ -127,7 +127,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 ImageContext context = view?.BindingContext as ImageContext;
                 if (context != null)
                 {
-                    DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                    NativeApplication.Keyboard?.TryHideKeyboard();
 
                     if (!string.IsNullOrWhiteSpace(context.CommandName))
                     {

@@ -113,7 +113,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 CheckBoxContext context = view?.BindingContext as CheckBoxContext;
                 if (context != null)
                 {
-                    DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                    NativeApplication.Keyboard?.TryHideKeyboard();
 
                     context.Selected = !context.Selected.GetValueOrDefault();
                 }

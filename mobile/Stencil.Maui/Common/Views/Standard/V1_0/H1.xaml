@@ -8,7 +8,8 @@
         <VerticalStackLayout
             Spacing="0"
             Padding="0"
-            VerticalOptions="Center">
+            Margin="{Binding Margin}"
+            HorizontalOptions="{Binding UIHorizontalOptions}">
             <Label HorizontalOptions="Center"
                    BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
                    Padding="{Binding Padding}"

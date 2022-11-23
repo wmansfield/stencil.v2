@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using System.Windows.Input;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -213,6 +214,34 @@ namespace Stencil.Maui.Views.Standard.v1_0
         {
             get { return _isReadOnly; }
             set { SetProperty(ref _isReadOnly, value); }
+        }
+
+        private string _keyboardType;
+        public string KeyboardType
+        {
+            get { return _keyboardType; }
+            set { SetProperty(ref _keyboardType, value); }
+        }
+
+        private bool _spellCheckEnabled = true;
+        public bool SpellCheckEnabled
+        {
+            get { return _spellCheckEnabled; }
+            set { SetProperty(ref _spellCheckEnabled, value); }
+        }
+
+        private bool _textPredictionEnabled = true;
+        public bool TextPredictionEnabled
+        {
+            get { return _textPredictionEnabled; }
+            set { SetProperty(ref _textPredictionEnabled, value); }
+        }
+
+        private bool _suppressBottomLine = true;
+        public bool SuppressBottomLine
+        {
+            get { return _suppressBottomLine; }
+            set { SetProperty(ref _suppressBottomLine, value); }
         }
 
         private bool _hidden;

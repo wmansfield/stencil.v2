@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.Maui.Controls;
+using Microsoft.Maui;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -85,6 +86,13 @@ namespace Stencil.Maui.Views.Standard.v1_0
         {
             get { return _outerColor; }
             set { SetProperty(ref _outerColor, value); }
+        }
+
+        private Thickness _margin;
+        public Thickness Margin
+        {
+            get { return _margin; }
+            set { SetProperty(ref _margin, value); }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    xmlns:effects="clr-namespace:Stencil.Maui.Effects;assembly=Stencil.Maui"
+                    xmlns:controls="clr-namespace:Stencil.Maui.Controls;assembly=Stencil.Maui"
                     xmlns:local="clr-namespace:Stencil.Maui.Views.Standard.v1_0"
                     x:Class="Stencil.Maui.Views.Standard.v1_0.FullEditor">
     <DataTemplate x:Key="fullEditor" x:DataType="local:FullEditorContext">
@@ -28,18 +28,22 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="12,12,12,12" />
                 </Border.StrokeShape>
-                <Editor Text="{Binding Input}"
+                <controls:StencilEditor Text="{Binding Input}"
                         HorizontalOptions="FillAndExpand"
                         IsReadOnly="{Binding IsReadOnly}"
                         FontFamily="{Binding FontFamily}"
                         FontAutoScalingEnabled="false"
+                        Keyboard="{Binding KeyboardType}"
+                        IsSpellCheckEnabled="{Binding SpellCheckEnabled}"
+                        IsTextPredictionEnabled="{Binding TextPredictionEnabled}"
                         FontSize="{Binding FontSize}"
                         AutoSize="TextChanges"
+                        SuppressBottomLine="{Binding SuppressBottomLine}"
                         Placeholder="{Binding Placeholder}"
                         IsFocused="{Binding UIEntryFocused, Mode=OneWayToSource}"
                         PlaceholderColor="{Binding PlaceholderColor, Converter={StaticResource stringToColorConverter}}"
                         TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}">
-                </Editor>
+                </controls:StencilEditor>
             </Border>
         </Grid>
         <!--</ViewCell>-->

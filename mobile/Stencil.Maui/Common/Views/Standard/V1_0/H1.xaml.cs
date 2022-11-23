@@ -4,6 +4,7 @@ using Stencil.Maui.Resourcing;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using System;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -135,6 +136,42 @@ namespace Stencil.Maui.Views.Standard.v1_0
         {
             get { return _fontSize; }
             set { SetProperty(ref _fontSize, value); }
+        }
+
+        private string _horizontalOptions;
+        public string HorizontalOptions
+        {
+            get { return _horizontalOptions; }
+            set 
+            { 
+                if(SetProperty(ref _horizontalOptions, value))
+                {
+                    if(value != null)
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "start":
+                                this.UIHorizontalOptions = LayoutOptions.Start;
+                                break;
+                            case "end":
+                                this.UIHorizontalOptions = LayoutOptions.End;
+                                break;
+                            case "center":
+                                this.UIHorizontalOptions = LayoutOptions.Center;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private LayoutOptions _uiHorizontalOptions = LayoutOptions.Center;
+        public LayoutOptions UIHorizontalOptions
+        {
+            get { return _uiHorizontalOptions; }
+            set { SetProperty(ref _uiHorizontalOptions, value); }
         }
 
 

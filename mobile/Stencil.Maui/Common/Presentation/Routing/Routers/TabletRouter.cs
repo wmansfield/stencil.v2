@@ -38,7 +38,7 @@ namespace Stencil.Maui.Presentation.Routing.Routers
         {
             return base.ExecuteMethodAsync(nameof(SetInitialViewAsync), async delegate ()
             {
-                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                NativeApplication.Keyboard?.TryHideKeyboard();
 
                 TMainMenuView menuView = new TMainMenuView();
                 menuView.MenuViewModel = new TMenuViewModel();
@@ -71,7 +71,7 @@ namespace Stencil.Maui.Presentation.Routing.Routers
         {
             return base.ExecuteFunction(nameof(PushViewAsync), delegate ()
             {
-                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                NativeApplication.Keyboard?.TryHideKeyboard();
 
                 if (this.CurrentShellModel.View.IsMenuSupported)
                 {
@@ -125,7 +125,7 @@ namespace Stencil.Maui.Presentation.Routing.Routers
             return base.ExecuteFunction(nameof(PopViewAsync), delegate ()
             {
                 //TODO:MUST:Support PopViewAsync(iterations) for tablet view
-                DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
+                NativeApplication.Keyboard?.TryHideKeyboard();
 
                 if (this.CurrentShellModel.Parent != null)
                 {
