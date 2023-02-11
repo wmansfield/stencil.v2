@@ -44,14 +44,14 @@ namespace Stencil.Maui.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunctionAsync<IDataViewItemReference>($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", async delegate ()
             {
-                TriColumnViewContext result = null;
+                SingleColumnViewContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<TriColumnViewContext>(configuration_json);
+                    result = JsonConvert.DeserializeObject<SingleColumnViewContext>(configuration_json);
                 }
                 if(result == null)
                 {
-                    result = new TriColumnViewContext();
+                    result = new SingleColumnViewContext();
                 }
                 
                 result.CommandScope = commandScope;
