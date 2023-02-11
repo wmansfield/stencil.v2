@@ -6,6 +6,7 @@ namespace Stencil.Common.Screens
         string library { get; }
         string component { get; }
         string configuration_json { get; }
+        string tag { get; set; }
         ISectionConfig[] sections { get; set; }
         IViewConfig[] encapsulated_views { get; set; }
 

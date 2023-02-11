@@ -8,6 +8,6 @@ namespace Stencil.Maui.Views
 {
     public interface IDataViewAdjuster
     {
-        Task AdjustItems(INestedDataViewModel viewModel, List<IDataViewItem> dataViewItems);
+        Task AdjustItems(INestedDataViewModel viewModel, ObservableCollection<IDataViewItem> availableItems, List<IDataViewItem> filteredItems);
     }
 }

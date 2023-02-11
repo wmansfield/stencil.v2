@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stencil.Maui.Commanding.Commands
@@ -32,7 +33,7 @@ namespace Stencil.Maui.Commanding.Commands
             });
         }
 
-        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel)
+        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel, CancellationToken token = default)
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate ()
             {
@@ -50,19 +51,19 @@ namespace Stencil.Maui.Commanding.Commands
 
                     if (chainInfo != null)
                     {
-                        bool success = await commandScope.CommandProcessor.ExecuteCommandAsync(commandScope, chainInfo.command_name, chainInfo.command_parameter, dataViewModel);
+                        bool success = await commandScope.CommandProcessor.ExecuteCommandAsync(commandScope, chainInfo.command_name, chainInfo.command_parameter, dataViewModel, token);
                         if(success)
                         {
                             if(!string.IsNullOrWhiteSpace(chainInfo.success_command_name))
                             {
-                                await commandScope.CommandProcessor.ExecuteCommandAsync(commandScope, chainInfo.success_command_name, chainInfo.success_command_parameter, dataViewModel);
+                                await commandScope.CommandProcessor.ExecuteCommandAsync(commandScope, chainInfo.success_command_name, chainInfo.success_command_parameter, dataViewModel, token);
                             }
                         }
                         else
                         {
                             if (!string.IsNullOrWhiteSpace(chainInfo.fail_command_name))
                             {
-                                await commandScope.CommandProcessor.ExecuteCommandAsync(commandScope, chainInfo.fail_command_name, chainInfo.fail_command_parameter, dataViewModel);
+                                await commandScope.CommandProcessor.ExecuteCommandAsync(commandScope, chainInfo.fail_command_name, chainInfo.fail_command_parameter, dataViewModel, token);
                             }
                         }
                         return success;

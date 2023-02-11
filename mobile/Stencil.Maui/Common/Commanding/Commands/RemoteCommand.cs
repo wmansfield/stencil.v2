@@ -7,6 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stencil.Maui.Platforms.Common.Commanding.Commands
@@ -41,14 +42,14 @@ namespace Stencil.Maui.Platforms.Common.Commanding.Commands
             });
         }
 
-        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel)
+        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel, CancellationToken token = default)
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate ()
             {
                 TInput input = this.PrepareInput(commandParameter);
                 input = this.FillUserValues(commandScope, dataViewModel, input);
 
-                RemoteCommandResponse result = await this.ExecuteCommandRemotelyAsync(commandScope, input, dataViewModel);
+                RemoteCommandResponse result = await this.ExecuteCommandRemotelyAsync(commandScope, input, dataViewModel, token);
                 if(result == null)
                 {
                     return false;
@@ -60,7 +61,7 @@ namespace Stencil.Maui.Platforms.Common.Commanding.Commands
                     {
                         try
                         {
-                            await this.API.CommandProcessor.ExecuteCommandAsync(commandScope, result.command_name, result.command_parameter, dataViewModel);
+                            await this.API.CommandProcessor.ExecuteCommandAsync(commandScope, result.command_name, result.command_parameter, dataViewModel, token);
                         }
                         catch (Exception ex)
                         {
@@ -82,7 +83,7 @@ namespace Stencil.Maui.Platforms.Common.Commanding.Commands
             });
         }
 
-        public abstract Task<RemoteCommandResponse> ExecuteCommandRemotelyAsync(ICommandScope commandScope, TInput input, IDataViewModel dataViewModel);
+        public abstract Task<RemoteCommandResponse> ExecuteCommandRemotelyAsync(ICommandScope commandScope, TInput input, IDataViewModel dataViewModel, CancellationToken token = default);
         
         protected virtual TInput PrepareInput(object commandParameter)
         {

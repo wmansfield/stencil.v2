@@ -12,8 +12,8 @@ namespace Stencil.Common.Markdown
 
         }
         public MarkdownSection(string source)
+            : base(source)
         {
-            _source = source;
         }
 
         public MarkdownSectionKind kind { get; set; }
@@ -22,14 +22,5 @@ namespace Stencil.Common.Markdown
         public AssetData asset { get; set; }
 
 
-        private string _source = string.Empty;
-        public string GetSource()
-        {
-            return _source;
-        }
-        public void SetSource(string value)
-        {
-            _source = value;
-        }
     }
 }

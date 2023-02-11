@@ -31,6 +31,10 @@ namespace Stencil.Maui.Resourcing
         public const string fa_caret_square_o_up = "";//[&#xf151;]
         public const string fa_caret_square_o_down = "";//[&#xf150;]
 
+        public const string fa_home = "";//[&#xf015;]
+        public const string fa_terminal = "";//[&#xf120;]
+
+
         public const string fa_square_o = "";//[&#xf096;]
         public const string fa_check_square_o = "";//[&#xf046;]
     }

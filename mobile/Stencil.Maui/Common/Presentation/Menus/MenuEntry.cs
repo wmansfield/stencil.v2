@@ -28,8 +28,20 @@ namespace Stencil.Maui.Presentation.Menus
                 }
             }
         }
-        public string IconCharacter { get; set; }
-        public string Label { get; set; }
+        private string _iconCharacter;
+        public string IconCharacter
+        {
+            get { return _iconCharacter; }
+            set { SetProperty(ref _iconCharacter, value); }
+        }
+
+        private string _label;
+        public string Label
+        {
+            get { return _label; }
+            set { SetProperty(ref _label, value); }
+        }
+
         public string CommandName { get; set; }
         public string CommandParameter { get; set; }
 

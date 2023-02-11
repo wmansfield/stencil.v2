@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Starter.App.Views.V1"
+                    x:Class="Starter.App.Views.V1.SampleView">
+    
+    <DataTemplate x:Key="sampleView" x:DataType="local:SampleViewContext">
+        <Grid HorizontalOptions="Fill"
+              ColumnDefinitions="40,*"
+              Padding="0" 
+              Margin="{Binding Margin}"
+              HeightRequest="55"
+              RowSpacing="0"
+              ColumnSpacing="0"
+              BackgroundColor="Transparent">
+            <Label Grid.Column="0"
+                   Text="{Binding Text}"
+                   Margin="0,0,0,0"
+                   Padding="8,0"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Fill"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

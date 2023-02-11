@@ -1,0 +1,92 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Starter"
+             xmlns:converters="clr-namespace:Stencil.Maui.Converters;assembly=Stencil.Maui"
+             x:Class="Starter.MainApp">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!-- Custom Styles -->
+            <Color x:Key="AppBlue" />
+
+            <Color x:Key="HeaderAttention" />
+            <Color x:Key="TextColor" />
+            <Color x:Key="BorderColor" />
+            <Color x:Key="TextColorFaded" />
+            <Color x:Key="ButtonBackgroundFaded" />
+            <Color x:Key="ButtonBackground" />
+
+            <!--Converters-->
+            <converters:IsEmptyStringConverter x:Key="isEmptyStringConverter"/>
+            <converters:IsValidStringConverter x:Key="isValidStringConverter"/>
+            <converters:NegateBoolConverter x:Key="negateBoolConverter"/>
+            <converters:StringToColorConverter x:Key="stringToColorConverter"/>
+
+            <!--Global Styles-->
+            <!--Colors-->
+            <Color x:Key="Warning"/>
+            <Color x:Key="Danger"/>
+            <Color x:Key="Success"/>
+
+            <Color x:Key="PageBackground"/>
+
+            <Color x:Key="PrimaryWhite"/>
+            <Color x:Key="PrimaryBlack"/>
+            <Color x:Key="PrimaryBlackMuted"/>
+
+            <Color x:Key="Primary50"/>
+            <Color x:Key="Primary100"/>
+            <Color x:Key="Primary200"/>
+            <Color x:Key="Primary300"/>
+            <Color x:Key="Primary400"/>
+            <Color x:Key="Primary500"/>
+            <Color x:Key="Primary600"/>
+            <Color x:Key="Primary700"/>
+            <Color x:Key="Primary800"/>
+            <Color x:Key="Primary900"/>
+
+            <Color x:Key="Accent50"/>
+            <Color x:Key="Accent100"/>
+            <Color x:Key="Accent200"/>
+            <Color x:Key="Accent300"/>
+            <Color x:Key="Accent400"/>
+            <Color x:Key="Accent500"/>
+            <Color x:Key="Accent600"/>
+            <Color x:Key="Accent700"/>
+            <Color x:Key="Accent800"/>
+            <Color x:Key="Accent900"/>
+
+            <Color x:Key="TextOverBackground"/>
+            <Color x:Key="TextOverBackgroundMuted"/>
+            <Color x:Key="TextOverPrimary"/>
+            <Color x:Key="TextOverAccent"/>
+
+            <Color x:Key="MenuBarBackground" />
+
+            <Color x:Key="MenuSelectedBackground" />
+            <Color x:Key="MenuSelectedText" />
+
+            <Color x:Key="MenuUnselectedBackground" />
+            <Color x:Key="MenuUnselectedText" />
+
+            <Color x:Key="MenuActiveBackground" />
+            <Color x:Key="MenuActiveText" />
+
+
+            <x:Double x:Key="FontSizeH1">25</x:Double>
+            <x:Double x:Key="FontSizeH2">20</x:Double>
+            <x:Double x:Key="FontSizeH3">18</x:Double>
+            <x:Double x:Key="FontSizeH4">16</x:Double>
+
+
+            <!-- Fonts -->
+            <x:String x:Key="SansRegular">LibreFranklin-Regular</x:String>
+            <x:String x:Key="SansBold">LibreFranklin-Bold</x:String>
+            <x:String x:Key="SansBoldItalic">LibreFranklin-BoldItalic</x:String>
+            <x:String x:Key="SansItalic">LibreFranklin-Italic</x:String>
+            <x:String x:Key="FontAwesome">FontAwesome</x:String>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

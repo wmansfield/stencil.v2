@@ -3,6 +3,7 @@ using Stencil.Maui.Presentation.Routing;
 using Stencil.Maui.Screens;
 using Stencil.Maui.Views;
 using Stencil.Maui.Views.Standard;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stencil.Maui.Commanding.Commands
@@ -34,7 +35,7 @@ namespace Stencil.Maui.Commanding.Commands
             });
         }
 
-        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel)
+        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel, CancellationToken token = default)
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate()
             {

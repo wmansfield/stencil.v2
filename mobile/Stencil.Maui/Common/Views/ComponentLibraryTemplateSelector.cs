@@ -140,9 +140,7 @@ namespace Stencil.Maui.Views
                 {
                     dataViewItem.PreparedContext = componentName;
                 }
-#if !DEBUG
                 CoreUtility.Logger.LogError("ComponentLibraryTemplateSelector", new Exception("Unable to find component with the name " + componentName));
-#endif
 
                 // return empty
                 return this.MissingTemplate;

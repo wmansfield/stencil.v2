@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Stencil.Common</PackageId>
-	  <Owners>William Mansfield</Owners>
+	<Owners>William Mansfield</Owners>
     <Authors>William Mansfield</Authors>
     <Company>Foundation Zero</Company>
     <Product>Stencil</Product>
@@ -17,8 +17,8 @@
     <PackageReleaseNotes>https://raw.githubusercontent.com/wmansfield/stencil.v2/main/ChangeLog.md</PackageReleaseNotes>
     <PackageTags>Stencil</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>2.0.16</Version>
-    <AssemblyVersion>2.0.16.0</AssemblyVersion>
+    <Version>2.0.17</Version>
+    <AssemblyVersion>2.0.17.0</AssemblyVersion>
   </PropertyGroup>
 
 	<ItemGroup>

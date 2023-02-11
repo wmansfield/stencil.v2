@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:base="clr-namespace:Stencil.Maui.Base;assembly=Stencil.Maui"
+                      xmlns:menus="clr-namespace:Stencil.Maui.Presentation.Menus;assembly=Stencil.Maui"
+                      x:Class="Starter.App.Presentation.Shells.Phone.MenuBarViewDark"
+                      x:DataType="menus:IMenuViewModel">
+    <ContentView.Content>
+        <Grid RowSpacing="0" 
+              RowDefinitions="18,28,44"
+              ColumnSpacing="0"
+              ColumnDefinitions="*,30,120"
+              Margin="0"
+              Padding="0">
+
+            <Image Grid.Column="1" BackgroundColor="Transparent"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="0"
+                   Grid.RowSpan="2"
+                   Margin="0"
+                   VerticalOptions="Fill"
+                   HorizontalOptions="Fill"
+                   Aspect="AspectFit"  
+                   Source="arc.png">
+            </Image>
+            <Image Grid.Column="2" BackgroundColor="Transparent"
+                   Grid.Row="1"
+                   Grid.RowSpan="3"
+                   Margin="0,0,5,0"
+                   VerticalOptions="End"
+                   HorizontalOptions="Center"
+                   HeightRequest="70"
+                   WidthRequest="70"
+                   Aspect="AspectFit"  
+                   Source="fab_plus.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="PrimaryButton_Tapped"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Grid.Column="0" BackgroundColor="Transparent"
+                   Grid.ColumnSpan="1"
+                   Grid.Row="0"  
+                   Grid.RowSpan="2"
+                   Margin="0"
+                   VerticalOptions="End"
+                   HorizontalOptions="Fill"
+                   Aspect="AspectFill" 
+                   Source="horizontal_divider_thin.png">
+            </Image>
+            <FlexLayout Grid.Column="0" Grid.ColumnSpan="2"
+                        Grid.Row="2"
+                        VerticalOptions="Fill"
+                        Direction="Row"
+                        JustifyContent="SpaceEvenly"
+                        Margin="0"
+                        Padding="5,0,5,5"
+                        BindableLayout.ItemsSource="{Binding MenuEntriesFiltered}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="menus:IMenuEntry">
+                        <Label HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"
+                               VerticalOptions="Fill"
+                               Text="{Binding Label}"
+                               TextColor="{Binding UITextColor, Converter={StaticResource stringToColorConverter}}"
+                               FontFamily="{StaticResource SansMedium}"
+                               FontAutoScalingEnabled="false"
+                               FontSize="{StaticResource FontSizeStandard}"
+                               Margin="0"
+                               Padding="0">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </Grid>
+    </ContentView.Content>
+</base:BaseContentView>

@@ -20,7 +20,12 @@ namespace Stencil.Maui.Views
         /// Configuration given to the view component
         /// </summary>
         string ConfigurationJson { get; }
-        
+
+        /// <summary>
+        /// Tag used for internal entity tracking
+        /// </summary>
+        string Tag { get; set; }
+
         /// <summary>
         /// Dynamically generated BindingContext used to bind against the current component
         /// </summary>

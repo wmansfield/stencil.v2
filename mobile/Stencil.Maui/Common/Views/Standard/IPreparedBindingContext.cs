@@ -6,7 +6,7 @@ namespace Stencil.Maui.Views.Standard
 {
     public partial interface IPreparedBindingContext
     {
-        void PrepareInteractions(bool force = false);
+        void EnsureInteractionsPrepared(bool force = false);
 
         /// <summary>
         /// Only enforced by stencil native controls. Ex. (TrackedStackLayout)

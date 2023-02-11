@@ -1,52 +1,84 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
+		<TargetFrameworks>net7.0-ios;net7.0-maccatalyst;net7.0-android</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>false</ImplicitUsings>
 
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Stencil.Maui</PackageId>
+		<Owners>William Mansfield</Owners>
+		<Authors>William Mansfield</Authors>
+		<Company>Foundation Zero</Company>
+		<Product>Stencil</Product>
+		<Description>Stencil</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/wmansfield/stencil.v2</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/wmansfield/stencil.v2</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReleaseNotes>https://raw.githubusercontent.com/wmansfield/stencil.v2/main/ChangeLog.md</PackageReleaseNotes>
+		<PackageTags>Stencil</PackageTags>
+		<NeutralLanguage>en</NeutralLanguage>
+		<Version>2.0.18</Version>
+		<AssemblyVersion>2.0.18.0</AssemblyVersion>
+		
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PublishReadyToRun>false</PublishReadyToRun>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
+	  <NoWarn>1701;1702;8981</NoWarn>
 	</PropertyGroup>
 
 	<!-- Custom Fonts -->
 	<ItemGroup>
 		<MauiFont Include="Resources\Fonts\*" />
 	</ItemGroup>
+
 	
 	<ItemGroup>
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	  <PackageReference Include="Realm" Version="10.15.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Stencil.Common\Stencil.Common.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Common\Views\Standard\V1_0\ColumnCollection.xaml.cs">
-	    <DependentUpon>ColumnCollection.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Common\Views\Standard\V1_0\TripleStackView.xaml.cs">
-	    <DependentUpon>TripleStackView.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Common\Views\Standard\V1_0\ColumnCollection.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Common\Views\Standard\V1_0\TripleStackView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+	  <PackageReference Include="Stencil.Common" Version="2.0.17" />
 	</ItemGroup>
 
 

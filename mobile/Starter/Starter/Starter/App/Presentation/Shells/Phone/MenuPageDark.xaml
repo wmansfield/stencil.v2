@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Maui.Base;assembly=Stencil.Maui"
+             xmlns:cmp="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls"
+             x:Class="Starter.App.Presentation.Shells.Phone.MenuPageDark"
+             BackgroundColor="{StaticResource PrimaryBlack}">
+    <ContentPage.ControlTemplate>
+        <ControlTemplate>
+            <AbsoluteLayout x:Name="vwBackground" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <ContentPresenter
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All">
+                    <ContentPresenter.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <On Platform="iOS" Value="0,0,0,0" />
+                            <On Platform="Android" Value="0,0,0,30" />
+                        </OnPlatform>
+                    </ContentPresenter.Margin>
+                </ContentPresenter>
+            </AbsoluteLayout>
+        </ControlTemplate>
+    </ContentPage.ControlTemplate>
+    <ContentPage.Content>
+        <Grid RowSpacing="0" ColumnSpacing="0" Margin="0" Padding="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="90"/>
+            </Grid.RowDefinitions>
+            <ContentView x:Name="vwContent" Grid.Row="0" />
+            <ContentView x:Name="vwMenu" Grid.Row="1" />
+        </Grid>
+    </ContentPage.Content>
+</base:BaseContentPage>

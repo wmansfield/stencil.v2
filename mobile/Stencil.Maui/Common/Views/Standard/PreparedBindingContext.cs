@@ -53,7 +53,7 @@ namespace Stencil.Maui.Views.Standard
         {
             return base.ExecuteFunction(nameof(GetInteractionGroups), delegate ()
             {
-                this.PrepareInteractions(false);
+                this.EnsureInteractionsPrepared(false);
 
                 if(this.InteractionLookup != null)
                 {
@@ -62,16 +62,23 @@ namespace Stencil.Maui.Views.Standard
                 return null;
             });
         }
-        public virtual void PrepareInteractions(bool force = false)
+        public virtual void EnsureInteractionsPrepared(bool force = false)
         {
-            base.ExecuteMethod(nameof(PrepareInteractions), delegate ()
+            base.ExecuteMethod("EnsureInteractionsPrepared", delegate ()
             {
-                if(!force && this.HasPrepared)
+                if (!force && this.HasPrepared)
                 {
                     return;
                 }
                 this.HasPrepared = true; // proactive, ignore error
 
+                this.PrepareInteractions();
+            });
+        }
+        protected virtual void PrepareInteractions()
+        {
+            base.ExecuteMethod(nameof(PrepareInteractions), delegate ()
+            {
                 Dictionary<string, Dictionary<string, List<InteractionStateGroup>>> lookup = null;
                 if (this.InteractionStateGroups != null)
                 {

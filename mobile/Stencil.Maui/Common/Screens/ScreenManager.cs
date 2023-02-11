@@ -193,6 +193,7 @@ namespace Stencil.Maui.Screens
                 StandardDataViewItem result = new StandardDataViewItem()
                 {
                     DataViewModel = dataViewModel,
+                    Tag = viewConfig.tag,
                     Library = viewConfig.library,
                     Component = viewConfig.component,
                     ConfigurationJson = viewConfig.configuration_json,

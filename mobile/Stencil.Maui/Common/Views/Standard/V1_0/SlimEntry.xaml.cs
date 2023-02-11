@@ -80,7 +80,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
-                result.PrepareInteractions();
+                result.EnsureInteractionsPrepared();
 
                 commandScope.RegisterCommandField(result);
 

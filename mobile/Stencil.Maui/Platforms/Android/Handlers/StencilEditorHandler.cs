@@ -74,7 +74,6 @@ namespace Stencil.Maui.Handlers
                             {
                                 InputMethodManager inputMethodManager = editText.Context.GetSystemService(Android.Content.Context.InputMethodService) as InputMethodManager;
                                 inputMethodManager.ShowSoftInput(editText, ShowFlags.Forced);
-                                inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
                             }
                             else
                             {

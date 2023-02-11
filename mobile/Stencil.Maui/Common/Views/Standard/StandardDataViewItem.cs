@@ -13,6 +13,8 @@ namespace Stencil.Maui.Views.Standard
         public string Library { get; set; }
         public string Component { get; set; }
 
+        public string Tag { get; set; }
+
 
         private object _preparedData;
         public object PreparedContext

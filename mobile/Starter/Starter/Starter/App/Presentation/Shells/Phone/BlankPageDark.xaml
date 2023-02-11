@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<base:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Stencil.Maui.Base;assembly=Stencil.Maui"
+             x:Class="Starter.App.Presentation.Shells.Phone.BlankPageDark"
+             BackgroundColor="{StaticResource PrimaryBlack}">
+    <ContentPage.ControlTemplate>
+        <ControlTemplate>
+            <AbsoluteLayout x:Name="vwBackground" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <ContentPresenter
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All">
+                    <ContentPresenter.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <On Platform="iOS" Value="0,0,0,0" />
+                            <On Platform="Android" Value="0,0,0,30" />
+                        </OnPlatform>
+                    </ContentPresenter.Margin>
+                </ContentPresenter>
+            </AbsoluteLayout>
+        </ControlTemplate>
+    </ContentPage.ControlTemplate>
+    <ContentPage.Content>
+        <ContentView x:Name="vwContent"/>
+    </ContentPage.Content>
+</base:BaseContentPage>

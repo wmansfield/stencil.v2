@@ -197,7 +197,7 @@ namespace Stencil.Maui.Views.Standard
                     {
                         try
                         {
-                            await adjuster.AdjustItems(this, filteredItems);
+                            await adjuster.AdjustItems(this, unFilteredItems, filteredItems);
                         }
                         catch (Exception ex)
                         {

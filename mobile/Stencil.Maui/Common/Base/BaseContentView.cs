@@ -54,6 +54,10 @@ namespace Stencil.Maui.Base
         {
             this.API?.Logger?.LogDebug(message);
         }
+        protected void LogTrace(string message, int level = 0)
+        {
+            this.API?.Logger?.LogTrace(message, level);
+        }
 
         #endregion
 
@@ -74,6 +78,24 @@ namespace Stencil.Maui.Base
             else
             {
                 this.ExecuteMethod(name, action, onError);
+            }
+        }
+        /// <summary>
+        /// Warning, this attempts to execute synchronous execution.
+        /// </summary>
+        protected Task ExecuteMethodOnMainThreadAsync(string name, Action action, Action<Exception> onError = null)
+        {
+            if (!MainThread.IsMainThread)
+            {
+                return MainThread.InvokeOnMainThreadAsync(delegate ()
+                {
+                    this.ExecuteMethod(name, action, onError);
+                });
+            }
+            else
+            {
+                this.ExecuteMethod(name, action, onError);
+                return Task.CompletedTask;
             }
         }
 

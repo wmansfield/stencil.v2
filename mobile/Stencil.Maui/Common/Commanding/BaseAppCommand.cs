@@ -1,5 +1,6 @@
 ﻿using Stencil.Maui.Views;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stencil.Maui.Commanding
@@ -16,6 +17,6 @@ namespace Stencil.Maui.Commanding
         public abstract bool AlertErrors { get; }
         public abstract Task<string> CanExecuteAsync(ICommandScope commandScope, IDataViewModel dataViewModel);
 
-        public abstract Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel);
+        public abstract Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel, CancellationToken token = default);
     }
 }

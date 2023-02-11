@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Stencil.Maui.Commanding.Commands
@@ -32,7 +33,7 @@ namespace Stencil.Maui.Commanding.Commands
             });
         }
 
-        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel)
+        public override Task<bool> ExecuteAsync(ICommandScope commandScope, object commandParameter, IDataViewModel dataViewModel, CancellationToken token = default)
         {
             return base.ExecuteFunction(nameof(ExecuteAsync), delegate ()
             {

@@ -12,9 +12,13 @@ namespace Stencil.Maui.Converters
             string color = value?.ToString();
             if(color != null && color.Length > 0)
             {
-                if(color.Length >= 6)
+                if(color.Length >= 8)
                 {
                     return Color.FromArgb(color);
+                }
+                if (color.Length >= 6)
+                {
+                    return Color.FromArgb("#FF" + color.Trim('#')); // upscale
                 }
                 else if (color.Length >= 3)
                 {

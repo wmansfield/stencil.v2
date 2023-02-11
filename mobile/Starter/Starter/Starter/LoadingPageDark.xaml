@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:BlankPageDark xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:base="clr-namespace:Starter.App.Presentation.Shells.Phone"
+             x:Class="Starter.LoadingPageDark">
+    <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+        <Label x:Name="lblMessage" Text="..."
+               TextColor="{StaticResource TextColor}"
+               FontSize="12"
+               HorizontalOptions="Center" />
+    </VerticalStackLayout>
+
+</base:BlankPageDark>
