@@ -44,7 +44,8 @@ namespace Starter.App.Commands
                 return _appCommands.ContainsKey(commandName);
             });
         }
-        public Task<bool> ExecuteCommandAsync(ICommandScope commandScope, string commandName, object commandParameter, IDataViewModel dataViewModel)
+
+        public Task<bool> ExecuteCommandAsync(ICommandScope commandScope, string commandName, object commandParameter, IDataViewModel dataViewModel, CancellationToken token = default)
         {
             return base.ExecuteFunctionAsync(nameof(ExecuteCommandAsync), async delegate ()
             {
@@ -72,7 +73,7 @@ namespace Starter.App.Commands
                     }
                     else
                     {
-                        return await command.ExecuteAsync(commandScope, commandParameter, dataViewModel);
+                        return await command.ExecuteAsync(commandScope, commandParameter, dataViewModel, token);
                     }
                 }
                 else
@@ -84,7 +85,7 @@ namespace Starter.App.Commands
             });
         }
 
-        public Task<object> ExecuteDataCommandAsync(ICommandScope commandScope, string commandName, object commandParameter, IDataViewModel dataViewModel)
+        public Task<object> ExecuteDataCommandAsync(ICommandScope commandScope, string commandName, object commandParameter, IDataViewModel dataViewModel, CancellationToken token = default)
         {
             return base.ExecuteFunctionAsync<object>(nameof(ExecuteDataCommandAsync), async delegate ()
             {
@@ -112,7 +113,7 @@ namespace Starter.App.Commands
                     }
                     else
                     {
-                        object result = await command.ExecuteAsync(commandScope, commandParameter, dataViewModel);
+                        object result = await command.ExecuteAsync(commandScope, commandParameter, dataViewModel, token);
                         return result;
                     }
                 }
@@ -134,5 +135,6 @@ namespace Starter.App.Commands
                 }
             });
         }
+
     }
 }

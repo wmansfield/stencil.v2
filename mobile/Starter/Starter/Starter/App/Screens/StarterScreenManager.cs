@@ -295,7 +295,7 @@ namespace Starter.App.Screens
                                         component = st1.CenterText.COMPONENT_NAME,
                                         configuration = new st1.CenterTextContext()
                                         {
-                                            Text = "Welcome do data driven ui",//this.API.Localize(..)
+                                            Text = "Welcome to data driven ui",//this.API.Localize(..)
                                             TextColor = StarterColors.Current.TextColor,
                                             FontSize = 15,
                                             Center = true,

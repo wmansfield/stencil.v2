@@ -50,7 +50,7 @@ namespace Starter.App.Views.V1
                 result.CommandScope = commandScope;
                 result.DataViewItem = dataViewItem;
 
-                result.PrepareInteractions();
+                result.EnsureInteractionsPrepared();
 
                 return Task.FromResult<IDataViewItemReference>(result);
             });
