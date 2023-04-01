@@ -122,7 +122,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _uiButtonBackgroundColor, value); }
         }
 
-        private string _backgroundColor;
+        private string _backgroundColor = AppColors.Transparent;
         public string BackgroundColor
         {
             get { return _backgroundColor; }

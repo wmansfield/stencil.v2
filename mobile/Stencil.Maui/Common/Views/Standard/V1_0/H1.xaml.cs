@@ -55,7 +55,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 {
                     try
                     {
-                        result.FontSize = (int)Application.Current.Resources["FontSizeH1"];
+                        result.FontSize = (int)(double)Application.Current.Resources["FontSizeH1"];
                     }
                     catch
                     {

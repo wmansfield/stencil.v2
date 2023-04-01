@@ -9,8 +9,12 @@ namespace Stencil.Maui.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is Color)
+            {
+                return value;
+            }
             string color = value?.ToString();
-            if(color != null && color.Length > 0)
+            if (color != null && color.Length > 0)
             {
                 if(color.Length >= 8)
                 {
@@ -29,7 +33,7 @@ namespace Stencil.Maui.Converters
                     return Color.FromArgb(color);// not sure.
                 }
             }
-            return null;
+            return Colors.Transparent;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

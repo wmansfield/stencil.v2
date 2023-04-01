@@ -40,7 +40,36 @@ namespace Stencil.Maui.Views.Standard.v1_0
         public string ColumnWidth
         {
             get { return _columnWidth; }
-            set { SetProperty(ref _columnWidth, value); }
+            set 
+            {
+                if (SetProperty(ref _columnWidth, value))
+                {
+                    OnPropertyChanged(nameof(ColumnGridLength));
+                }
+            }
+        }
+
+        private GridLength _columnGridLength;
+        private string _columnGridLengthSource;
+        public GridLength ColumnGridLength
+        {
+            get 
+            {
+                if (this.ColumnWidth == "*" || this.ColumnWidth == GridLength.Star.ToString())
+                {
+                    return GridLength.Star;
+                }
+                else
+                {
+                    if(_columnGridLengthSource != this.ColumnWidth)
+                    {
+                        _columnGridLengthSource = this.ColumnWidth;
+                        double.TryParse(this.ColumnWidth, out double parsed);
+                        _columnGridLength = new GridLength(parsed);
+                    }
+                    return _columnGridLength;
+                }
+            }
         }
 
         private string _backgroundColor;
@@ -49,5 +78,6 @@ namespace Stencil.Maui.Views.Standard.v1_0
             get { return _backgroundColor; }
             set { SetProperty(ref _backgroundColor, value); }
         }
+
     }
 }

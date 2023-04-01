@@ -32,8 +32,9 @@ namespace Stencil.Maui
                 fonts.AddFont("LibreFranklin-BoldItalic.ttf", "LibreFranklin-BoldItalic");
                 fonts.AddFont("fontawesome-webfont.ttf", "FontAwesome");
             });
+#if !WINDOWS
             builder.UseMauiCompatibility();
-
+#endif
 #if ANDROID
             NativeApplication.Keyboard = new Stencil.Maui.Droid.DroidKeyboardManager();
 #elif IOS

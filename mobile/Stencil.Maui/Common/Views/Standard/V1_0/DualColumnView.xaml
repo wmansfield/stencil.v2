@@ -12,8 +12,8 @@
               ColumnSpacing="0"
               BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding Column1Config.ColumnWidth}" />
-                <ColumnDefinition Width="{Binding Column2Config.ColumnWidth}" />
+                <ColumnDefinition Width="{Binding Column1Config.ColumnGridLength}" />
+                <ColumnDefinition Width="{Binding Column2Config.ColumnGridLength}" />
             </Grid.ColumnDefinitions>
 
             <ContentView Grid.Column="0" Content="{Binding FirstContent}" HorizontalOptions="{Binding Column1Config.HorizontalOptions}" VerticalOptions="{Binding Column1Config.VerticalOptions}" BackgroundColor="{Binding Column1Config.BackgroundColor, Converter={StaticResource stringToColorConverter}}" Margin="{Binding Column1Config.Margin}"/>

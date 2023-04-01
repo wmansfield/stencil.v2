@@ -8,8 +8,8 @@
                       x:DataType="standard:StandardNestedDataViewModel">
     <ContentView.Content>
         <Grid x:Name="grdContainer"
-              BackgroundColor="{Binding BackgroundColor}"
-              Background="{Binding BackgroundBrush}"
+              BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
+              
               VerticalOptions="FillAndExpand" 
               HorizontalOptions="Fill"
               RowSpacing="0"
@@ -30,7 +30,7 @@
                 <!--- StencilCollectionView.Margin as Padding is Not a mistake -->
                 <controls:StencilCollectionView 
                       Margin="{Binding Padding}" 
-                      BackgroundColor="{Binding BackgroundColor}"
+                      BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
                       VerticalOptions="FillAndExpand"
                       HorizontalOptions="Fill"
                       ItemSizingStrategy="MeasureAllItems"
@@ -51,6 +51,7 @@
                     BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
                 </StackLayout>
             </StackLayout>
+            <Label Text="{Binding BackgroundColor}" TextColor="White"/>
         </Grid>
     </ContentView.Content>
 </base:BaseContentView>
