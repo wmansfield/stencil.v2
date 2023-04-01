@@ -8,14 +8,14 @@
         <ResourceDictionary>
 
             <!-- Custom Styles -->
-            <Color x:Key="AppBlue" />
-
-            <Color x:Key="HeaderAttention" />
-            <Color x:Key="TextColor" />
-            <Color x:Key="BorderColor" />
-            <Color x:Key="TextColorFaded" />
-            <Color x:Key="ButtonBackgroundFaded" />
-            <Color x:Key="ButtonBackground" />
+            <!--Colors are replaced dynamically on load-->
+            <Color x:Key="AppBlue">#00000000</Color>
+            <Color x:Key="HeaderAttention">#00000000</Color>
+            <Color x:Key="TextColor">#00000000</Color>
+            <Color x:Key="BorderColor">#00000000</Color>
+            <Color x:Key="TextColorFaded">#00000000</Color>
+            <Color x:Key="ButtonBackgroundFaded">#00000000</Color>
+            <Color x:Key="ButtonBackground">#00000000</Color>
 
             <!--Converters-->
             <converters:IsEmptyStringConverter x:Key="isEmptyStringConverter"/>
@@ -24,54 +24,54 @@
             <converters:StringToColorConverter x:Key="stringToColorConverter"/>
 
             <!--Global Styles-->
-            <!--Colors-->
-            <Color x:Key="Warning"/>
-            <Color x:Key="Danger"/>
-            <Color x:Key="Success"/>
+            <!--Colors are replaced dynamically on load-->
+            <Color x:Key="Warning">#00000000</Color>
+            <Color x:Key="Danger">#00000000</Color>
+            <Color x:Key="Success">#00000000</Color>
 
-            <Color x:Key="PageBackground"/>
+            <Color x:Key="PageBackground">#00000000</Color>
 
-            <Color x:Key="PrimaryWhite"/>
-            <Color x:Key="PrimaryBlack"/>
-            <Color x:Key="PrimaryBlackMuted"/>
+            <Color x:Key="PrimaryWhite">#00000000</Color>
+            <Color x:Key="PrimaryBlack">#00000000</Color>
+            <Color x:Key="PrimaryBlackMuted">#00000000</Color>
 
-            <Color x:Key="Primary50"/>
-            <Color x:Key="Primary100"/>
-            <Color x:Key="Primary200"/>
-            <Color x:Key="Primary300"/>
-            <Color x:Key="Primary400"/>
-            <Color x:Key="Primary500"/>
-            <Color x:Key="Primary600"/>
-            <Color x:Key="Primary700"/>
-            <Color x:Key="Primary800"/>
-            <Color x:Key="Primary900"/>
+            <Color x:Key="Primary50">#00000000</Color>
+            <Color x:Key="Primary100">#00000000</Color>
+            <Color x:Key="Primary200">#00000000</Color>
+            <Color x:Key="Primary300">#00000000</Color>
+            <Color x:Key="Primary400">#00000000</Color>
+            <Color x:Key="Primary500">#00000000</Color>
+            <Color x:Key="Primary600">#00000000</Color>
+            <Color x:Key="Primary700">#00000000</Color>
+            <Color x:Key="Primary800">#00000000</Color>
+            <Color x:Key="Primary900">#00000000</Color>
 
-            <Color x:Key="Accent50"/>
-            <Color x:Key="Accent100"/>
-            <Color x:Key="Accent200"/>
-            <Color x:Key="Accent300"/>
-            <Color x:Key="Accent400"/>
-            <Color x:Key="Accent500"/>
-            <Color x:Key="Accent600"/>
-            <Color x:Key="Accent700"/>
-            <Color x:Key="Accent800"/>
-            <Color x:Key="Accent900"/>
+            <Color x:Key="Accent50">#00000000</Color>
+            <Color x:Key="Accent100">#00000000</Color>
+            <Color x:Key="Accent200">#00000000</Color>
+            <Color x:Key="Accent300">#00000000</Color>
+            <Color x:Key="Accent400">#00000000</Color>
+            <Color x:Key="Accent500">#00000000</Color>
+            <Color x:Key="Accent600">#00000000</Color>
+            <Color x:Key="Accent700">#00000000</Color>
+            <Color x:Key="Accent800">#00000000</Color>
+            <Color x:Key="Accent900">#00000000</Color>
 
-            <Color x:Key="TextOverBackground"/>
-            <Color x:Key="TextOverBackgroundMuted"/>
-            <Color x:Key="TextOverPrimary"/>
-            <Color x:Key="TextOverAccent"/>
+            <Color x:Key="TextOverBackground">#00000000</Color>
+            <Color x:Key="TextOverBackgroundMuted">#00000000</Color>
+            <Color x:Key="TextOverPrimary">#00000000</Color>
+            <Color x:Key="TextOverAccent">#00000000</Color>
 
-            <Color x:Key="MenuBarBackground" />
+            <Color x:Key="MenuBarBackground">#00000000</Color>
 
-            <Color x:Key="MenuSelectedBackground" />
-            <Color x:Key="MenuSelectedText" />
+            <Color x:Key="MenuSelectedBackground">#00000000</Color>
+            <Color x:Key="MenuSelectedText">#00000000</Color>
 
-            <Color x:Key="MenuUnselectedBackground" />
-            <Color x:Key="MenuUnselectedText" />
+            <Color x:Key="MenuUnselectedBackground">#00000000</Color>
+            <Color x:Key="MenuUnselectedText">#00000000</Color>
 
-            <Color x:Key="MenuActiveBackground" />
-            <Color x:Key="MenuActiveText" />
+            <Color x:Key="MenuActiveBackground">#00000000</Color>
+            <Color x:Key="MenuActiveText">#00000000</Color>
 
 
             <x:Double x:Key="FontSizeH1">25</x:Double>

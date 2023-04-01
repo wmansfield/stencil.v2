@@ -54,10 +54,5 @@
 	  <PackageReference Include="RestSharp" Version="108.0.3" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Stencil.Common\Stencil.Common.csproj" />
-	  <ProjectReference Include="..\..\..\Stencil.Maui\Stencil.Maui.csproj" />
-	</ItemGroup>
-
 
 </Project>
