@@ -51,7 +51,6 @@
                     BindableLayout.ItemTemplateSelector="{Binding DataTemplateSelector}">
                 </StackLayout>
             </StackLayout>
-            <Label Text="{Binding BackgroundColor}" TextColor="White"/>
         </Grid>
     </ContentView.Content>
 </base:BaseContentView>
