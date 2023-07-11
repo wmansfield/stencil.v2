@@ -5,7 +5,7 @@
                     x:Class="Stencil.Maui.Views.Standard.v1_0.Image">
     <DataTemplate x:Key="image" x:DataType="local:ImageContext">
         <!--<ViewCell>-->
-        <StackLayout Padding="{Binding Padding}"
+        <StackLayout Padding="{Binding UIPadding}"
                      BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
                      HorizontalOptions="Fill"
                      PropertyChanged="StackLayout_PropertyChanged">

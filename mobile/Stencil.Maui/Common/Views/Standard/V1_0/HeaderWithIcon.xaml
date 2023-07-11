@@ -7,7 +7,7 @@
         <!--<ViewCell>-->
         <StackLayout Orientation="Horizontal" 
                      HorizontalOptions="Fill" 
-                     Padding="{Binding Padding}" 
+                     Padding="{Binding UIPadding}" 
                      Margin="0" 
                      Spacing="0" 
                      BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">

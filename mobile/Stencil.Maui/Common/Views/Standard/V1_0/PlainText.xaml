@@ -15,8 +15,8 @@
                 FontFamily="{Binding FontFamily}"
                 FontAutoScalingEnabled="false"
                 TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
-                Padding="{Binding Padding}"
-                Margin="{Binding Margin}"
+                Padding="{Binding UIPadding}"
+                Margin="{Binding UIMargin}"
                 HorizontalTextAlignment="{Binding UITextAlignment}"/>
         <!--</ViewCell>-->
     </DataTemplate>

@@ -7,7 +7,12 @@
                     x:Class="Stencil.Maui.Views.Standard.v1_0.GlyphHeader">
     <DataTemplate x:Key="glyphHeader" x:DataType="local:GlyphHeaderContext">
         <!--<ViewCell>-->
-        <AbsoluteLayout x:Name="glyphLayoutRoot" HorizontalOptions="Fill" HeightRequest="{Binding HeightRequest}" SizeChanged="glyphLayoutRoot_SizeChanged">
+        <AbsoluteLayout x:Name="glyphLayoutRoot" 
+                        HorizontalOptions="Fill" 
+                        Margin="{Binding UIMargin}"
+                        Padding="{Binding UIPadding}"
+                        HeightRequest="{Binding HeightRequest}" 
+                        SizeChanged="glyphLayoutRoot_SizeChanged">
             <StackLayout x:Name="glyphStackRoot" Spacing="0"
                          Margin="0"
                          Padding="0"
@@ -19,7 +24,7 @@
                     <DataTemplate x:DataType="local:GlyphInfo">
                         <Label HorizontalOptions="Start"
                                VerticalOptions="Center"
-                               Padding="{Binding Padding}"
+                               Padding="{Binding UIPadding}"
                                Margin="0"
                                FontSize="{Binding FontSize}"
                                FontFamily="{Binding FontFamily}"

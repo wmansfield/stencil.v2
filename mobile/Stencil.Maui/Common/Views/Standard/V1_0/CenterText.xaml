@@ -19,8 +19,8 @@
                    FontFamily="{Binding FontFamily}"
                    FontAutoScalingEnabled="false"
                    TextColor="{Binding TextColor, Converter={StaticResource stringToColorConverter}}"
-                   Margin="{Binding Margin}" 
-                   Padding="{Binding Padding}"
+                   Margin="{Binding UIMargin}" 
+                   Padding="{Binding UIPadding}"
                    Text="{Binding Text}"
                    />
         </VerticalStackLayout>

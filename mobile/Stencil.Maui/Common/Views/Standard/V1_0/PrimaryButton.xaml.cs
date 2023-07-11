@@ -6,6 +6,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using Stencil.Common.Views;
+using Stencil.Maui.Data;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -128,20 +130,43 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _backgroundColor, value); }
         }
 
-        private Thickness _padding = new Thickness(20, 0);
-        public Thickness Padding
+        private ThicknessInfo _padding = new ThicknessInfo(20, 0);
+        public ThicknessInfo Padding
         {
             get { return _padding; }
-            set { SetProperty(ref _padding, value); }
+            set
+            {
+                if (SetProperty(ref _padding, value))
+                {
+                    this.UIPadding = value.ToThickness();
+                }
+            }
         }
-
-        private Thickness _margin = new Thickness();
-        public Thickness Margin
+        private ThicknessInfo _margin;
+        public ThicknessInfo Margin
         {
             get { return _margin; }
-            set { SetProperty(ref _margin, value); }
+            set
+            {
+                if (SetProperty(ref _margin, value))
+                {
+                    this.UIMargin = value.ToThickness();
+                }
+            }
+        }
+        private Thickness _uiPadding = new Thickness(20, 0);
+        public Thickness UIPadding
+        {
+            get { return _uiPadding; }
+            protected set { SetProperty(ref _uiPadding, value); }
         }
 
+        private Thickness _uiMargin = new Thickness();
+        public Thickness UIMargin
+        {
+            get { return _uiMargin; }
+            protected set { SetProperty(ref _uiMargin, value); }
+        }
         private bool _showIcon;
         public bool ShowIcon
         {
@@ -168,6 +193,8 @@ namespace Stencil.Maui.Views.Standard.v1_0
                 }
             }
         }
+
+        
 
         public bool UIVisible
         {

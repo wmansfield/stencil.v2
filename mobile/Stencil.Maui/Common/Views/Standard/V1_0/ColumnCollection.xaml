@@ -9,7 +9,7 @@
                         BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
                         HeightRequest="{Binding HeightRequest}"
                         VerticalOptions="{Binding VerticalOptions}"
-                        Margin="{Binding Margin}"
+                        Margin="{Binding UIMargin}"
                         ItemsLayout="HorizontalList"
                         ItemsSource="{Binding Cells}">
             <CollectionView.ItemTemplate>

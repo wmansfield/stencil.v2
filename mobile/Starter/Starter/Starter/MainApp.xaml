@@ -73,6 +73,15 @@
             <Color x:Key="MenuActiveBackground">#00000000</Color>
             <Color x:Key="MenuActiveText">#00000000</Color>
 
+            <x:Double x:Key="FontSizeSmaller">9</x:Double>
+            <x:Double x:Key="FontSizeSmall">12</x:Double>
+            <x:Double x:Key="FontSizeMedium">14</x:Double>
+            <x:Double x:Key="FontSizeStandard">16</x:Double>
+            <x:Double x:Key="FontSizeLarge">18</x:Double>
+
+            <x:Double x:Key="FontSizeMenuText">11</x:Double>
+            <x:Double x:Key="FontSizeMenuIcon">20</x:Double>
+            <x:Double x:Key="FontSizeHeaderIcon">28</x:Double>
 
             <x:Double x:Key="FontSizeH1">25</x:Double>
             <x:Double x:Key="FontSizeH2">20</x:Double>

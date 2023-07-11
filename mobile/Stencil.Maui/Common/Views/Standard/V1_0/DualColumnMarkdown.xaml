@@ -11,7 +11,7 @@
               RowSpacing="0" 
               ColumnSpacing="0" 
               HorizontalOptions="Fill"
-              Padding="{Binding Padding}"
+              Padding="{Binding UIPadding}"
               BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
             <stencil:MarkdownView Grid.Column="0"
                                   HorizontalOptions="Start"

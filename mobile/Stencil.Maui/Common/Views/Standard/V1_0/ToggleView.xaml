@@ -6,7 +6,7 @@
     <DataTemplate x:Key="toggleView" x:DataType="local:ToggleViewContext">
         <Grid HorizontalOptions="Fill"
               VerticalOptions="StartAndExpand"
-              Padding="0" Margin="{Binding Margin}"
+              Padding="0" Margin="{Binding UIMargin}"
               HeightRequest="{Binding HeightRequest}"
               RowSpacing="0"
               ColumnSpacing="0"

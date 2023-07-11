@@ -8,7 +8,7 @@
         <!--<ViewCell>-->
         <Grid RowDefinitions="20,*"
               RowSpacing="4" ColumnSpacing="0"
-              Margin="0" Padding="0"
+              Margin="{Binding UIMargin}" Padding="{Binding UIPadding}"
               IsVisible="{Binding UIVisible}"
               HorizontalOptions="Fill"
               HeightRequest="{Binding HeightRequest}">

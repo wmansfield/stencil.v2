@@ -12,6 +12,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
 using System;
 using static System.Collections.Specialized.BitVector32;
+using Stencil.Common.Views;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -154,11 +155,23 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _contentHeight, value); }
         }
 
-        private Thickness _margin;
-        public Thickness Margin
+        private ThicknessInfo _margin;
+        public ThicknessInfo Margin
         {
             get { return _margin; }
-            set { SetProperty(ref _margin, value); }
+            set
+            {
+                if (SetProperty(ref _margin, value))
+                {
+                    this.UIMargin = value.ToThickness();
+                }
+            }
+        }
+        private Thickness _uiMargin = new Thickness();
+        public Thickness UIMargin
+        {
+            get { return _uiMargin; }
+            protected set { SetProperty(ref _uiMargin, value); }
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

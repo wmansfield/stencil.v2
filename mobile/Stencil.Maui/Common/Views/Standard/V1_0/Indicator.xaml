@@ -8,7 +8,7 @@
                        IndicatorColor="{Binding Color, Converter={StaticResource stringToColorConverter}}"
                        SelectedIndicatorColor="{Binding SelectedColor, Converter={StaticResource stringToColorConverter}}"
                        IsVisible="{Binding Visible}"
-                       Margin="{Binding Margin}"
+                       Margin="{Binding UIMargin}"
                        IndicatorSize="{Binding IndicatorSize}"
                        MaximumVisible="{Binding MaximumVisible}"
                        Count="{Binding ItemCount}"

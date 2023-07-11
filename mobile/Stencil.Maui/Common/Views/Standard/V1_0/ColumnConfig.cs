@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
+using Stencil.Common.Views;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -13,7 +14,7 @@ namespace Stencil.Maui.Views.Standard.v1_0
             this.ColumnWidth = "*";
             this.HorizontalOptions = LayoutOptions.Center;
             this.VerticalOptions = LayoutOptions.Center;
-            this.Margin = new Thickness(0);
+            this.Margin = new ThicknessInfo(0);
         }
         private LayoutOptions _horizontalOptions;
         public LayoutOptions HorizontalOptions
@@ -29,8 +30,8 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _verticalOptions, value); }
         }
 
-        private Thickness _margin;
-        public Thickness Margin
+        private ThicknessInfo _margin;
+        public ThicknessInfo Margin
         {
             get { return _margin; }
             set { SetProperty(ref _margin, value); }

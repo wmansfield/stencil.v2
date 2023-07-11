@@ -8,8 +8,8 @@
         <Grid HorizontalOptions="Fill" 
               RowSpacing="0" ColumnSpacing="0"
               HeightRequest="{Binding HeightRequest}"
-              Padding="{Binding Padding}" 
-              Margin="0" 
+              Padding="{Binding UIPadding}" 
+              Margin="{Binding UIMargin}" 
               ColumnDefinitions="*,2*"
               BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}">
             <Label Grid.Column="0"

@@ -7,7 +7,7 @@
         <!--<ViewCell>-->
         <Grid RowDefinitions="20,48"
               RowSpacing="4" ColumnSpacing="0"
-              Margin="{Binding Margin}" Padding="0"
+              Margin="{Binding UIMargin}" Padding="{Binding UIPadding}"
               IsVisible="{Binding UIVisible}">
             <Label Grid.Row="0"
                    Text="{Binding Label}"

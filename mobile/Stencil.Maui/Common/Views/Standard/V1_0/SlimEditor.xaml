@@ -8,8 +8,8 @@
         <!--<ViewCell>-->
         <Grid RowDefinitions="48"
               RowSpacing="0" ColumnSpacing="0"
-              Margin="{Binding Margin}"
-              Padding="{Binding Padding}"
+              Margin="{Binding UIMargin}"
+              Padding="{Binding UIPadding}"
               IsVisible="{Binding UIVisible}">
             <Border Grid.Row="0"
                     HeightRequest="48"

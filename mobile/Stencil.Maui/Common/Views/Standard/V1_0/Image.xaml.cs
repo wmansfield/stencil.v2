@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
+using Stencil.Common.Views;
+using Stencil.Maui.Data;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -195,13 +197,18 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _imageHeight, value); }
         }
 
-        private Thickness _padding = new Thickness();
-        public Thickness Padding
+        private ThicknessInfo _padding = new ThicknessInfo();
+        public ThicknessInfo Padding
         {
             get { return _padding; }
-            set { SetProperty(ref _padding, value); }
+            set 
+            { 
+                if(SetProperty(ref _padding, value))
+                {
+                    this.UIPadding = value.ToThickness();
+                }
+            }
         }
-
 
         private string _backgroundColor;
         public string BackgroundColor
@@ -210,12 +217,18 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _backgroundColor, value); }
         }
 
-
         private ImageSource _uiSource;
         public ImageSource UISource
         {
             get { return _uiSource; }
             set { SetProperty(ref _uiSource, value); }
+        }
+
+        private Thickness _uiPadding = new Thickness();
+        public Thickness UIPadding
+        {
+            get { return _uiPadding; }
+            protected set { SetProperty(ref _uiPadding, value); }
         }
     }
 }

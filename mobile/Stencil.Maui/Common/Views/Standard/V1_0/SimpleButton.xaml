@@ -8,8 +8,8 @@
         <Grid HeightRequest="52"
               ColumnSpacing="0"
               RowSpacing="0"
-              Padding="{Binding Padding}"
-              Margin="{Binding Margin}"
+              Padding="{Binding UIPadding}"
+              Margin="{Binding UIMargin}"
               BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
               IsVisible="{Binding UIVisible}"
               HorizontalOptions="Fill"
@@ -20,7 +20,7 @@
                      VerticalOptions="FillAndExpand"/>
             <StackLayout Orientation="Horizontal" 
                          HorizontalOptions="Center" 
-                         Padding="{Binding Padding}" 
+                         Padding="0" 
                          Margin="0" 
                          Spacing="0">
                 <Label Text="{Binding Text}"

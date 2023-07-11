@@ -4,6 +4,8 @@ using Stencil.Maui.Resourcing;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using Stencil.Common.Views;
+using Stencil.Maui.Data;
 
 namespace Stencil.Maui.Views.Standard.v1_0
 {
@@ -109,11 +111,26 @@ namespace Stencil.Maui.Views.Standard.v1_0
             set { SetProperty(ref _showIcon, value); }
         }
 
-        private Thickness _padding;
-        public Thickness Padding
+        private ThicknessInfo _padding = new ThicknessInfo();
+        public ThicknessInfo Padding
         {
             get { return _padding; }
-            set { SetProperty(ref _padding, value); }
+            set
+            {
+                if (SetProperty(ref _padding, value))
+                {
+                    this.UIPadding = value.ToThickness();
+                }
+            }
         }
+        
+
+        private Thickness _uiPadding = new Thickness();
+        public Thickness UIPadding
+        {
+            get { return _uiPadding; }
+            protected set { SetProperty(ref _uiPadding, value); }
+        }
+
     }
 }

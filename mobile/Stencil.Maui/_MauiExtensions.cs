@@ -33,7 +33,7 @@ namespace Stencil.Maui
                 fonts.AddFont("fontawesome-webfont.ttf", "FontAwesome");
             });
 #if !WINDOWS
-            builder.UseMauiCompatibility();
+            //builder.UseMauiCompatibility();
 #endif
 #if ANDROID
             NativeApplication.Keyboard = new Stencil.Maui.Droid.DroidKeyboardManager();

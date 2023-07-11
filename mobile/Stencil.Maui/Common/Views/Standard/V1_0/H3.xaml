@@ -8,11 +8,12 @@
         <VerticalStackLayout
             Spacing="0"
             Padding="0"
+            Margin="{Binding UIMargin}"
             VerticalOptions="Center">
             <Label Text="{Binding Text}"
                    HorizontalOptions="Fill"
                    VerticalOptions="Start"
-                   Padding="{Binding Padding}"
+                   Padding="{Binding UIPadding}"
                    FontSize="{Binding FontSize}"
                    FontFamily="{Binding FontFamily}"
                    FontAutoScalingEnabled="false"

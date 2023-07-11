@@ -8,7 +8,7 @@
         <!--<ViewCell>-->
         <Grid HorizontalOptions="Fill" 
               RowSpacing="0" ColumnSpacing="0"
-              Margin="{Binding Margin}" Padding="0"
+              Margin="{Binding UIMargin}" Padding="0"
               BackgroundColor="{Binding BackgroundColor, Converter={StaticResource stringToColorConverter}}"
               ColumnDefinitions="40,*"
               RowDefinitions="*">
