@@ -15,6 +15,9 @@ namespace Stencil.Forms.Resourcing
         public static string PrimaryBlackMuted = "#333333";
 
 
+        public static string MutedBackground = "#f3f3f3";
+        public static string MutedBackgroundDark = "#333333";
+        public static string MutedForeground = "#7c7c7c";
 
 
         public static string Primary50 = "#e2eaf2";

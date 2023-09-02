@@ -26,6 +26,7 @@ namespace Stencil.Forms.Screens
                     ExpireUTC = source.ExpireUTC,
                     InvalidatedUTC = source.InvalidatedUTC,
                     Lifetime = source.Lifetime,
+                    PreventExpired = source.PreventExpired,
                     ScreenNavigationData = (source as IScreenConfig).ScreenNavigationData,
                     VisualConfig = (source as IScreenConfig).VisualConfig,
                     MenuConfigs = (source as IScreenConfig).MenuConfigs,

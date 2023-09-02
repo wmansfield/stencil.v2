@@ -121,13 +121,16 @@ namespace Stencil.Forms.Platforms.Common.Commanding.Commands
                     input = new TInput();
                 }
                 ConcurrentDictionary<string, ICommandField> values = this.ExtractCommandGroup(scope, RemoteCommandInput.INPUT_GROUP);
-                foreach (KeyValuePair<string, ICommandField> item in values)
+                if (values != null)
                 {
-                    input.user_values.Add(new InputPair()
+                    foreach (KeyValuePair<string, ICommandField> item in values)
                     {
-                        name = item.Value.FieldName,
-                        value = item.Value.GetFieldValue(),
-                    });
+                        input.user_values.Add(new InputPair()
+                        {
+                            name = item.Value.FieldName,
+                            value = item.Value.GetFieldValue(),
+                        });
+                    }
                 }
 
                 return input;

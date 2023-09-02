@@ -11,6 +11,7 @@ namespace Stencil.Common.Screens
         string ScreenParameter { get; }
         INavigationData ScreenNavigationData { get; }
         Lifetime Lifetime { get; }
+        bool PreventExpired { get; }
         DateTimeOffset? DownloadedUTC { get; }
         DateTimeOffset? CacheUntilUTC { get; }
         DateTimeOffset? ExpireUTC { get; }

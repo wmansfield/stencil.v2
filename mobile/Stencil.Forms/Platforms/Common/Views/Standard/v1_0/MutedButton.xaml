@@ -2,8 +2,8 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:local="clr-namespace:Stencil.Forms.Views.Standard.v1_0"
-                    x:Class="Stencil.Forms.Views.Standard.v1_0.PrimaryButton">
-    <DataTemplate x:Key="primaryButton" x:DataType="local:PrimaryButtonContext">
+                    x:Class="Stencil.Forms.Views.Standard.v1_0.MutedButton">
+    <DataTemplate x:Key="mutedButton" x:DataType="local:MutedButtonnContext">
         <!--<ViewCell>-->
         <Grid HeightRequest="52"
               ColumnSpacing="0"
@@ -26,7 +26,7 @@
                 <Label Text="{Binding Text}"
                        VerticalOptions="Center"
                        HorizontalOptions="Start"
-                       TextColor="{StaticResource PrimaryWhite}"
+                       TextColor="{Binding TextColor}"
                        FontFamily="{StaticResource SansRegular}"
                        FontSize="{Binding FontSize}" />
                 <Label IsVisible="{Binding ShowIcon}"

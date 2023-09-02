@@ -128,6 +128,7 @@ namespace Stencil.Forms.Data
                 AutomaticDownload = source.automatic_download,
                 IsMenuSupported = source.is_menu_supported,
                 Lifetime = (Lifetime)source.lifetime,
+                PreventExpired = source.prevent_expired,
                 DownloadedUTC = source.download_utc,
                 CacheUntilUTC = source.cache_until_utc,
                 ExpireUTC = source.expire_utc,
@@ -150,24 +151,24 @@ namespace Stencil.Forms.Data
             }
             if (!string.IsNullOrWhiteSpace(source.json))
             {
-                List<ViewConfig> viewConfigs = JsonConvert.DeserializeObject<List<ViewConfig>>(source.json);
-                foreach (ViewConfig item in viewConfigs)
+                List<ViewConfigExchange> viewConfigs = JsonConvert.DeserializeObject<List<ViewConfigExchange>>(source.json);
+                foreach (ViewConfigExchange item in viewConfigs)
                 {
                     result.ViewConfigs.Add(item);
                 }
             }
             if (!string.IsNullOrWhiteSpace(source.json_header_configs))
             {
-                List<ViewConfig> headerConfigs = JsonConvert.DeserializeObject<List<ViewConfig>>(source.json_header_configs);
-                foreach (ViewConfig item in headerConfigs)
+                List<ViewConfigExchange> headerConfigs = JsonConvert.DeserializeObject<List<ViewConfigExchange>>(source.json_header_configs);
+                foreach (ViewConfigExchange item in headerConfigs)
                 {
                     result.HeaderConfigs.Add(item);
                 }
             }
             if (!string.IsNullOrWhiteSpace(source.json_footer_configs))
             {
-                List<ViewConfig> footerConfigs = JsonConvert.DeserializeObject<List<ViewConfig>>(source.json_footer_configs);
-                foreach (ViewConfig item in footerConfigs)
+                List<ViewConfigExchange> footerConfigs = JsonConvert.DeserializeObject<List<ViewConfigExchange>>(source.json_footer_configs);
+                foreach (ViewConfigExchange item in footerConfigs)
                 {
                     result.FooterConfigs.Add(item);
                 }
@@ -215,6 +216,7 @@ namespace Stencil.Forms.Data
             destination.is_menu_supported = source.IsMenuSupported;
 
             destination.lifetime = (int)source.Lifetime;
+            destination.prevent_expired = source.PreventExpired;
 
             destination.download_utc = source.DownloadedUTC;
             destination.cache_until_utc = source.CacheUntilUTC;

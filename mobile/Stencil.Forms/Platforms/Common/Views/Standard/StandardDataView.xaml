@@ -13,7 +13,9 @@
               VerticalOptions="FillAndExpand" 
               HorizontalOptions="Fill"
               RowSpacing="0"
-              ColumnSpacing="0">
+              ColumnSpacing="0"
+              ColumnDefinitions="*"
+              RowDefinitions="*">
             <Image IsVisible="{Binding BackgroundImage, Converter={StaticResource isValidStringConverter}}"
                    Source="{Binding BackgroundImage}" 
                    VerticalOptions="Fill" 

@@ -20,9 +20,9 @@ namespace Stencil.Common.Screens
 
         public ScreenConfigExchange()
         {
-            this.ViewConfigs = new List<ViewConfig>();
-            this.HeaderConfigs = new List<ViewConfig>();
-            this.FooterConfigs = new List<ViewConfig>();
+            this.ViewConfigs = new List<ViewConfigExchange>();
+            this.HeaderConfigs = new List<ViewConfigExchange>();
+            this.FooterConfigs = new List<ViewConfigExchange>();
             this.BeforeShowCommands = new List<CommandConfig>();
             this.AfterShowCommands = new List<CommandConfig>();
             this.MenuConfigs = new List<MenuConfig>();
@@ -42,6 +42,8 @@ namespace Stencil.Common.Screens
 
 
         public Lifetime Lifetime { get; set; }
+        public bool PreventExpired { get; set; }
+
         public DateTimeOffset? DownloadedUTC { get; set; }
         public DateTimeOffset? CacheUntilUTC { get; set; }
         public DateTimeOffset? ExpireUTC { get; set; }
@@ -50,9 +52,9 @@ namespace Stencil.Common.Screens
 
         public VisualConfig VisualConfig { get; set; }
 
-        public List<ViewConfig> ViewConfigs { get; set; }
-        public List<ViewConfig> HeaderConfigs { get; set; }
-        public List<ViewConfig> FooterConfigs { get; set; }
+        public List<ViewConfigExchange> ViewConfigs { get; set; }
+        public List<ViewConfigExchange> HeaderConfigs { get; set; }
+        public List<ViewConfigExchange> FooterConfigs { get; set; }
         public List<CommandConfig> BeforeShowCommands { get; set; }
         public List<CommandConfig> AfterShowCommands { get; set; }
         public List<CommandConfig> DownloadCommands { get; set; }
@@ -71,7 +73,15 @@ namespace Stencil.Common.Screens
         {
             get
             {
-                return this.ViewConfigs.AsEnumerable<IViewConfig>().ToList();
+                List<IViewConfig> result = this.ViewConfigs.AsEnumerable<IViewConfig>().ToList();
+                foreach (var item in result)
+                {
+                    if(item.encapsulated_views != null)
+                    {
+                        item.encapsulated_views = item.encapsulated_views.AsEnumerable<IViewConfig>().ToArray();
+                    }
+                }
+                return result;
             }
         }
         List<IViewConfig> IScreenConfig.HeaderConfigs

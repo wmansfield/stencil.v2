@@ -96,5 +96,25 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <None Remove="Platforms\Common\Views\Standard\v1_0\Spacer - Copy.xaml.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="Platforms\Common\Views\Standard\v1_0\Divider.xaml.cs">
+      <DependentUpon>Divider.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Platforms\Common\Views\Standard\v1_0\MutedButton.xaml.cs">
+      <DependentUpon>MutedButton.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Remove="Platforms\Common\Views\Standard\v1_0\PrimaryButton - Copy.xaml.cs" />
+  </ItemGroup>
+
+
 
 </Project>

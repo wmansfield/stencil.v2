@@ -16,7 +16,6 @@
     <PackageReference Include="Unity.Microsoft.DependencyInjection" Version="5.11.5" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.6" />
     <PackageReference Include="Zero.Foundation" Version="1.0.11" />
-    <PackageReference Include="shopifysharp" Version="5.15.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" NoWarn="NU1608" />
   </ItemGroup>
 

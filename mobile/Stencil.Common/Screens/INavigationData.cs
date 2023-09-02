@@ -10,6 +10,7 @@ namespace Stencil.Common.Screens
         string screen_parameter { get; set; }
         DateTime? last_retrieved_utc { get; set; }
         Dictionary<string, string> data { get; set; }
+        bool prevent_expired { get; set; }
 
     }
 }

@@ -14,5 +14,7 @@ namespace Stencil.Common.Screens
         public string screen_parameter { get; set; }
         public DateTime? last_retrieved_utc { get; set; }
         public Dictionary<string, string> data { get; set; }
+        public bool prevent_expired { get; set; }
+
     }
 }

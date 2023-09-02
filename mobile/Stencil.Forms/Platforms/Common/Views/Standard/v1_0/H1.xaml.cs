@@ -57,13 +57,15 @@ namespace Stencil.Forms.Views.Standard.v1_0
                 {
                     try
                     {
-                        result.FontSize = (int)Application.Current.Resources["FontSizeH1"];
+                        result.FontSize = (int)(double)Application.Current.Resources["FontSizeH1"];
                     }
                     catch
                     {
                         // gulp
+                        result.FontSize = 16;
                     }
                 }
+                
                 if (string.IsNullOrWhiteSpace(result.FontFamily))
                 {
                     result.FontFamily = "SansBold";
@@ -94,12 +96,30 @@ namespace Stencil.Forms.Views.Standard.v1_0
         private string _fontFamily = "SansBold";
         public string FontFamily
         {
-            get {
-                return _fontFamily; 
+            get { return _fontFamily; }
+            set 
+            { 
+                if( SetProperty(ref _fontFamily, value))
+                {
+                    this.OnPropertyChanged(nameof(UIFontFamily));
+                }
             }
-            set { SetProperty(ref _fontFamily, value); }
         }
-
+        public string UIFontFamily
+        {
+            get
+            {
+                try
+                {
+                    string result = (string)(OnPlatform<string>)Application.Current.Resources[this.FontFamily];
+                    return result;
+                }
+                catch (System.Exception)
+                {
+                    return this.FontFamily;
+                }
+            }
+        }
         
 
         private string _text;
@@ -142,6 +162,34 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             get { return _fontSize; }
             set { SetProperty(ref _fontSize, value); }
+        }
+
+        private bool _leftAlign;
+        public bool LeftAlign
+        {
+            get { return _leftAlign; }
+            set
+            {
+                if (SetProperty(ref _leftAlign, value))
+                {
+                    this.OnPropertyChanged(nameof(UIHorizontalTextAlignment));
+                }
+            }
+        }
+
+        public TextAlignment UIHorizontalTextAlignment
+        {
+            get
+            {
+                if (this.LeftAlign)
+                {
+                    return TextAlignment.Start;
+                }
+                else
+                {
+                    return TextAlignment.Center;
+                }
+            }
         }
 
         public int HeightRequest { get; set; }

@@ -329,6 +329,19 @@ namespace Stencil.Forms.Screens
                     {
                         result = database.ScreenConfig_Get(screenStorageKey);
                     }
+                    if (result != null)
+                    {
+                        if (navigationData.prevent_expired || result.PreventExpired)
+                        {
+                            if (result.ExpireUTC.HasValue && result.Lifetime == Lifetime.until_expired)
+                            {
+                                if (result.ExpireUTC.Value < DateTimeOffset.UtcNow)
+                                {
+                                    result = null;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (result == null)

@@ -8,18 +8,18 @@ using Xamarin.Forms;
 
 namespace Stencil.Forms.Views.Standard.v1_0
 {
-    public partial class PrimaryButton : ResourceDictionary, IDataViewComponent
+    public partial class MutedButton : ResourceDictionary, IDataViewComponent
     {
-        public PrimaryButton()
+        public MutedButton()
         {
             InitializeComponent();
         }
 
 
 
-        public const string COMPONENT_NAME = "primaryButton";
+        public const string COMPONENT_NAME = "mutedButton";
 
-        private const string TEMPLATE_KEY = "primaryButton";
+        private const string TEMPLATE_KEY = "mutedButton";
 
         public bool BindingContextCacheEnabled
         {
@@ -40,14 +40,14 @@ namespace Stencil.Forms.Views.Standard.v1_0
         {
             return CoreUtility.ExecuteFunction($"{COMPONENT_NAME}.{nameof(PrepareBindingContextAsync)}", delegate ()
             {
-                PrimaryButtonContext result = null;
+                MutedButtonContext result = null;
                 if (!string.IsNullOrWhiteSpace(configuration_json))
                 {
-                    result = JsonConvert.DeserializeObject<PrimaryButtonContext>(configuration_json);
+                    result = JsonConvert.DeserializeObject<MutedButtonContext>(configuration_json);
                 }
                 if(result == null)
                 {
-                    result = new PrimaryButtonContext();
+                    result = new MutedButtonContext();
                 }
 
                 if (result.FontSize <= 0)
@@ -69,7 +69,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             await CoreUtility.ExecuteMethodAsync($"{COMPONENT_NAME}.Button_Clicked", async delegate ()
             {
                 View view = (sender as View);
-                PrimaryButtonContext context = view?.BindingContext as PrimaryButtonContext;
+                MutedButtonContext context = view?.BindingContext as MutedButtonContext;
                 if (context != null)
                 {
                     DependencyService.Get<IKeyboardManager>()?.TryHideKeyboard();
@@ -81,7 +81,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
                     try
                     {
                         context.UIActive = true;
-                        context.UIButtonBackgroundColor = AppColors.Primary400;
+                        context.UIButtonBackgroundColor = AppColors.MutedBackgroundDark;
                         _ = Task.Delay(400).ContinueWith(x =>
                         {
                             if (context.UIActive)
@@ -101,17 +101,17 @@ namespace Stencil.Forms.Views.Standard.v1_0
                     {
                         context.UIActive = false;
                         context.UIActiveSlow = false;
-                        context.UIButtonBackgroundColor = AppColors.Primary900;
+                        context.UIButtonBackgroundColor = AppColors.MutedBackground;
                     }
                 }
             });
         }
     }
 
-    public class PrimaryButtonContext : PreparedBindingContext, IStateResponder
+    public class MutedButtonContext : PreparedBindingContext, IStateResponder
     {
-        public PrimaryButtonContext()
-            : base(nameof(PrimaryButtonContext))
+        public MutedButtonContext()
+            : base(nameof(MutedButtonContext))
         {
         }
         public const string INTERACTION_KEY_TEXT = "text";
@@ -127,11 +127,18 @@ namespace Stencil.Forms.Views.Standard.v1_0
             set { SetProperty(ref _text, value); }
         }
 
-        private string _uiButtonBackgroundColor = AppColors.Primary900;
+        private string _uiButtonBackgroundColor = AppColors.MutedBackground;
         public string UIButtonBackgroundColor
         {
             get { return _uiButtonBackgroundColor; }
             set { SetProperty(ref _uiButtonBackgroundColor, value); }
+        }
+
+        private string _textColor = AppColors.MutedForeground;
+        public string TextColor
+        {
+            get { return _textColor; }
+            set { SetProperty(ref _textColor, value); }
         }
 
         private string _backgroundColor;

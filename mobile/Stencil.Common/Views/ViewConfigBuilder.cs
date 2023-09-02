@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Stencil.Common.Views
 {
-    public class ViewConfigBuilder<TConfiguration> : ViewConfig
+    public class ViewConfigBuilder<TConfiguration> : ViewConfigExchange
         where TConfiguration : class
     {
         private TConfiguration _configuration;

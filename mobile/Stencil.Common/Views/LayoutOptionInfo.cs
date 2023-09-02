@@ -6,6 +6,10 @@ namespace Stencil.Common.Views
 {
     public class LayoutOptionInfo
     {
+        public static readonly LayoutOptionInfo Center = new LayoutOptionInfo() { alignment = LayoutAlignmentInfo.Center };
+        public static readonly LayoutOptionInfo Start = new LayoutOptionInfo() { alignment = LayoutAlignmentInfo.Start };
+        public static readonly LayoutOptionInfo End = new LayoutOptionInfo() { alignment = LayoutAlignmentInfo.End };
+
         public bool expands { get; set; }
         public LayoutAlignmentInfo alignment { get; set; }
     }

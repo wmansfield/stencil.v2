@@ -22,7 +22,7 @@ namespace Stencil.Forms.Data.Models
         public bool automatic_download { get; set; }
         public bool is_menu_supported { get; set; }
         public int lifetime { get; set; }
-
+        public bool prevent_expired { get; set; }
 
         /// <summary>
         /// effecitvely json_view_configs

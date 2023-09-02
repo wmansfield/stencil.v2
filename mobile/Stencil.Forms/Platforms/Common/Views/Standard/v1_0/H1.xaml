@@ -16,11 +16,11 @@
                    Padding="{Binding Padding}"
                    Margin="0"
                    FontSize="{Binding FontSize}"
-                   FontFamily="{Binding FontFamily}"
+                   FontFamily="{Binding UIFontFamily}"
                    Text="{Binding Text}"
                    TextColor="{Binding TextColor}"
                    VerticalTextAlignment="Center"
-                   HorizontalTextAlignment="Center"/>
+                   HorizontalTextAlignment="{Binding UIHorizontalTextAlignment}"/>
         </Grid>
         <!--</ViewCell>-->
     </DataTemplate>

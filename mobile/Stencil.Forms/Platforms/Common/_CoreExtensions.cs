@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Stencil.Common.Views;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Stencil.Forms
 {
@@ -117,6 +119,39 @@ namespace Stencil.Forms
         public static TResult SyncResult<TResult>(this Task<TResult> task)
         {
             return task.GetAwaiter().GetResult();
+        }
+
+        public static LayoutOptions ToLayoutOptions(this LayoutAlignmentInfo alignmentInfo)
+        {
+            switch (alignmentInfo)
+            {
+                case LayoutAlignmentInfo.Start:
+                    return LayoutOptions.Start;
+                case LayoutAlignmentInfo.Center:
+                    return LayoutOptions.Center;
+                case LayoutAlignmentInfo.End:
+                    return LayoutOptions.End;
+                case LayoutAlignmentInfo.Fill:
+                    return LayoutOptions.Fill;
+                default:
+                    return LayoutOptions.Start;
+            }
+        }
+        public static LayoutAlignmentInfo ToAlignmentInfo(this LayoutOptions options)
+        {
+            switch (options.Alignment)
+            {
+                case LayoutAlignment.Start:
+                    return LayoutAlignmentInfo.Start;
+                case LayoutAlignment.Center:
+                    return LayoutAlignmentInfo.Center;
+                case LayoutAlignment.End:
+                    return LayoutAlignmentInfo.End;
+                case LayoutAlignment.Fill:
+                    return LayoutAlignmentInfo.Fill;
+                default:
+                    return LayoutAlignmentInfo.Start;
+            }
         }
     }
 }

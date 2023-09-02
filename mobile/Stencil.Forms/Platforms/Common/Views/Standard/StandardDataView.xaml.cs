@@ -31,10 +31,15 @@ namespace Stencil.Forms.Views.Standard
         {
             base.ExecuteMethod(nameof(OnBindingContextChanged), delegate ()
             {
-                base.OnBindingContextChanged();
+                try
+                {
+                    base.OnBindingContextChanged();
 
-                this.DataViewModel.DataViewVisual = this;
-
+                }
+                finally
+                {
+                    this.DataViewModel.DataViewVisual = this;
+                }
             });
         }
 

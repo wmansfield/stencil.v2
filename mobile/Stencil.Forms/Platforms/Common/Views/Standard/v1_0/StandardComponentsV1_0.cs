@@ -17,6 +17,7 @@ namespace Stencil.Forms.Views.Standard.v1_0
             _dataViewComponents[HeaderWithIcon.COMPONENT_NAME] = new HeaderWithIcon();
             _dataViewComponents[NamedValue.COMPONENT_NAME] = new NamedValue();
             _dataViewComponents[PrimaryButton.COMPONENT_NAME] = new PrimaryButton();
+            _dataViewComponents[MutedButton.COMPONENT_NAME] = new MutedButton();
             _dataViewComponents[SlimEditor.COMPONENT_NAME] = new SlimEditor();
             _dataViewComponents[FullEditor.COMPONENT_NAME] = new FullEditor();
             _dataViewComponents[SlimEntry.COMPONENT_NAME] = new SlimEntry();
@@ -36,7 +37,8 @@ namespace Stencil.Forms.Views.Standard.v1_0
             _dataViewComponents[GlyphHeader.COMPONENT_NAME] = new GlyphHeader();
             _dataViewComponents[CheckBox.COMPONENT_NAME] = new CheckBox();
             _dataViewComponents[ToggleView.COMPONENT_NAME] = new ToggleView();
-            
+            _dataViewComponents[Divider.COMPONENT_NAME] = new Divider();
+
             foreach (string key in _dataViewComponents.Keys.ToList())
             {
                 _dataViewComponents[ComponentUtility.GenerateVersionedName(key, VERSION)] = _dataViewComponents[key];

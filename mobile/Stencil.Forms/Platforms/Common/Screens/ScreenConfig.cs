@@ -37,6 +37,7 @@ namespace Stencil.Forms.Screens
         public bool DisableCellSizeCaching { get; set; }
 
         public Lifetime Lifetime { get; set; }
+        public bool PreventExpired { get; set; }
 
         public DateTimeOffset? DownloadedUTC { get; set; }
         public DateTimeOffset? CacheUntilUTC { get; set; }
