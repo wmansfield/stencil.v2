@@ -22,6 +22,8 @@ namespace Stencil.Forms.Platforms.ios.Renderers
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
+            // you think that the new size isn't being respected. 
+            // check to see if re-use is causing the issue first.
             if (!this.ItemsViewLayout.EstimatedItemSize.IsEmpty)
             {
                 if (this.ViewController.ItemsSource.IsIndexPathValid(indexPath))
@@ -37,8 +39,11 @@ namespace Stencil.Forms.Platforms.ios.Renderers
                     }
                 }
             }
-
-            return base.GetSizeForItem(collectionView, layout, indexPath);
+            CGSize size = base.GetSizeForItem(collectionView, layout, indexPath);
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($"--->> Had to get default size for item at {indexPath.Row}, size is now: {size.Width} x {size.Height}");
+#endif
+            return size;
         }
     }
 }

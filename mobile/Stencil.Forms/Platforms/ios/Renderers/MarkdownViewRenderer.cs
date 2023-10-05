@@ -1,11 +1,14 @@
 ﻿using CoreGraphics;
 using Foundation;
+using Stencil.Common.Markdown;
 using Stencil.Forms;
 using Stencil.Forms.iOS.Markdown;
 using Stencil.Forms.iOS.Renderers;
 using Stencil.Forms.Views;
+using Stencil.Forms.Views.Standard;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using UIKit;
@@ -20,13 +23,12 @@ namespace Stencil.Forms.iOS.Renderers
     {
         public MarkdownViewRenderer()
         {
-            
         }
 
-
         private nfloat _boundWidth;
-        private MarkdownView _boundView;
-        private CacheModel _cacheModel;
+        private IMarkdownHost _boundHost;
+        private List<MarkdownSection> _boundSections;
+        private CacheModel _cacheModel; // In case we aren't in stencil? possible?
 
         public override CGRect Frame 
         {
@@ -45,9 +47,37 @@ namespace Stencil.Forms.iOS.Renderers
             CoreUtility.ExecuteMethod(nameof(LayoutSubviews), delegate ()
             {
                 base.LayoutSubviews();
+                IPreparedBindingContext preparedContext = this.Element?.BindingContext as IPreparedBindingContext;
+                if (preparedContext != null)
+                {
+                    if (preparedContext.UICache == null)
+                    {
+                        preparedContext.UICache = new CacheModel();
+                    }
+                    this.ApplyMarkdownIfNeeded("LayoutSubviews", preparedContext.UICache, this.Element, preparedContext, this.Element.Sections, (int)this.Bounds.Width);
+                }
 
-                this.ApplyMarkdownIfNeeded(this.Element, (int)this.Bounds.Width);
+                CoreUtility.Logger.LogDebug($" ------> LayoutSubviews. Element: {this.Element != null}: ------> ");
             });
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == "Sections")
+            {
+                IPreparedBindingContext preparedContext = this.Element?.BindingContext as IPreparedBindingContext;
+                if (preparedContext != null)
+                {
+                    if (preparedContext.UICache == null)
+                    {
+                        preparedContext.UICache = new CacheModel();
+                    }
+                    _cacheModel = preparedContext.UICache;
+                    this.ApplyMarkdownIfNeeded("OnElementPropertyChanged", preparedContext.UICache, this.Element, preparedContext, this.Element.Sections, (int)this.Bounds.Width);
+                }
+            }
         }
 
         public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
@@ -56,7 +86,18 @@ namespace Stencil.Forms.iOS.Renderers
             {
                 SizeRequest result = base.GetDesiredSize(widthConstraint, heightConstraint);
 
-                this.ApplyMarkdownIfNeeded(this.Element, (int)widthConstraint);
+                IPreparedBindingContext preparedContext = this.Element?.BindingContext as IPreparedBindingContext;
+                if (preparedContext != null)
+                {
+                    if (preparedContext.UICache == null)
+                    {
+                        preparedContext.UICache = new CacheModel();
+                    }
+                    _cacheModel = preparedContext.UICache;
+                    this.ApplyMarkdownIfNeeded("GetDesiredSize", preparedContext.UICache, this.Element, preparedContext, this.Element.Sections, (int)widthConstraint);
+                }
+
+                System.Diagnostics.Debug.WriteLine($"Width For sizing:  {widthConstraint}, height: {_cacheModel.ui_height}, text is: {this.Element.Sections[0].text}");
 
                 result.Request = new Size() 
                 { 
@@ -67,6 +108,7 @@ namespace Stencil.Forms.iOS.Renderers
             });
             
         }
+
         protected override void OnElementChanged(ElementChangedEventArgs<MarkdownView> args)
         {
             CoreUtility.ExecuteMethod(nameof(OnElementChanged), delegate ()
@@ -75,14 +117,22 @@ namespace Stencil.Forms.iOS.Renderers
 
                 MarkdownStackView control = this.Control;
 
-                if(control != null)
-                {
-                    control.ClearText();
-                }
-
                 if (args.NewElement != null)
                 {
-                    _cacheModel = new CacheModel();
+                    IPreparedBindingContext preparedContext = args.NewElement.BindingContext as IPreparedBindingContext;
+                    if (preparedContext != null)
+                    {
+                        if (preparedContext.UICache == null)
+                        {
+                            preparedContext.UICache = new CacheModel();
+                        }
+                        _cacheModel = preparedContext.UICache;
+
+                    }
+                    else
+                    {
+                        _cacheModel = new CacheModel();
+                    }
 
                     if (control == null)
                     {
@@ -92,36 +142,49 @@ namespace Stencil.Forms.iOS.Renderers
 
                     this.ApplyBackground();
 
-                    this.ApplyMarkdownIfNeeded(args.NewElement, (int)this.Bounds.Width);
+                    this.ApplyMarkdownIfNeeded("OnElementChanged", _cacheModel, args.NewElement, preparedContext, args.NewElement?.Sections, (int)this.Bounds.Width);
+                }
+                else
+                {
+                    if (control != null)
+                    {
+                        control.ClearText();
+                    }
                 }
 
-                
+                CoreUtility.Logger.LogDebug($" --[]----> OnElementChanged. NewElement: {args.NewElement != null}: ------> ");
             });
         }
         
-        private void ApplyMarkdownIfNeeded(MarkdownView newMarkdownView, int width)
+        private void ApplyMarkdownIfNeeded(string source, CacheModel cache, IMarkdownHost markdownHost, IPreparedBindingContext bindingContext, List<MarkdownSection> sections, int width)
         {
             CoreUtility.ExecuteMethod(nameof(ApplyMarkdownIfNeeded), delegate ()
             {
-                if (newMarkdownView == null || width < 1)
+                if (sections == null || width < 1)
                 {
-                    CoreUtility.Logger.LogDebug($" ------> ApplyMarkdownIfNeeded Not Ready: ------> ");
+                    CoreUtility.Logger.LogDebug($" ------||> {source}: ApplyMarkdownIfNeeded Not Ready: ------> ");
                     return;
                 }
 
-                if (_boundView == newMarkdownView && _boundWidth == width)
+                if (_boundWidth == width && _boundSections == sections)
                 {
-                    CoreUtility.Logger.LogDebug($" ------> ApplyMarkdownIfNeeded Already Bound: ------> ");
+                    CoreUtility.Logger.LogDebug($" ------||> {source}: ApplyMarkdownIfNeeded Already Bound: ------> ");
                     return;
                 }
 
                 MarkdownStackView control = this.Control;
                 if (control != null)
                 {
-                    _boundView = newMarkdownView;
+                    _boundHost = markdownHost;
+                    _boundSections = sections;
                     _boundWidth = width;
 
-                    control.SetText(newMarkdownView, _cacheModel, width, newMarkdownView.Sections);
+                    control.SetText(markdownHost, cache, width, sections);
+                    CoreUtility.Logger.LogDebug($" ------||> {source}: ApplyMarkdownIfNeeded Binding: " + string.Join(", ", sections.Select(x => x.text).ToArray()));
+                }
+                else
+                {
+                    CoreUtility.Logger.LogDebug($" ------||> {source}: ApplyMarkdownIfNeeded can't bind: ------> ");
                 }
             });
         }

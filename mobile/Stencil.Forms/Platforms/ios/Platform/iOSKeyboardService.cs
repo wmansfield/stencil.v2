@@ -19,7 +19,7 @@ namespace Quantum.Native.iOS.Stencil.Dependencies
         {
             CoreUtility.ExecuteMethod(nameof(TryHideKeyboard), delegate ()
             {
-                UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+                UIApplication.SharedApplication.KeyWindow?.EndEditing(true);
             });
         }
     }

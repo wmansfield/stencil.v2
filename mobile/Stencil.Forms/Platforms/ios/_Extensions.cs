@@ -100,7 +100,7 @@ namespace Stencil.Forms.iOS
 
         public static int ClampToLineHeights(CGRect boudingRect, float fontSize)
         {
-            int singleLineHeight = (int)Math.Ceiling(fontSize * 1.55d); //TODO: Magic number 1.55d (fontsize + ios font treatment, 16pt -> 25px)
+            int singleLineHeight = (int)Math.Ceiling(fontSize * 1.60d); //TODO: Magic number 1.55d (fontsize + ios font treatment, 16pt -> 25px)
             int rows = (int)(boudingRect.Size.Height / singleLineHeight);
             nfloat remainder = boudingRect.Size.Height % singleLineHeight;
             if (remainder / singleLineHeight > .1) // if more than 10% over, make a new line
@@ -120,38 +120,5 @@ namespace Stencil.Forms.iOS
 
         private static readonly Lazy<CGRect> _mainScreenBounds = new Lazy<CGRect>(() => UIScreen.MainScreen.Bounds);
         public static CGRect MainScreenBounds { get { return _mainScreenBounds.Value; } }
-
-        /// <summary>
-        /// Converts from storyboard basic width of 320 to current device metric.
-        /// Assumes the width is constrained by left/right
-        /// Essentially only good for text sizing routines
-        /// </summary>
-        public static float SizingScaleFix(this int width, bool halfExpand = false)
-        {
-            float extra = (float)MainScreenBounds.Width - 320f;
-
-            /*
-            if (IsIPhone6Plus())
-            {
-                // (414 - 320) = 94
-                extra = 94f;
-            }
-            else if (IsIPhone6())
-            {
-                // (375 - 320) = 55
-                extra = 55f;
-            }
-            else if (IsIPhoneX())
-            {
-                // (375 - 320) = 55
-                extra = 55f;
-            }
-            */
-            if (halfExpand)
-            {
-                extra = extra / 2f;
-            }
-            return width + extra;
-        }
     }
 }

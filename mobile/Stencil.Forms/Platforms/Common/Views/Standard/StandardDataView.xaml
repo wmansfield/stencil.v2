@@ -32,11 +32,13 @@
                 <!--- StencilCollectionView.Margin as Padding is Not a mistake -->
                 <controls:StencilCollectionView 
                       Margin="{Binding Padding}" 
-                      BackgroundColor="{Binding BackgroundColor}"
+                      BackgroundColor="Transparent"
                       VerticalOptions="FillAndExpand"
                       HorizontalOptions="Fill"
                       ItemSizingStrategy="MeasureAllItems"
                       SelectionMode="None"
+                      HorizontalScrollBarVisibility="Never"
+                      VerticalScrollBarVisibility="Never"
                       EnableDynamicCellReuse="{Binding EnableCellReuse}"
                       EnableDynamicCellSizeCaching="{Binding EnableCellSizeCaching}"
                       ItemsSource="{Binding MainItemsFiltered}"

@@ -167,6 +167,8 @@ namespace Stencil.Forms.iOS.Markdown
                         return;
                     }
                 }
+                CoreUtility.Logger.LogDebug("SetText is happening");
+
                 cacheModel.MarkdownSetGenerated(true);
                 this.Host = host;
                 this.CacheModel = cacheModel;
@@ -310,7 +312,7 @@ namespace Stencil.Forms.iOS.Markdown
                     Size size = Size.Empty;
                     if (CoreUtility.TryParseDimensions(section.asset.dimensions, out size))
                     {
-                        int imageHeight = (int)(width.SizingScaleFix() * (float)size.Height / (float)size.Width);// W/H = w/?
+                        int imageHeight = (int)(width * (float)size.Height / (float)size.Width);// W/H = w/?
                         if (imageHeight < MIN_IMAGE_HEIGHT)
                         {
                             imageHeight = MIN_IMAGE_HEIGHT;
@@ -329,7 +331,7 @@ namespace Stencil.Forms.iOS.Markdown
                     UIImage image = section.ui_data as UIImage;
                     if (image != null)
                     {
-                        int imageHeight = (int)(width.SizingScaleFix() * image.Size.Height / image.Size.Width);// W/H = w/?
+                        int imageHeight = (int)(width * image.Size.Height / image.Size.Width);// W/H = w/?
                         if (imageHeight < MIN_IMAGE_HEIGHT)
                         {
                             imageHeight = MIN_IMAGE_HEIGHT;
@@ -365,7 +367,7 @@ namespace Stencil.Forms.iOS.Markdown
                         attributedString = MarkdownStackView.GenerateTextRegular(text, fontSize, textColor);
                         section.ui_text = attributedString;
 
-                        CGRect boudingRect = attributedString.GetBoundingRect(new CGSize(width.SizingScaleFix(), 5000), NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, new NSStringDrawingContext());
+                        CGRect boudingRect = attributedString.GetBoundingRect(new CGSize(width, 5000), NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, new NSStringDrawingContext());
                         section.ui_height = _Extensions.ClampToLineHeights(boudingRect, fontSize);
                     }
 
@@ -391,7 +393,7 @@ namespace Stencil.Forms.iOS.Markdown
                     section.ui_text = data.Text;
                     section.ui_links = data.Links;
 
-                    CGRect boudingRect = attributedString.GetBoundingRect(new CGSize(width.SizingScaleFix(), 5000), NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, new NSStringDrawingContext());
+                    CGRect boudingRect = attributedString.GetBoundingRect(new CGSize(width, 5000), NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, new NSStringDrawingContext());
                     section.ui_height = _Extensions.ClampToLineHeights(boudingRect, fontSize);
                 }
 
@@ -412,7 +414,7 @@ namespace Stencil.Forms.iOS.Markdown
                         annotatedText.ui_text = data.Text;
                         annotatedText.ui_links = data.Links;
 
-                        CGRect boudingRect = attributedString.GetBoundingRect(new CGSize(width.SizingScaleFix(), 5000), NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, new NSStringDrawingContext());
+                        CGRect boudingRect = attributedString.GetBoundingRect(new CGSize(width, 5000), NSStringDrawingOptions.UsesLineFragmentOrigin | NSStringDrawingOptions.UsesFontLeading, new NSStringDrawingContext());
                         annotatedText.ui_height = _Extensions.ClampToLineHeights(boudingRect, fontSize);
                     }
                 }

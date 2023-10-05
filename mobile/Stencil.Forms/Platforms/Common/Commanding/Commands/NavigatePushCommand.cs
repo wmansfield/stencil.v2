@@ -4,6 +4,7 @@ using Stencil.Forms.Presentation.Routing;
 using Stencil.Forms.Screens;
 using Stencil.Forms.Views;
 using Stencil.Forms.Views.Standard;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Stencil.Forms.Commanding.Commands
@@ -42,6 +43,7 @@ namespace Stencil.Forms.Commanding.Commands
             return base.ExecuteFunctionAsync(nameof(ExecuteAsync), async delegate ()
             {
                 NavigationData navigationData = this.ParseNavigationData<NavigationData>(commandParameter);
+                Debug.WriteLine("---> Navigation to: " + navigationData.screen_name + " with target: " + commandScope.TargetMenuEntry);
 
                 IDataViewModel dataViewModel = await this.API.StencilScreens.GenerateViewModelAsync(this.API.CommandProcessor, navigationData);
                 if (dataViewModel == null)
